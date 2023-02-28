@@ -8,7 +8,6 @@ export const GetTitle: React.FC = () => {
 
     if (error) return <div>failed to load</div>;
     if (isLoading) return <div>loading...</div>;
-    console.log(data);
     return (
         <>
             <div>{data.fields.title}</div>
