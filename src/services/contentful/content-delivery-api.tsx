@@ -1,20 +1,27 @@
-import useSWR from 'swr';
-import React from "react";
-const API_BASE_URL = 'https://cdn.contentful.com';
+import React, { useState } from "react";
+import { VoiceEntry } from '../../shared/content-types';
+import { createClient } from 'contentful';
 
 export const GetTitle: React.FC = () => {
-    const fetcher = (url: string) => fetch(url).then((res) => res.json());
-    const { data, error, isLoading} = useSWR(`${API_BASE_URL}/spaces/${import.meta.env.VITE_CONTENTFUL_SPACE_ID}/environments/${import.meta.env.VITE_CONTENTFUL_ENVIRONMENT_ID}/entries/${import.meta.env.VITE_FIRST_ENTRY_ID}?access_token=${import.meta.env.VITE_CONTENTFUL_API_KEY}`, fetcher);
+    const [voiceEntry, setVoiceEntry] = useState<VoiceEntry | undefined>();
+    const client = createClient({
+        space: import.meta.env.VITE_CONTENTFUL_SPACE_ID,
+        environment: import.meta.env.VITE_CONTENTFUL_ENVIRONMENT_ID,
+        accessToken: import.meta.env.VITE_CONTENTFUL_API_KEY
+      })
+    
+    // Add error handling
+    client.getEntry<VoiceEntry>(import.meta.env.VITE_FIRST_ENTRY_ID).then((entry) => setVoiceEntry(entry.fields));
 
-    if (error) return <div>failed to load</div>;
-    if (isLoading) return <div>loading...</div>;
     return (
         <>
-            <div>{data.fields.title}</div>
+            <div>{voiceEntry?.title}</div>
             <br></br>
-            <div>{data.fields.japaneseVoice}</div>
+            <img src={voiceEntry?.photo[0].fields.file.url} alt="photo voice image"></img>
             <br></br>
-            <div>{data.fields.englishVoice}</div>
+            <div>{voiceEntry?.japaneseVoice}</div>
+            <br></br>
+            <div>{voiceEntry?.englishVoice}</div>
         </>
     );
 }
