@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { VoiceEntry } from '../../shared/content-types';
 import { createClient } from 'contentful';
 
-export const GetTitle: React.FC = () => {
+export const GetEntry: React.FC = () => {
     const [voiceEntry, setVoiceEntry] = useState<VoiceEntry | undefined>();
     const client = createClient({
         space: import.meta.env.VITE_CONTENTFUL_SPACE_ID,
