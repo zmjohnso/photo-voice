@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { VoiceEntry } from '../../shared/content-types';
 import { createClient } from 'contentful';
+import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 
 export const GetEntry: React.FC = () => {
     const [voiceEntry, setVoiceEntry] = useState<VoiceEntry | undefined>();
@@ -14,14 +15,21 @@ export const GetEntry: React.FC = () => {
     client.getEntry<VoiceEntry>(import.meta.env.VITE_FIRST_ENTRY_ID).then((entry) => setVoiceEntry(entry.fields));
 
     return (
-        <>
-            <div>{voiceEntry?.title}</div>
-            <br></br>
-            <img src={voiceEntry?.photo[0].fields.file.url} alt="photo voice image"></img>
-            <br></br>
-            <div>{voiceEntry?.japaneseVoice}</div>
-            <br></br>
-            <div>{voiceEntry?.englishVoice}</div>
-        </>
+        <Card sx={{ display: 'flex' }} variant="outlined">
+            <CardMedia component="img" sx={{ width: 1/2 }} image={voiceEntry?.photo[0].fields.file.url} alt={voiceEntry?.photo[0].fields.title} />
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <CardContent sx={{ flex: '1 0 auto' }}>
+                    <Typography gutterBottom component="div" variant="h5">
+                        {voiceEntry?.title}
+                    </Typography>
+                    <Typography gutterBottom variant="body1" component="div">
+                        {voiceEntry?.japaneseVoice}
+                    </Typography>   
+                    <Typography variant="body2" component="div">
+                        {voiceEntry?.englishVoice}
+                    </Typography>
+                </CardContent>
+            </Box>
+        </Card>
     );
 }

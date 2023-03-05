@@ -30,4 +30,5 @@ export interface VoiceEntry {
     voiceDate: string;
     voiceLocation: Coordinates;
     entryId: number;
+    keywords: string[];
 }
