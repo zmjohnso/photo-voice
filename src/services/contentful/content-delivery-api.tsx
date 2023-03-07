@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { VoiceEntry } from '../../shared/content-types';
 import { createClient, Entry } from 'contentful';
 import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 
-export const GetEntries: React.FC = () => {
+export const GetEntries: React.FC<{keywords: string[]}> = (props) => {
     const [voiceEntries, setVoiceEntries] = useState<Entry<VoiceEntry>[] | undefined>();
     const client = createClient({
         space: import.meta.env.VITE_CONTENTFUL_SPACE_ID,
@@ -12,11 +12,23 @@ export const GetEntries: React.FC = () => {
       })
 
     // Add error handling
-    client.getEntries<VoiceEntry>().then((entries) => setVoiceEntries(entries.items)).catch(console.error);
+    useEffect(() => {
+        client.getEntries<VoiceEntry>().then((entries) => setVoiceEntries(entries.items)).catch(console.error);
+    }, [props.keywords]);
+
+    // voiceEntries must have at least one common keyword with the props keyword list
+    const filteredVoiceEntries: Entry<VoiceEntry>[] = [];
+    voiceEntries?.map(entry => {
+        entry.fields.keywords.forEach(keyword => {
+            if (props.keywords.includes(keyword)) {
+                filteredVoiceEntries.push(entry);
+            }
+        })
+    });
 
     return (
         <>
-            {voiceEntries?.map(entry => {
+            {filteredVoiceEntries?.map(entry => {
                 return (
                     <Card sx={{ display: 'flex' }} variant="outlined">
                         <CardMedia component="img" sx={{ width: 1/2 }} image={entry.fields.photo[0].fields.file.url} alt={"Photo Voice image"} />

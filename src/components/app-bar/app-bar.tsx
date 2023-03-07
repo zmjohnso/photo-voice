@@ -1,8 +1,9 @@
-import { AppBar, Box, Button, IconButton, Toolbar, Typography } from "@mui/material"
+import { AppBar, Autocomplete, Box, Button, IconButton, TextField, Toolbar, Typography } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
 
-export const PhotoVoiceAppBar: React.FC = () => {
+export const PhotoVoiceAppBar: React.FC<{setSelectedKeywords: (keywords: string[]) => void}> = (props) => {
     const navItems = ['Home', 'About', 'Contact'];
+    const keywords = ['Tag1', 'Tag2', 'Tag3'];
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -27,6 +28,22 @@ export const PhotoVoiceAppBar: React.FC = () => {
                     Contact
                 </Typography>
                 </Toolbar>
+                <Autocomplete
+                    multiple
+                    id="tags-standard"
+                    options={keywords}
+                    onChange={(event, value) => props.setSelectedKeywords(value)}
+                    // getOptionLabel={keywords}
+                    // defaultValue={[top100Films[13]]}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            variant="standard"
+                            label="Tags"
+                            placeholder="Example Tag"
+                        />
+                    )}
+                />
             </AppBar>
         </Box>
     );
