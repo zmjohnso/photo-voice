@@ -20,7 +20,7 @@ export const GetEntries: React.FC<{keywords: string[]}> = (props) => {
     const filteredVoiceEntries: Entry<VoiceEntry>[] = [];
     voiceEntries?.map(entry => {
         entry.fields.keywords.forEach(keyword => {
-            if (props.keywords.includes(keyword)) {
+            if (props.keywords.includes(keyword) && !filteredVoiceEntries.includes(entry)) {
                 filteredVoiceEntries.push(entry);
             }
         })
