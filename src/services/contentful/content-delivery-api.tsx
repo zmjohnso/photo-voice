@@ -13,12 +13,11 @@ export const GetEntries: React.FC<{ keywords: string[] }> = (props) => {
     accessToken: import.meta.env.VITE_CONTENTFUL_API_KEY,
   });
 
-  // Add error handling
   useEffect(() => {
     client
       .getEntries<VoiceEntry>()
       .then((entries) => setVoiceEntries(entries.items))
-      .catch(console.error);
+      .catch(console.error); // Add error handling
   }, [props.keywords]);
 
   // voiceEntries must have at least one common keyword with the props keyword list
