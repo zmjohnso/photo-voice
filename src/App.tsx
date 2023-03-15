@@ -11,7 +11,6 @@ function App() {
   const [selectedKeywords, setSelectedKeywords] = useState([""]);
 
   const handleSetSelectedKeywords = (keywords: string[]) => {
-    console.log({ keywords });
     setSelectedKeywords(keywords);
   };
 

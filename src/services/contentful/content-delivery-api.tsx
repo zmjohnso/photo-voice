@@ -3,7 +3,11 @@ import { VoiceEntry } from "../../shared/content-types";
 import { createClient, Entry } from "contentful";
 import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 
-export const GetEntries: React.FC<{ keywords: string[] }> = (props) => {
+interface Props {
+  keywords: string[];
+}
+
+export const GetEntries: React.FC<Props> = (props) => {
   const [voiceEntries, setVoiceEntries] = useState<
     Entry<VoiceEntry>[] | undefined
   >();
@@ -15,27 +19,27 @@ export const GetEntries: React.FC<{ keywords: string[] }> = (props) => {
 
   useEffect(() => {
     client
-      .getEntries<VoiceEntry>()
+      .getEntries<VoiceEntry>({ content_type: "entry" })
       .then((entries) => setVoiceEntries(entries.items))
       .catch(console.error); // Add error handling
-  }, [props.keywords]);
+  }, []);
 
   // voiceEntries must have at least one common keyword with the props keyword list
-  const filteredVoiceEntries: Entry<VoiceEntry>[] = [];
-  voiceEntries?.map((entry) => {
-    entry.fields.keywords.forEach((keyword) => {
-      if (
-        props.keywords.includes(keyword) &&
-        !filteredVoiceEntries.includes(entry)
-      ) {
-        filteredVoiceEntries.push(entry);
-      }
-    });
-  });
+  // const filteredVoiceEntries: Entry<VoiceEntry>[] = [];
+  // voiceEntries?.map((entry) => {
+  //   entry.fields.keywords.forEach((keyword) => {
+  //     if (
+  //       props.keywords.includes(keyword) &&
+  //       !filteredVoiceEntries.includes(entry)
+  //     ) {
+  //       filteredVoiceEntries.push(entry);
+  //     }
+  //   });
+  // });
 
   return (
     <>
-      {filteredVoiceEntries?.map((entry) => {
+      {voiceEntries?.map((entry) => {
         return (
           <Card
             key={entry.fields.entryId}
@@ -51,7 +55,7 @@ export const GetEntries: React.FC<{ keywords: string[] }> = (props) => {
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <CardContent sx={{ flex: "1 0 auto" }}>
                 <Typography gutterBottom component="div" variant="h5">
-                  {entry.fields.title}
+                  {entry.fields.englishTitle}
                 </Typography>
                 <Typography gutterBottom variant="body1" component="div">
                   {entry.fields.japaneseVoice}

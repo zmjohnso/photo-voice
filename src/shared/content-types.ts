@@ -1,6 +1,15 @@
-interface Coordinates {
-  lon: number;
-  lat: number;
+export interface VoiceEntry {
+  japaneseTitle: string;
+  englishTitle: string;
+  japaneseVoice: string;
+  englishVoice?: string;
+  photo: Photo[];
+  photoDate: Date;
+  photoLocation: PhotoLocation;
+  voiceDate: string;
+  // voiceLocation: Coordinates;
+  entryId: number;
+  voiceAuthor: string;
 }
 
 interface Photo {
@@ -22,13 +31,10 @@ interface Photo {
   };
 }
 
-export interface VoiceEntry {
-  title: string;
-  photo: Photo[];
-  japaneseVoice: string;
-  englishVoice?: string;
-  voiceDate: string;
-  voiceLocation: Coordinates;
-  entryId: number;
-  keywords: string[];
+interface PhotoLocation {
+  fields: {
+    photoPrefecture: string;
+    photoCity: string;
+    photoLocationDetail?: string;
+  };
 }
