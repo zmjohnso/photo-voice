@@ -6,6 +6,7 @@ import "@fontsource/roboto/700.css";
 import { GetEntries } from "./services/contentful/content-delivery-api";
 import { PhotoVoiceAppBar } from "./components/app-bar/app-bar";
 import { useState } from "react";
+import { SimpleSearch } from "./components/simple-seach";
 
 function App() {
   const [selectedKeywords, setSelectedKeywords] = useState([""]);
@@ -16,8 +17,9 @@ function App() {
 
   return (
     <div>
-      <PhotoVoiceAppBar setSelectedKeywords={handleSetSelectedKeywords} />
-      <GetEntries keywords={selectedKeywords} />
+      <PhotoVoiceAppBar />
+      <SimpleSearch setSelectedKeywords={handleSetSelectedKeywords} />
+      {/* <GetEntries keywords={selectedKeywords} /> */}
     </div>
   );
 }

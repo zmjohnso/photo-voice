@@ -1,22 +1,8 @@
-import {
-  AppBar,
-  Autocomplete,
-  Box,
-  IconButton,
-  TextField,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { Link } from "react-router-dom";
 
-interface Props {
-  setSelectedKeywords: (keywords: string[]) => void;
-}
-
-export const PhotoVoiceAppBar: React.FC<Props> = (props) => {
-  const navItems = ["Home", "About", "Contact"];
-  const keywords = ["Tag1", "Tag2", "Tag3"];
-
+export const PhotoVoiceAppBar: React.FC = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -34,28 +20,12 @@ export const PhotoVoiceAppBar: React.FC<Props> = (props) => {
             Home
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 0.25 }}>
-            About
+            <Link to={"about"}>About</Link>
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 0.25 }}>
             Contact
           </Typography>
         </Toolbar>
-        <Autocomplete
-          multiple
-          id="tags-standard"
-          options={keywords}
-          onChange={(event, value) => props.setSelectedKeywords(value)}
-          // getOptionLabel={keywords}
-          // defaultValue={[top100Films[13]]}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              variant="standard"
-              label="Tags"
-              placeholder="Example Tag"
-            />
-          )}
-        />
       </AppBar>
     </Box>
   );
