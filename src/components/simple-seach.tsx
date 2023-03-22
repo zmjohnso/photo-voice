@@ -7,6 +7,7 @@ interface Props {
 export const SimpleSearch: React.FC<Props> = (props) => {
   const keywords = ["Tag1", "Tag2", "Tag3"];
   const photoLocations = ["location1", "location2", "location3"];
+  const contributorNames = ["name1", "name2", "name3"];
 
   return (
     <Box>
@@ -43,9 +44,10 @@ export const SimpleSearch: React.FC<Props> = (props) => {
           )}
         />
         <Autocomplete
+          multiple
           disablePortal
           id="combo-box-demo"
-          options={photoLocations}
+          options={contributorNames}
           sx={{ width: 300 }}
           renderInput={(params) => (
             <TextField {...params} label="Name of Contributor" />

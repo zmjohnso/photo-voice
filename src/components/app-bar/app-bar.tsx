@@ -17,13 +17,13 @@ export const PhotoVoiceAppBar: React.FC = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 0.25 }}>
-            Home
+            <Link to={"home"}>Home</Link>
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 0.25 }}>
             <Link to={"about"}>About</Link>
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 0.25 }}>
-            Contact
+            <Link to={"contact"}>Contact</Link>
           </Typography>
         </Toolbar>
       </AppBar>

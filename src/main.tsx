@@ -4,20 +4,28 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 import ErrorPage from "./routes/error-page";
 import "./index.css";
+import { GetEntries } from "./services/contentful/content-delivery-api";
+import { SimpleSearch } from "./components/simple-seach";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
-  },
-  {
-    path: "about",
-    element: "This is an about page",
-  },
-  {
-    path: "contact",
-    element: "This is the contact page",
+    children: [
+      {
+        path: "home",
+        element: <SimpleSearch />,
+      },
+      {
+        path: "about",
+        element: "This is an about page",
+      },
+      {
+        path: "contact",
+        element: "This is the contact page",
+      },
+    ],
   },
 ]);
 
