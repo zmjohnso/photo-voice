@@ -7,7 +7,7 @@ interface Props {
   keywords: string[];
 }
 
-export const GetEntries: React.FC<Props> = (props) => {
+export const DisplayEntries: React.FC<Props> = (props) => {
   const [voiceEntries, setVoiceEntries] = useState<
     Entry<VoiceEntry>[] | undefined
   >();
