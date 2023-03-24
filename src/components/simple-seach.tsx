@@ -1,12 +1,13 @@
 import { Autocomplete, Box, Button, Stack, TextField } from "@mui/material";
+import { useStore } from "../store/store";
 
-interface Props {
-  setSelectedKeywords: (keywords: string[]) => void;
-}
+export const SimpleSearch: React.FC = () => {
+  const [photoLocations, addPhotoLocations] = useStore((state) => [
+    state.photoLocations,
+    state.addPhotoLocations,
+  ]);
 
-export const SimpleSearch: React.FC<Props> = (props) => {
-  const keywords = ["Tag1", "Tag2", "Tag3"];
-  const photoLocations = ["location1", "location2", "location3"];
+  const photoLocationsList = ["Fukushima Prefecture"];
   const contributorNames = ["name1", "name2", "name3"];
 
   return (
@@ -19,8 +20,9 @@ export const SimpleSearch: React.FC<Props> = (props) => {
         <Autocomplete
           multiple
           id="combo-box-demo"
-          options={photoLocations}
+          options={photoLocationsList}
           sx={{ width: 300 }}
+          onChange={(_event, value) => addPhotoLocations(value)}
           renderInput={(params) => (
             <TextField {...params} label="Photo Location" />
           )}
@@ -28,7 +30,7 @@ export const SimpleSearch: React.FC<Props> = (props) => {
         <Autocomplete
           disablePortal
           id="combo-box-demo"
-          options={photoLocations}
+          options={photoLocationsList}
           sx={{ width: 300 }}
           renderInput={(params) => (
             <TextField {...params} label="Date of Photo" />
@@ -37,7 +39,7 @@ export const SimpleSearch: React.FC<Props> = (props) => {
         <Autocomplete
           disablePortal
           id="combo-box-demo"
-          options={photoLocations}
+          options={photoLocationsList}
           sx={{ width: 300 }}
           renderInput={(params) => (
             <TextField {...params} label="Date of Voice" />

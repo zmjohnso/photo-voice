@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
@@ -6,12 +6,6 @@ import ErrorPage from "./routes/error-page";
 import "./index.css";
 import { DisplayEntries } from "./services/contentful/content-delivery-api";
 import { SimpleSearch } from "./components/simple-seach";
-
-// const [selectedKeywords, setSelectedKeywords] = useState([""]);
-
-// const handleSetSelectedKeywords = (keywords: string[]) => {
-//   setSelectedKeywords(keywords);
-// };
 
 const router = createBrowserRouter([
   {
@@ -31,10 +25,10 @@ const router = createBrowserRouter([
         path: "contact",
         element: "This is the contact page",
       },
-      // {
-      //   path: "search",
-      //   element: <DisplayEntries />,
-      // },
+      {
+        path: "search",
+        element: <DisplayEntries />,
+      },
     ],
   },
 ]);

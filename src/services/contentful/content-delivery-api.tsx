@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { VoiceEntry } from "../../shared/content-types";
 import { createClient, Entry } from "contentful";
 import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { useStore } from "../../store/store";
 
-interface Props {
-  keywords: string[];
-}
+export const DisplayEntries: React.FC = () => {
+  const photoLocations = useStore((state) => state.photoLocations);
 
-export const DisplayEntries: React.FC<Props> = (props) => {
   const [voiceEntries, setVoiceEntries] = useState<
     Entry<VoiceEntry>[] | undefined
   >();
@@ -24,18 +23,21 @@ export const DisplayEntries: React.FC<Props> = (props) => {
       .catch(console.error); // Add error handling
   }, []);
 
-  // voiceEntries must have at least one common keyword with the props keyword list
-  // const filteredVoiceEntries: Entry<VoiceEntry>[] = [];
-  // voiceEntries?.map((entry) => {
-  //   entry.fields.keywords.forEach((keyword) => {
-  //     if (
-  //       props.keywords.includes(keyword) &&
-  //       !filteredVoiceEntries.includes(entry)
-  //     ) {
-  //       filteredVoiceEntries.push(entry);
-  //     }
-  //   });
-  // });
+  // TODO: fix filtering by photo location
+  // filter voice entries by photo location
+  const filteredVoiceEntries: Entry<VoiceEntry>[] = [];
+  voiceEntries?.map((entry) => {
+    const combinedPhotoLocation =
+      entry.fields.photoLocation.fields.photoPrefecture +
+      entry.fields.photoLocation.fields.photoCity +
+      entry.fields.photoLocation.fields.photoLocationDetail;
+    if (
+      photoLocations.includes(combinedPhotoLocation) &&
+      !filteredVoiceEntries.includes(entry)
+    ) {
+      filteredVoiceEntries.push(entry);
+    }
+  });
 
   return (
     <>
