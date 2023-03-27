@@ -1,8 +1,10 @@
 import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const PhotoVoiceAppBar: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -16,14 +18,29 @@ export const PhotoVoiceAppBar: React.FC = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 0.25 }}>
-            <Link to={"home"}>Home</Link>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 0.25 }}
+            onClick={() => navigate("/home")}
+          >
+            Home
           </Typography>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 0.25 }}>
-            <Link to={"about"}>About</Link>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 0.25 }}
+            onClick={() => navigate("/about")}
+          >
+            About
           </Typography>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 0.25 }}>
-            <Link to={"contact"}>Contact</Link>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 0.25 }}
+            onClick={() => navigate("/contact")}
+          >
+            Contact
           </Typography>
         </Toolbar>
       </AppBar>

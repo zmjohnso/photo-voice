@@ -6,10 +6,15 @@ import { useStore } from "../../store/store";
 
 export const DisplayEntries: React.FC = () => {
   const photoLocations = useStore((state) => state.photoLocations);
+  const englishAuthorNames = useStore((state) => state.englishAuthorNames);
 
   const [voiceEntries, setVoiceEntries] = useState<
     Entry<VoiceEntry>[] | undefined
   >();
+
+  const [filteredVoiceEntries, setFilteredVoiceEntries] =
+    useState<Entry<VoiceEntry>[]>();
+
   const client = createClient({
     space: import.meta.env.VITE_CONTENTFUL_SPACE_ID,
     environment: import.meta.env.VITE_CONTENTFUL_ENVIRONMENT_ID,
@@ -19,29 +24,53 @@ export const DisplayEntries: React.FC = () => {
   useEffect(() => {
     client
       .getEntries<VoiceEntry>({ content_type: "entry" })
-      .then((entries) => setVoiceEntries(entries.items))
+      .then((entries) => {
+        setVoiceEntries(entries.items);
+        setFilteredVoiceEntries(entries.items);
+      })
       .catch(console.error); // Add error handling
   }, []);
 
-  // TODO: fix filtering by photo location
-  // filter voice entries by photo location
-  const filteredVoiceEntries: Entry<VoiceEntry>[] = [];
-  voiceEntries?.map((entry) => {
-    const combinedPhotoLocation =
-      entry.fields.photoLocation.fields.photoPrefecture +
-      entry.fields.photoLocation.fields.photoCity +
-      entry.fields.photoLocation.fields.photoLocationDetail;
-    if (
-      photoLocations.includes(combinedPhotoLocation) &&
-      !filteredVoiceEntries.includes(entry)
-    ) {
-      filteredVoiceEntries.push(entry);
+  useEffect(() => {
+    const tempFilteredVoiceEntries: Entry<VoiceEntry>[] = [];
+
+    // only need to check one of the English or Japanese names
+    if (englishAuthorNames.length) {
+      voiceEntries?.forEach((entry) => {
+        const authorNameFields = entry.fields.voiceAuthor.fields;
+        englishAuthorNames.forEach((name) => {
+          if (
+            authorNameFields.englishName === name &&
+            !tempFilteredVoiceEntries?.includes(entry)
+          ) {
+            tempFilteredVoiceEntries.push(entry);
+          }
+        });
+      });
     }
-  });
+
+    // filter by photo location
+    if (photoLocations.length) {
+      voiceEntries?.forEach((entry) => {
+        const photoFields = entry.fields.photoLocation.fields;
+        photoLocations.forEach((location) => {
+          if (
+            (photoFields.photoPrefecture.includes(location) ||
+              photoFields.photoCity?.includes(location)) &&
+            !tempFilteredVoiceEntries?.includes(entry)
+          ) {
+            tempFilteredVoiceEntries.push(entry);
+          }
+        });
+      });
+    }
+    tempFilteredVoiceEntries.length &&
+      setFilteredVoiceEntries(tempFilteredVoiceEntries);
+  }, [photoLocations, englishAuthorNames, voiceEntries]);
 
   return (
     <>
-      {voiceEntries?.map((entry) => {
+      {filteredVoiceEntries?.map((entry) => {
         return (
           <Card
             key={entry.fields.entryId}

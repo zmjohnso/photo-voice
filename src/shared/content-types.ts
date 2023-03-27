@@ -1,3 +1,5 @@
+import { Entry } from "contentful";
+
 export interface VoiceEntry {
   japaneseTitle: string;
   englishTitle: string;
@@ -5,13 +7,13 @@ export interface VoiceEntry {
   englishVoice?: string;
   photo: Photo[];
   photoDate: Date;
-  photoLocation: PhotoLocation;
+  photoLocation: Entry<PhotoLocation>;
   voiceDate: string;
-  // voiceLocation: Coordinates;
   entryId: number;
-  voiceAuthor: string;
+  voiceAuthor: Entry<VoiceAuthor>;
 }
 
+// TODO: can this type be cleaned up?
 interface Photo {
   fields: {
     description: string;
@@ -31,10 +33,16 @@ interface Photo {
   };
 }
 
-interface PhotoLocation {
-  fields: {
-    photoPrefecture: string;
-    photoCity: string;
-    photoLocationDetail?: string;
-  };
+export interface PhotoLocation {
+  photoPrefecture: string;
+  photoCity?: string;
+  photoLocationDetail?: string;
+}
+
+export interface VoiceAuthor {
+  japaneseName: string;
+  englishName: string;
+  japaneseBiography?: string;
+  englishBiography?: string;
+  groupLocation: string;
 }
