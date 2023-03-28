@@ -5,7 +5,7 @@ import App from "./App";
 import ErrorPage from "./routes/error-page";
 import "./index.css";
 import { DisplayEntries } from "./services/contentful/content-delivery-api";
-import { SimpleSearch } from "./components/simple-seach";
+import { SimpleSearch } from "./components/simple-search/simple-seach";
 
 const router = createBrowserRouter([
   {
