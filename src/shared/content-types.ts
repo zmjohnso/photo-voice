@@ -6,9 +6,9 @@ export interface VoiceEntry {
   japaneseVoice: string;
   englishVoice?: string;
   photo: Photo[];
-  photoDate: Date; // is this just a string?
+  photoDate: Date;
   photoLocation: Entry<PhotoLocation>;
-  voiceDate: Date; // is this just a string?
+  voiceDate: Date;
   entryId: number;
   voiceAuthor: Entry<VoiceAuthor>;
 }

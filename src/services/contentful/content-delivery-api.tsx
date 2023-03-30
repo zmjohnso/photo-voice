@@ -79,11 +79,9 @@ export const DisplayEntries: React.FC = () => {
       setFilteredVoiceEntries(tempFilteredVoiceEntries);
   }, [photoLocations, englishAuthorNames, voiceEntries]);
 
-  const dateOptions = {
-    weekday: "long",
+  const dateFormatOptions: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "long",
-    day: "numeric",
   };
 
   return (
@@ -179,7 +177,7 @@ export const DisplayEntries: React.FC = () => {
                     <Typography variant="body2" component="div">
                       {new Date(entry.fields.voiceDate).toLocaleDateString(
                         "ja-JP",
-                        dateOptions
+                        dateFormatOptions
                       )}
                     </Typography>
                   </Stack>
@@ -231,7 +229,7 @@ export const DisplayEntries: React.FC = () => {
                   <Typography variant="body2" component="div">
                     {new Date(entry.fields.voiceDate).toLocaleDateString(
                       "en-US",
-                      dateOptions
+                      dateFormatOptions
                     )}
                   </Typography>
                 </Stack>
