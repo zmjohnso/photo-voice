@@ -96,7 +96,7 @@ export const SimpleSearch: React.FC = () => {
           <Autocomplete
             disablePortal
             id="combo-box-demo"
-            options={prefectures}
+            options={[]}
             sx={{ width: 300 }}
             renderInput={(params) => (
               <TextField {...params} label="Date of Photo" />
@@ -105,7 +105,7 @@ export const SimpleSearch: React.FC = () => {
           <Autocomplete
             disablePortal
             id="combo-box-demo"
-            options={prefectures}
+            options={[]}
             sx={{ width: 300 }}
             renderInput={(params) => (
               <TextField {...params} label="Date of Voice" />
@@ -130,7 +130,7 @@ export const SimpleSearch: React.FC = () => {
               englishNames.length && addEnglishAuthorNames(englishNames);
             }}
             renderInput={(params) => (
-              <TextField {...params} label="Author Name" />
+              <TextField {...params} label="Author/Photographer Name" />
             )}
           />
         </Stack>

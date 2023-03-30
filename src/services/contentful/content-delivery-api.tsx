@@ -79,6 +79,13 @@ export const DisplayEntries: React.FC = () => {
       setFilteredVoiceEntries(tempFilteredVoiceEntries);
   }, [photoLocations, englishAuthorNames, voiceEntries]);
 
+  const dateOptions = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+
   return (
     <>
       {filteredVoiceEntries?.map((entry) => {
@@ -133,44 +140,100 @@ export const DisplayEntries: React.FC = () => {
               }}
             >
               <CardContent sx={{ flex: "1 0 auto" }}>
-                <Stack spacing={3}>
-                  <Stack spacing={2} direction="row">
-                    <Typography gutterBottom component="div" variant="h5">
-                      {entry.fields.japaneseTitle}
-                    </Typography>
-                    <Typography gutterBottom component="div" variant="h5">
-                      |
-                    </Typography>
-                    <Typography gutterBottom component="div" variant="h5">
-                      {entry.fields.englishTitle}
-                    </Typography>
-                  </Stack>
+                <Stack spacing={2}>
+                  <Typography gutterBottom component="div" variant="h5">
+                    {entry.fields.japaneseTitle}
+                  </Typography>
                   <Typography gutterBottom variant="body1" component="div">
                     <ReactMarkdown>{entry.fields.japaneseVoice}</ReactMarkdown>
+                  </Typography>
+                  <Stack alignItems="flex-end">
+                    <Typography gutterBottom variant="body2" component="div">
+                      {entry.fields.voiceAuthor.fields.japaneseName}
+                    </Typography>
+                    <Typography variant="body2" component="div">
+                      {
+                        entry.fields.photoLocation.fields.photoPrefecture.split(
+                          "・"
+                        )[0]
+                      }
+                    </Typography>
+                    {entry.fields.photoLocation.fields.photoCity && (
+                      <Typography variant="body2" component="div">
+                        {
+                          entry.fields.photoLocation.fields.photoCity.split(
+                            "・"
+                          )[0]
+                        }
+                      </Typography>
+                    )}
+                    {entry.fields.photoLocation.fields.photoLocationDetail && (
+                      <Typography gutterBottom variant="body2" component="div">
+                        {
+                          entry.fields.photoLocation.fields.photoLocationDetail.split(
+                            "・"
+                          )[0]
+                        }
+                      </Typography>
+                    )}
+                    <Typography variant="body2" component="div">
+                      {new Date(entry.fields.voiceDate).toLocaleDateString(
+                        "ja-JP",
+                        dateOptions
+                      )}
+                    </Typography>
+                  </Stack>
+                </Stack>
+
+                <br></br>
+                <br></br>
+                <br></br>
+
+                <Stack spacing={2}>
+                  <Typography gutterBottom component="div" variant="h5">
+                    {entry.fields.englishTitle}
                   </Typography>
                   {entry.fields.englishVoice && (
                     <Typography gutterBottom variant="body1" component="div">
                       <ReactMarkdown>{entry.fields.englishVoice}</ReactMarkdown>
                     </Typography>
                   )}
-                  <Stack alignItems="flex-end">
+                </Stack>
+                <Stack alignItems="flex-end">
+                  <Typography gutterBottom variant="body2" component="div">
+                    {entry.fields.voiceAuthor.fields.englishName}
+                  </Typography>
+                  <Typography variant="body2" component="div">
+                    {
+                      entry.fields.photoLocation.fields.photoPrefecture.split(
+                        "・"
+                      )[1]
+                    }
+                  </Typography>
+                  {entry.fields.photoLocation.fields.photoCity && (
+                    <Typography variant="body2" component="div">
+                      {
+                        entry.fields.photoLocation.fields.photoCity.split(
+                          "・"
+                        )[1]
+                      }
+                    </Typography>
+                  )}
+                  {entry.fields.photoLocation.fields.photoLocationDetail && (
                     <Typography gutterBottom variant="body2" component="div">
-                      {entry.fields.voiceAuthor.fields.japaneseName} |{" "}
-                      {entry.fields.voiceAuthor.fields.englishName}
+                      {
+                        entry.fields.photoLocation.fields.photoLocationDetail.split(
+                          "・"
+                        )[1]
+                      }
                     </Typography>
-                    <Typography variant="body2" component="div">
-                      {entry.fields.photoLocation.fields.photoPrefecture}
-                    </Typography>
-                    <Typography variant="body2" component="div">
-                      {entry.fields.photoLocation.fields.photoCity}
-                    </Typography>
-                    <Typography gutterBottom variant="body2" component="div">
-                      {entry.fields.photoLocation.fields.photoLocationDetail}
-                    </Typography>
-                    <Typography variant="body2" component="div">
-                      {entry.fields.voiceDate.toString()}
-                    </Typography>
-                  </Stack>
+                  )}
+                  <Typography variant="body2" component="div">
+                    {new Date(entry.fields.voiceDate).toLocaleDateString(
+                      "en-US",
+                      dateOptions
+                    )}
+                  </Typography>
                 </Stack>
               </CardContent>
             </Box>
