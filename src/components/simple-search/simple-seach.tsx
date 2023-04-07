@@ -4,18 +4,29 @@ import { useNavigate } from "react-router-dom";
 import { createClient, Entry } from "contentful";
 import { VoiceAuthor, PhotoLocation } from "../../shared/content-types";
 import { useEffect, useState } from "react";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 export const SimpleSearch: React.FC = () => {
   const [
-    reset,
     addPhotoLocations,
     addJapaneseAuthorNames,
     addEnglishAuthorNames,
+    addPhotoStartDate,
+    addPhotoEndDate,
+    addVoiceStartDate,
+    addVoiceEndDate,
+    reset,
   ] = useStore((state) => [
-    state.reset,
     state.addPhotoLocations,
     state.addJapaneseAuthorNames,
     state.addEnglishAuthorNames,
+    state.addPhotoStartDate,
+    state.addPhotoEndDate,
+    state.addVoiceStartDate,
+    state.addVoiceEndDate,
+    state.reset,
   ]);
   const navigate = useNavigate();
   const client = createClient({
@@ -66,14 +77,14 @@ export const SimpleSearch: React.FC = () => {
 
   return (
     <Box
-      width="250px"
-      height="250px"
+      width="400px"
+      height="400px"
       marginLeft="auto"
       marginRight="auto"
       paddingTop="1rem"
     >
       <Stack spacing={2}>
-        <Stack spacing={2} direction="row">
+        <Stack spacing={2} direction="row" justifyContent="center">
           <Button variant="contained" onClick={() => reset()}>
             Clear
           </Button>
@@ -87,37 +98,83 @@ export const SimpleSearch: React.FC = () => {
             id="photo-locations"
             limitTags={2}
             options={photoLocationOptions}
-            sx={{ width: 300 }}
+            sx={{ width: 400 }}
             onChange={(_event, value) => addPhotoLocations(value)}
             renderInput={(params) => (
               <TextField {...params} label="Photo Location" />
             )}
           />
-          <Autocomplete
-            disablePortal
-            id="combo-box-demo"
-            options={[]}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Date of Photo" />
-            )}
-          />
-          <Autocomplete
-            disablePortal
-            id="combo-box-demo"
-            options={[]}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Date of Voice" />
-            )}
-          />
+          <Stack direction="row" spacing={2} sx={{ width: 400 }}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label={"Date of Photo"}
+                views={["month", "year"]}
+                slotProps={{
+                  textField: {
+                    helperText: "Start Date",
+                  },
+                }}
+                // TODO: find a better type here
+                onChange={(value: any) => {
+                  addPhotoStartDate(value.$d);
+                }}
+              />
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label={"Date of Photo"}
+                views={["month", "year"]}
+                slotProps={{
+                  textField: {
+                    helperText: "End Date",
+                  },
+                }}
+                // TODO: find a better type here
+                onChange={(value: any) => {
+                  addPhotoEndDate(value.$d);
+                }}
+              />
+            </LocalizationProvider>
+          </Stack>
+          <Stack direction="row" spacing={2} sx={{ width: 400 }}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label={"Start Date of Voice"}
+                views={["month", "year"]}
+                slotProps={{
+                  textField: {
+                    helperText: "Start Date",
+                  },
+                }}
+                // TODO: find a better type here
+                onChange={(value: any) => {
+                  addVoiceStartDate(value.$d);
+                }}
+              />
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label={"End Date of Voice"}
+                views={["month", "year"]}
+                slotProps={{
+                  textField: {
+                    helperText: "End Date",
+                  },
+                }}
+                // TODO: find a better type here
+                onChange={(value: any) => {
+                  addVoiceEndDate(value.$d);
+                }}
+              />
+            </LocalizationProvider>
+          </Stack>
           <Autocomplete
             multiple
             disablePortal
             id="author-names"
             limitTags={2}
             options={authorNameOptions}
-            sx={{ width: 300 }}
+            sx={{ width: 400 }}
             onChange={(_event, value) => {
               const japaneseNames: string[] = [];
               const englishNames: string[] = [];
