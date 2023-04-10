@@ -42,6 +42,11 @@ export const SimpleSearch: React.FC = () => {
   >();
 
   useEffect(() => {
+    // clear store search values on page load
+    reset();
+  }, []);
+
+  useEffect(() => {
     client
       .getEntries<PhotoLocation>({ content_type: "photoLocation" })
       .then((locations) => setPhotoLocations(locations.items))

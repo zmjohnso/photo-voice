@@ -252,7 +252,7 @@ export const DisplayEntries: React.FC = () => {
                         </Typography>
                       )}
                       <Typography variant="body2" component="div">
-                        {new Date(entry.fields.voiceDate).toLocaleDateString(
+                        {new Date(entry.fields.photoDate).toLocaleDateString(
                           "ja-JP",
                           dateFormatOptions
                         )}
@@ -306,7 +306,7 @@ export const DisplayEntries: React.FC = () => {
                       </Typography>
                     )}
                     <Typography variant="body2" component="div">
-                      {new Date(entry.fields.voiceDate).toLocaleDateString(
+                      {new Date(entry.fields.photoDate).toLocaleDateString(
                         "en-US",
                         dateFormatOptions
                       )}
