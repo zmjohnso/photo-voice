@@ -1,12 +1,13 @@
 import { Autocomplete, Box, Button, Stack, TextField } from "@mui/material";
 import { useStore } from "../../store/store";
 import { useNavigate } from "react-router-dom";
-import { createClient, Entry } from "contentful";
+import { Entry } from "contentful";
 import { VoiceAuthor, PhotoLocation } from "../../shared/content-types";
 import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { getClient } from "../../services/contentful/client";
 
 export const SimpleSearch: React.FC = () => {
   const [
@@ -29,11 +30,7 @@ export const SimpleSearch: React.FC = () => {
     state.reset,
   ]);
   const navigate = useNavigate();
-  const client = createClient({
-    space: import.meta.env.VITE_CONTENTFUL_SPACE_ID,
-    environment: import.meta.env.VITE_CONTENTFUL_ENVIRONMENT_ID,
-    accessToken: import.meta.env.VITE_CONTENTFUL_API_KEY,
-  });
+  const client = getClient();
   const [photoLocations, setPhotoLocations] = useState<
     Entry<PhotoLocation>[] | undefined
   >();
@@ -93,7 +90,7 @@ export const SimpleSearch: React.FC = () => {
           <Button variant="contained" onClick={() => reset()}>
             Clear
           </Button>
-          <Button variant="outlined" onClick={() => navigate("/search")}>
+          <Button variant="outlined" onClick={() => navigate("/icon")}>
             Search
           </Button>
         </Stack>

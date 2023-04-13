@@ -4,8 +4,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 import ErrorPage from "./routes/error-page";
 import "./index.css";
-import { DisplayEntries } from "./services/contentful/content-delivery-api";
 import { SimpleSearch } from "./components/simple-search/simple-seach";
+import { IconDisplay } from "./components/icon-display/icon-display";
+import { EntryDisplay } from "./components/entry-display/entry-display";
 
 const router = createBrowserRouter([
   {
@@ -26,8 +27,12 @@ const router = createBrowserRouter([
         element: "This is the contact page",
       },
       {
-        path: "search",
-        element: <DisplayEntries />,
+        path: "icon",
+        element: <IconDisplay />,
+      },
+      {
+        path: "display",
+        element: <EntryDisplay />,
       },
     ],
   },

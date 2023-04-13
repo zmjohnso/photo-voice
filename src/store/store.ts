@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { VoiceEntry } from "../shared/content-types";
+import { Entry } from "contentful";
 
 interface State {
   photoLocations: string[];
@@ -8,6 +10,7 @@ interface State {
   photoEndDate: Date | null;
   voiceStartDate: Date | null;
   voiceEndDate: Date | null;
+  currentEntry: Entry<VoiceEntry> | null;
 }
 
 interface Action {
@@ -18,6 +21,7 @@ interface Action {
   addPhotoEndDate: (date: Date) => void;
   addVoiceStartDate: (date: Date) => void;
   addVoiceEndDate: (date: Date) => void;
+  addCurrentEntry: (entry: Entry<VoiceEntry>) => void;
   reset: () => void;
 }
 
@@ -30,6 +34,7 @@ const initialState: State = {
   photoEndDate: null,
   voiceStartDate: null,
   voiceEndDate: null,
+  currentEntry: null,
 };
 
 export const useStore = create<State & Action>((set) => ({
@@ -67,6 +72,11 @@ export const useStore = create<State & Action>((set) => ({
   addVoiceEndDate: (date: Date) =>
     set(() => ({
       voiceEndDate: date,
+    })),
+  currentEntry: null,
+  addCurrentEntry: (entry: Entry<VoiceEntry>) =>
+    set(() => ({
+      currentEntry: entry,
     })),
   reset: () => {
     set(initialState);
