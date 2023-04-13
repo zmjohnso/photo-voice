@@ -27,13 +27,18 @@ export const EntryPreview: React.FC<Props> = (props) => {
   return (
     <Card>
       <CardActionArea onClick={handleNavigate}>
-        <CardMedia image={props.entry.fields.photo[0].fields.file.url}>
-          <CardContent>
-            <Typography gutterBottom variant="h5">
-              {props.entry.fields.japaneseTitle}
-            </Typography>
-          </CardContent>
-        </CardMedia>
+        <CardMedia
+          image={props.entry.fields.photo[0].fields.file.url}
+          style={{ height: "150px" }}
+        />
+        <CardContent>
+          <Typography gutterBottom variant="body1">
+            {props.entry.fields.japaneseTitle}
+          </Typography>
+          <Typography gutterBottom variant="body1">
+            {props.entry.fields.englishTitle}
+          </Typography>
+        </CardContent>
       </CardActionArea>
     </Card>
   );
