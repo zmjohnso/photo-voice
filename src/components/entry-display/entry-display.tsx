@@ -29,7 +29,7 @@ export const EntryDisplay: React.FC = () => {
       key={currentEntry.fields.entryId}
       sx={{
         display: "flex",
-        height: `${currentEntry.fields.photo[0].fields.file.details.image.height}`,
+        height: "95%",
         marginTop: "1rem",
         marginBottom: "1rem",
       }}
@@ -38,7 +38,7 @@ export const EntryDisplay: React.FC = () => {
       {currentEntry.fields.photo.length === 1 && (
         <CardMedia
           component="img"
-          sx={{ width: 1 / 2 }}
+          sx={{ width: "50vw" }}
           image={currentEntry.fields.photo[0].fields.file.url}
           alt={currentEntry.fields.photo[0].fields.title}
         />
@@ -46,15 +46,11 @@ export const EntryDisplay: React.FC = () => {
       {currentEntry.fields.photo.length > 1 && (
         <ImageList
           sx={{
-            width:
-              currentEntry.fields.photo[0].fields.file.details.image.width * 3,
-            height:
-              currentEntry.fields.photo[0].fields.file.details.image.height,
+            width: "70vw",
+            height: "95%",
           }}
-          cols={3}
-          rowHeight={
-            currentEntry.fields.photo[0].fields.file.details.image.height
-          }
+          cols={1}
+          rowHeight={"auto"}
         >
           {currentEntry.fields.photo.map((photo) => (
             <ImageListItem key={photo.fields.title}>
