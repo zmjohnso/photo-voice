@@ -37,7 +37,7 @@ const initialState: State = {
   currentEntry: null,
 };
 
-export const useStore = create<State & Action>((set) => ({
+export const useStore = create<State & Action>()((set) => ({
   photoLocations: [],
   addPhotoLocations: (locations) =>
     set(() => ({

@@ -79,8 +79,8 @@ export const SimpleSearch: React.FC = () => {
 
   return (
     <Box
-      width="400px"
-      height="400px"
+      width="500px"
+      height="500px"
       marginLeft="auto"
       marginRight="auto"
       paddingTop="1rem"
@@ -88,10 +88,10 @@ export const SimpleSearch: React.FC = () => {
       <Stack spacing={2}>
         <Stack spacing={2} direction="row" justifyContent="center">
           <Button variant="contained" onClick={() => reset()}>
-            Clear
+            クリア・Clear
           </Button>
           <Button variant="outlined" onClick={() => navigate("/icon")}>
-            Search
+            検索・Search
           </Button>
         </Stack>
         <Stack spacing={2}>
@@ -100,20 +100,20 @@ export const SimpleSearch: React.FC = () => {
             id="photo-locations"
             limitTags={2}
             options={photoLocationOptions}
-            sx={{ width: 400 }}
+            sx={{ width: 480 }}
             onChange={(_event, value) => addPhotoLocations(value)}
             renderInput={(params) => (
-              <TextField {...params} label="Photo Location" />
+              <TextField {...params} label="撮影場所・Photo Location" />
             )}
           />
-          <Stack direction="row" spacing={2} sx={{ width: 400 }}>
+          <Stack direction="row" spacing={2} sx={{ width: 480 }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                label={"Date of Photo"}
+                label={"撮影年月・Date of Photo"}
                 views={["month", "year"]}
                 slotProps={{
                   textField: {
-                    helperText: "Start Date",
+                    helperText: "開始日・Start Date",
                   },
                 }}
                 // TODO: find a better type here
@@ -124,11 +124,11 @@ export const SimpleSearch: React.FC = () => {
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                label={"Date of Photo"}
+                label={"撮影年月・Date of Photo"}
                 views={["month", "year"]}
                 slotProps={{
                   textField: {
-                    helperText: "End Date",
+                    helperText: "終了日・End Date",
                   },
                 }}
                 // TODO: find a better type here
@@ -138,10 +138,10 @@ export const SimpleSearch: React.FC = () => {
               />
             </LocalizationProvider>
           </Stack>
-          <Stack direction="row" spacing={2} sx={{ width: 400 }}>
+          {/* <Stack direction="row" spacing={2} sx={{ width: 480 }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                label={"Start Date of Voice"}
+                label={"Date of Voice"}
                 views={["month", "year"]}
                 slotProps={{
                   textField: {
@@ -156,7 +156,7 @@ export const SimpleSearch: React.FC = () => {
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                label={"End Date of Voice"}
+                label={"Date of Voice"}
                 views={["month", "year"]}
                 slotProps={{
                   textField: {
@@ -169,14 +169,14 @@ export const SimpleSearch: React.FC = () => {
                 }}
               />
             </LocalizationProvider>
-          </Stack>
+          </Stack> */}
           <Autocomplete
             multiple
             disablePortal
             id="author-names"
             limitTags={2}
             options={authorNameOptions}
-            sx={{ width: 400 }}
+            sx={{ width: 480 }}
             onChange={(_event, value) => {
               const japaneseNames: string[] = [];
               const englishNames: string[] = [];
@@ -189,7 +189,10 @@ export const SimpleSearch: React.FC = () => {
               englishNames.length && addEnglishAuthorNames(englishNames);
             }}
             renderInput={(params) => (
-              <TextField {...params} label="Author/Photographer Name" />
+              <TextField
+                {...params}
+                label="撮影者・筆者名・Author/Photographer Name"
+              />
             )}
           />
         </Stack>

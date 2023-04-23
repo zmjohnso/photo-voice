@@ -11,8 +11,8 @@ export const IconDisplay: React.FC = () => {
   const englishAuthorNames = useStore((state) => state.englishAuthorNames);
   const photoStartDate = useStore((state) => state.photoStartDate);
   const photoEndDate = useStore((state) => state.photoEndDate);
-  const voiceStartDate = useStore((state) => state.voiceStartDate);
-  const voiceEndDate = useStore((state) => state.voiceEndDate);
+  // const voiceStartDate = useStore((state) => state.voiceStartDate);
+  // const voiceEndDate = useStore((state) => state.voiceEndDate);
 
   const [voiceEntries, setVoiceEntries] = useState<
     Entry<VoiceEntry>[] | undefined
@@ -67,20 +67,20 @@ export const IconDisplay: React.FC = () => {
     }
 
     // filter by voice date
-    if (voiceStartDate && voiceEndDate) {
-      voiceEntries?.forEach((entry) => {
-        const voiceDate = new Date(entry.fields.voiceDate);
-        if (voiceDate.getFullYear() > voiceStartDate.getFullYear()) {
-          if (voiceDate.getFullYear() < voiceEndDate.getFullYear()) {
-            tempFilteredVoiceEntries.push(entry);
-          } else if (voiceDate.getFullYear() === voiceEndDate.getFullYear()) {
-            if (voiceDate.getMonth() >= voiceStartDate.getMonth()) {
-              tempFilteredVoiceEntries.push(entry);
-            }
-          }
-        }
-      });
-    }
+    // if (voiceStartDate && voiceEndDate) {
+    //   voiceEntries?.forEach((entry) => {
+    //     const voiceDate = new Date(entry.fields.voiceDate);
+    //     if (voiceDate.getFullYear() > voiceStartDate.getFullYear()) {
+    //       if (voiceDate.getFullYear() < voiceEndDate.getFullYear()) {
+    //         tempFilteredVoiceEntries.push(entry);
+    //       } else if (voiceDate.getFullYear() === voiceEndDate.getFullYear()) {
+    //         if (voiceDate.getMonth() >= voiceStartDate.getMonth()) {
+    //           tempFilteredVoiceEntries.push(entry);
+    //         }
+    //       }
+    //     }
+    //   });
+    // }
 
     // filter by photo location
     if (photoLocations.length) {
@@ -103,8 +103,8 @@ export const IconDisplay: React.FC = () => {
       !englishAuthorNames.length &&
       !photoStartDate &&
       !photoEndDate &&
-      !voiceStartDate &&
-      !voiceEndDate &&
+      // !voiceStartDate &&
+      // !voiceEndDate &&
       !photoLocations.length
     ) {
       setFilteredVoiceEntries(voiceEntries);
@@ -115,8 +115,8 @@ export const IconDisplay: React.FC = () => {
     photoLocations,
     englishAuthorNames,
     voiceEntries,
-    voiceStartDate,
-    voiceEndDate,
+    // voiceStartDate,
+    // voiceEndDate,
     photoStartDate,
     photoEndDate,
   ]);

@@ -22,9 +22,17 @@ export const PhotoVoiceAppBar: React.FC = () => {
             variant="h6"
             component="div"
             sx={{ flexGrow: 0.25 }}
-            onClick={() => navigate("/home")}
+            onClick={() => navigate("/")}
           >
-            Home
+            ホーム・Home
+          </Typography>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 0.25 }}
+            onClick={() => navigate("/search")}
+          >
+            検索・Search
           </Typography>
           <Typography
             variant="h6"
@@ -32,15 +40,7 @@ export const PhotoVoiceAppBar: React.FC = () => {
             sx={{ flexGrow: 0.25 }}
             onClick={() => navigate("/about")}
           >
-            About
-          </Typography>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 0.25 }}
-            onClick={() => navigate("/contact")}
-          >
-            Contact
+            事業概要・About
           </Typography>
         </Toolbar>
       </AppBar>
