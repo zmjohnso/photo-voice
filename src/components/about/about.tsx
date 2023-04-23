@@ -1,7 +1,21 @@
 import { Box, CardMedia, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getClient } from "../../services/contentful/client";
+import { AboutPage } from "../../shared/content-types";
+import { Entry } from "contentful";
 
 export const About: React.FC = () => {
+  const client = getClient();
+
+  // TODO: there will ever only be one about page, fix this array type?
+  const [aboutPage, setAboutPage] = useState<Entry<AboutPage>[] | undefined>();
+
+  useEffect(() => {
+    client
+      .getEntries<AboutPage>({ content_type: "about" })
+      .then((aboutPageContent) => setAboutPage(aboutPageContent.items))
+      .catch(console.error); // Add error handling;
+  });
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column" }}
@@ -10,12 +24,14 @@ export const About: React.FC = () => {
       paddingTop="1rem"
       alignItems="center"
     >
-      <CardMedia
-        component="img"
-        sx={{ width: "450px" }}
-        image="src/components/about/photo-voice-about.jpg"
-        alt="About Page Image"
-      />
+      {aboutPage && (
+        <CardMedia
+          component="img"
+          sx={{ width: "450px" }}
+          image={aboutPage[0].fields.aboutPicture.fields.file.url}
+          alt="About Page Image"
+        />
+      )}
       <Typography variant="body1" padding="1rem">
         フォトボイス・プロジェクトは、東日本大震災で被災した女性たちが、写真を通して自分たちの経験や感情を言葉にして共有し、地域や社会の問題を話し合う場をつくり、写真と「声」を通して、よりよい防災・災害対応・復興に向けて発信していくことを目的としている。
       </Typography>

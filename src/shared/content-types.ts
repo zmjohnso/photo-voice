@@ -46,3 +46,11 @@ export interface VoiceAuthor {
   englishBiography?: string;
   groupLocation: string;
 }
+
+export interface HomePage {
+  logo: Photo;
+}
+
+export interface AboutPage {
+  aboutPicture: Photo;
+}
