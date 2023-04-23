@@ -156,8 +156,18 @@ export const IconDisplay: React.FC = () => {
           </Grid>
         </Box>
       ) : (
-        <Box paddingTop="1rem">
-          <Typography>
+        <Box
+          display="flex"
+          flexDirection="column"
+          paddingTop="1rem"
+          paddingLeft="15rem"
+          paddingRight="15rem"
+          alignItems="center"
+        >
+          <Typography variant="body1">
+            検索結果がありません。ご検索条件を変更して、再試行してください。
+          </Typography>
+          <Typography variant="body1">
             No voices found for your search parameters. Please alter your search
             and try again.
           </Typography>
