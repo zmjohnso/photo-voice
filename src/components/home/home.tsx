@@ -34,7 +34,7 @@ export const Home: React.FC = () => {
         />
       )}
       <Typography padding="2rem" variant="h3">
-        フォトボイスプロジェクトへようこそ
+        フォトボイス・プロジェクトへようこそ
       </Typography>
       <Typography padding="2rem" variant="h3">
         Welcome to The PhotoVoice Project
