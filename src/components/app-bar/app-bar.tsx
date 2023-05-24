@@ -1,11 +1,11 @@
 import {
   AppBar,
   Box,
+  Button,
   IconButton,
   Menu,
   MenuItem,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +22,12 @@ export const PhotoVoiceAppBar: React.FC = () => {
     setAnchorEl(null);
   };
 
+  const navItems = new Map<string, string>([
+    ["ホーム・Home", "/"],
+    ["検索・Search", "/search"],
+    ["事業概要・About", "/about"],
+  ]);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -37,55 +43,38 @@ export const PhotoVoiceAppBar: React.FC = () => {
             <MenuIcon />
           </IconButton>
           <Menu id="menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
-            <MenuItem
-              onClick={() => {
-                navigate("/");
-                handleClose();
-              }}
-            >
-              ホーム・Home
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                navigate("/search");
-                handleClose();
-              }}
-            >
-              検索・Search
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                navigate("/about");
-                handleClose();
-              }}
-            >
-              事業概要・About
-            </MenuItem>
+            {Array.from(navItems.entries()).map((item) => (
+              <MenuItem
+                key={item[0]}
+                onClick={() => {
+                  navigate(item[1]);
+                  handleClose();
+                }}
+              >
+                {item[0]}
+              </MenuItem>
+            ))}
           </Menu>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 0.25 }}
-            onClick={() => navigate("/")}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "95%",
+            }}
           >
-            ホーム・Home
-          </Typography>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 0.25 }}
-            onClick={() => navigate("/search")}
-          >
-            検索・Search
-          </Typography>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 0.25 }}
-            onClick={() => navigate("/about")}
-          >
-            事業概要・About
-          </Typography>
+            {Array.from(navItems.entries()).map((item) => (
+              <Button
+                key={item[0]}
+                onClick={() => {
+                  navigate(item[1]);
+                  handleClose();
+                }}
+                sx={{ color: "#fff" }}
+              >
+                {item[0]}
+              </Button>
+            ))}
+          </Box>
         </Toolbar>
       </AppBar>
     </Box>

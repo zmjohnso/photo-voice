@@ -1,8 +1,9 @@
-import { Box, CardMedia, Typography } from "@mui/material";
+import { Box, CardMedia, CircularProgress, Typography } from "@mui/material";
 import { Entry } from "contentful";
 import React, { useEffect, useState } from "react";
 import { HomePage } from "../../shared/content-types";
 import { getClient } from "../../services/contentful/client";
+import { LoadingIndicator } from "../loading-indicator/loading-indicator";
 
 export const Home: React.FC = () => {
   const client = getClient();
@@ -15,7 +16,11 @@ export const Home: React.FC = () => {
       .getEntries<HomePage>({ content_type: "homepage" })
       .then((homePageContent) => setHomePage(homePageContent.items))
       .catch(console.error); // Add error handling;
-  });
+  }, []);
+
+  if (homePage === undefined) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <Box

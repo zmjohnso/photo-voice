@@ -1,8 +1,9 @@
-import { Box, CardMedia, Typography } from "@mui/material";
+import { Box, CardMedia, CircularProgress, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { getClient } from "../../services/contentful/client";
 import { AboutPage } from "../../shared/content-types";
 import { Entry } from "contentful";
+import { LoadingIndicator } from "../loading-indicator/loading-indicator";
 
 export const About: React.FC = () => {
   const client = getClient();
@@ -15,7 +16,12 @@ export const About: React.FC = () => {
       .getEntries<AboutPage>({ content_type: "about" })
       .then((aboutPageContent) => setAboutPage(aboutPageContent.items))
       .catch(console.error); // Add error handling;
-  });
+  }, []);
+
+  if (aboutPage === undefined) {
+    return <LoadingIndicator />;
+  }
+
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column" }}

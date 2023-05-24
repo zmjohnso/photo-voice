@@ -1,4 +1,11 @@
-import { Autocomplete, Box, Button, Stack, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  CircularProgress,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { useStore } from "../../store/store";
 import { useNavigate } from "react-router-dom";
 import { Entry } from "contentful";
@@ -8,6 +15,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { getClient } from "../../services/contentful/client";
+import { LoadingIndicator } from "../loading-indicator/loading-indicator";
 
 export const SimpleSearch: React.FC = () => {
   const [
@@ -76,6 +84,10 @@ export const SimpleSearch: React.FC = () => {
       )
     ),
   ];
+
+  if (photoLocations === undefined || voiceAuthors === undefined) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <Box

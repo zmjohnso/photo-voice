@@ -5,6 +5,7 @@ import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import { EntryPreview } from "../entry-preview/entry-preview";
 import { useStore } from "../../store/store";
 import { getClient } from "../../services/contentful/client";
+import { LoadingIndicator } from "../loading-indicator/loading-indicator";
 
 export const IconDisplay: React.FC = () => {
   const photoLocations = useStore((state) => state.photoLocations);
@@ -122,17 +123,7 @@ export const IconDisplay: React.FC = () => {
   ]);
 
   if (voiceEntries === undefined) {
-    return (
-      <Box
-        position="fixed"
-        top="50%"
-        left="50%"
-        marginTop="-2.5rem"
-        marginLeft="-2.5rem"
-      >
-        <CircularProgress size="5rem" />
-      </Box>
-    );
+    return <LoadingIndicator />;
   }
 
   return (
