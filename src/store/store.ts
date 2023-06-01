@@ -8,8 +8,6 @@ interface State {
   englishAuthorNames: string[];
   photoStartDate: Date | null;
   photoEndDate: Date | null;
-  voiceStartDate: Date | null;
-  voiceEndDate: Date | null;
   currentEntry: Entry<VoiceEntry> | null;
 }
 
@@ -19,8 +17,6 @@ interface Action {
   addEnglishAuthorNames: (names: string[]) => void;
   addPhotoStartDate: (date: Date) => void;
   addPhotoEndDate: (date: Date) => void;
-  addVoiceStartDate: (date: Date) => void;
-  addVoiceEndDate: (date: Date) => void;
   addCurrentEntry: (entry: Entry<VoiceEntry>) => void;
   reset: () => void;
 }
@@ -32,8 +28,6 @@ const initialState: State = {
   englishAuthorNames: [],
   photoStartDate: null,
   photoEndDate: null,
-  voiceStartDate: null,
-  voiceEndDate: null,
   currentEntry: null,
 };
 
@@ -64,15 +58,6 @@ export const useStore = create<State & Action>()((set) => ({
       photoEndDate: date,
     })),
   voiceStartDate: null,
-  addVoiceStartDate: (date: Date) =>
-    set(() => ({
-      voiceStartDate: date,
-    })),
-  voiceEndDate: null,
-  addVoiceEndDate: (date: Date) =>
-    set(() => ({
-      voiceEndDate: date,
-    })),
   currentEntry: null,
   addCurrentEntry: (entry: Entry<VoiceEntry>) =>
     set(() => ({

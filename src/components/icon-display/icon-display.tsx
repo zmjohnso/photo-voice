@@ -1,7 +1,7 @@
 import { Entry } from "contentful";
 import React, { useEffect, useState } from "react";
 import { VoiceEntry } from "../../shared/content-types";
-import { Box, CircularProgress, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { EntryPreview } from "../entry-preview/entry-preview";
 import { useStore } from "../../store/store";
 import { getClient } from "../../services/contentful/client";

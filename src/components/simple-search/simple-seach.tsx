@@ -1,11 +1,4 @@
-import {
-  Autocomplete,
-  Box,
-  Button,
-  CircularProgress,
-  Stack,
-  TextField,
-} from "@mui/material";
+import { Autocomplete, Box, Button, Stack, TextField } from "@mui/material";
 import { useStore } from "../../store/store";
 import { useNavigate } from "react-router-dom";
 import { Entry } from "contentful";
@@ -24,8 +17,6 @@ export const SimpleSearch: React.FC = () => {
     addEnglishAuthorNames,
     addPhotoStartDate,
     addPhotoEndDate,
-    addVoiceStartDate,
-    addVoiceEndDate,
     reset,
   ] = useStore((state) => [
     state.addPhotoLocations,
@@ -33,8 +24,6 @@ export const SimpleSearch: React.FC = () => {
     state.addEnglishAuthorNames,
     state.addPhotoStartDate,
     state.addPhotoEndDate,
-    state.addVoiceStartDate,
-    state.addVoiceEndDate,
     state.reset,
   ]);
   const navigate = useNavigate();
@@ -99,9 +88,6 @@ export const SimpleSearch: React.FC = () => {
     >
       <Stack spacing={2}>
         <Stack spacing={2} direction="row" justifyContent="center">
-          <Button variant="contained" onClick={() => reset()}>
-            クリア・Clear
-          </Button>
           <Button variant="outlined" onClick={() => navigate("/icon")}>
             検索・Search
           </Button>
@@ -132,6 +118,7 @@ export const SimpleSearch: React.FC = () => {
                 onChange={(value: any) => {
                   addPhotoStartDate(value.$d);
                 }}
+                disableFuture
               />
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -147,41 +134,10 @@ export const SimpleSearch: React.FC = () => {
                 onChange={(value: any) => {
                   addPhotoEndDate(value.$d);
                 }}
+                disableFuture
               />
             </LocalizationProvider>
           </Stack>
-          {/* <Stack direction="row" spacing={2} sx={{ width: 480 }}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label={"Date of Voice"}
-                views={["month", "year"]}
-                slotProps={{
-                  textField: {
-                    helperText: "Start Date",
-                  },
-                }}
-                // TODO: find a better type here
-                onChange={(value: any) => {
-                  addVoiceStartDate(value.$d);
-                }}
-              />
-            </LocalizationProvider>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label={"Date of Voice"}
-                views={["month", "year"]}
-                slotProps={{
-                  textField: {
-                    helperText: "End Date",
-                  },
-                }}
-                // TODO: find a better type here
-                onChange={(value: any) => {
-                  addVoiceEndDate(value.$d);
-                }}
-              />
-            </LocalizationProvider>
-          </Stack> */}
           <Autocomplete
             multiple
             disablePortal

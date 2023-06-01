@@ -1,4 +1,4 @@
-import { Box, CardMedia, CircularProgress, Typography } from "@mui/material";
+import { Box, CardMedia, Typography } from "@mui/material";
 import { Entry } from "contentful";
 import React, { useEffect, useState } from "react";
 import { HomePage } from "../../shared/content-types";

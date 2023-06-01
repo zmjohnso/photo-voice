@@ -1,4 +1,4 @@
-import { Box, CardMedia, CircularProgress, Typography } from "@mui/material";
+import { Box, CardMedia, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { getClient } from "../../services/contentful/client";
 import { AboutPage } from "../../shared/content-types";
