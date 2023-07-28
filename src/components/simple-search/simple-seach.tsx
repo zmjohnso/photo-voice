@@ -10,6 +10,14 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { getClient } from "../../services/contentful/client";
 import { LoadingIndicator } from "../loading-indicator/loading-indicator";
 
+// make date pickers readable for Japanese speakers
+// eventually allow the date selection for English and Japanes
+// once site language selection is enabled
+import dayjs from "dayjs";
+import "dayjs/locale/ja";
+
+dayjs.locale("ja");
+
 export const SimpleSearch: React.FC = () => {
   const [
     addPhotoLocations,
