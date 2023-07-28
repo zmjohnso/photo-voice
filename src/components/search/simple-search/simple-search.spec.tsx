@@ -9,7 +9,7 @@ describe("simple search", () => {
     };
     const useNavigateSpy = vi.spyOn(mockUseNavigate, "useNavigate");
 
-    render(<SimpleSearch />);
+    render(<SimpleSearch photoLocationOptions={[]} authorNameOptions={[]} />);
 
     expect(screen.getByText("Search")).toBeDefined();
   });

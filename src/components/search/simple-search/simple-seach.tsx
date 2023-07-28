@@ -1,80 +1,34 @@
 import { Autocomplete, Box, Button, Stack, TextField } from "@mui/material";
-import { useStore } from "../../store/store";
+import { useStore } from "../../../store/store";
 import { useNavigate } from "react-router-dom";
-import { Entry } from "contentful";
-import { VoiceAuthor, PhotoLocation } from "../../shared/content-types";
-import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { getClient } from "../../services/contentful/client";
-import { LoadingIndicator } from "../loading-indicator/loading-indicator";
+import { LoadingIndicator } from "../../loading-indicator/loading-indicator";
 
-export const SimpleSearch: React.FC = () => {
+interface Props {
+  photoLocationOptions: string[];
+  authorNameOptions: string[];
+}
+
+export const SimpleSearch: React.FC<Props> = (props) => {
+  const { photoLocationOptions, authorNameOptions } = props;
   const [
     addPhotoLocations,
     addJapaneseAuthorNames,
     addEnglishAuthorNames,
     addPhotoStartDate,
     addPhotoEndDate,
-    reset,
   ] = useStore((state) => [
     state.addPhotoLocations,
     state.addJapaneseAuthorNames,
     state.addEnglishAuthorNames,
     state.addPhotoStartDate,
     state.addPhotoEndDate,
-    state.reset,
   ]);
   const navigate = useNavigate();
-  const client = getClient();
-  const [photoLocations, setPhotoLocations] = useState<
-    Entry<PhotoLocation>[] | undefined
-  >();
-  const [voiceAuthors, setVoiceAuthors] = useState<
-    Entry<VoiceAuthor>[] | undefined
-  >();
 
-  useEffect(() => {
-    // clear store search values on page load
-    reset();
-  }, []);
-
-  useEffect(() => {
-    client
-      .getEntries<PhotoLocation>({ content_type: "photoLocation" })
-      .then((locations) => setPhotoLocations(locations.items))
-      .catch(console.error); // Add error handling
-
-    client
-      .getEntries<VoiceAuthor>({ content_type: "author" })
-      .then((authors) => setVoiceAuthors(authors.items))
-      .catch(console.error); // Add error handling
-  }, []);
-
-  const prefectures = [
-    ...new Set(
-      photoLocations?.map((x) => x.fields.photoPrefecture).filter((x) => x) ??
-        []
-    ),
-  ];
-  const cities = [
-    ...new Set(
-      photoLocations?.map((x) => x.fields.photoCity ?? "").filter((x) => x) ??
-        []
-    ),
-  ];
-  const photoLocationOptions = [...prefectures, ...cities];
-
-  const authorNameOptions = [
-    ...new Set(
-      voiceAuthors?.map(
-        (x) => `${x.fields.japaneseName}・${x.fields.englishName}`
-      )
-    ),
-  ];
-
-  if (photoLocations === undefined || voiceAuthors === undefined) {
+  if (!photoLocationOptions.length || !authorNameOptions.length) {
     return <LoadingIndicator />;
   }
 

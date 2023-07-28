@@ -4,12 +4,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 import ErrorPage from "./routes/error-page";
 import "./index.css";
-import { SimpleSearch } from "./components/simple-search/simple-seach";
 import { IconDisplay } from "./components/icon-display/icon-display";
 import { EntryDisplay } from "./components/entry-display/entry-display";
 import { About } from "./components/about/about";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./shared/theme";
+import { Search } from "./components/search/search";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "search",
-        element: <SimpleSearch />,
+        element: <Search />,
       },
       {
         path: "about",

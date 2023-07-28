@@ -21,7 +21,6 @@ interface Action {
   reset: () => void;
 }
 
-// define the initial state
 const initialState: State = {
   photoLocations: [],
   japaneseAuthorNames: [],
