@@ -6,6 +6,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { LoadingIndicator } from "../../loading-indicator/loading-indicator";
 
+// make date pickers readable for Japanese speakers
+// eventually allow the date selection for English and Japanes
+// once site language selection is enabled
+import dayjs from "dayjs";
+import "dayjs/locale/ja";
+
+dayjs.locale("ja");
+
 interface Props {
   photoLocationOptions: string[];
   authorNameOptions: string[];
@@ -18,13 +26,17 @@ export const SimpleSearch: React.FC<Props> = (props) => {
     addJapaneseAuthorNames,
     addEnglishAuthorNames,
     addPhotoStartDate,
+    photoStartDate,
     addPhotoEndDate,
+    photoEndDate,
   ] = useStore((state) => [
     state.addPhotoLocations,
     state.addJapaneseAuthorNames,
     state.addEnglishAuthorNames,
     state.addPhotoStartDate,
+    state.photoStartDate,
     state.addPhotoEndDate,
+    state.photoEndDate,
   ]);
   const navigate = useNavigate();
 
@@ -48,12 +60,10 @@ export const SimpleSearch: React.FC<Props> = (props) => {
         </Stack>
         <Stack spacing={2}>
           <Autocomplete
-            multiple
             id="photo-locations"
-            limitTags={2}
             options={photoLocationOptions}
             sx={{ width: 480 }}
-            onChange={(_event, value) => addPhotoLocations(value)}
+            onChange={(_event, value) => value && addPhotoLocations([value])}
             renderInput={(params) => (
               <TextField {...params} label="撮影場所・Photo Location" />
             )}
@@ -73,6 +83,7 @@ export const SimpleSearch: React.FC<Props> = (props) => {
                   addPhotoStartDate(value.$d);
                 }}
                 disableFuture
+                maxDate={dayjs(photoEndDate)}
               />
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -89,26 +100,21 @@ export const SimpleSearch: React.FC<Props> = (props) => {
                   addPhotoEndDate(value.$d);
                 }}
                 disableFuture
+                minDate={dayjs(photoStartDate)}
               />
             </LocalizationProvider>
           </Stack>
           <Autocomplete
-            multiple
             disablePortal
             id="author-names"
-            limitTags={2}
             options={authorNameOptions}
             sx={{ width: 480 }}
             onChange={(_event, value) => {
-              const japaneseNames: string[] = [];
-              const englishNames: string[] = [];
-              value.forEach((nameSet) => {
-                const namePair = nameSet.split("・");
-                japaneseNames.push(namePair[0]);
-                englishNames.push(namePair[1]);
-              });
-              japaneseNames.length && addJapaneseAuthorNames(japaneseNames);
-              englishNames.length && addEnglishAuthorNames(englishNames);
+              if (value) {
+                const namePair = value.split("・");
+                addJapaneseAuthorNames([namePair[0]]);
+                addEnglishAuthorNames([namePair[1]]);
+              }
             }}
             renderInput={(params) => (
               <TextField
