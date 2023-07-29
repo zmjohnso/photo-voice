@@ -25,8 +25,8 @@ export const Home: React.FC = () => {
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column" }}
-      paddingLeft="15rem"
-      paddingRight="15rem"
+      paddingLeft="1rem"
+      paddingRight="1rem"
       paddingTop="1rem"
       alignItems="center"
     >
@@ -38,12 +38,28 @@ export const Home: React.FC = () => {
           alt="Photo Voice Logo"
         />
       )}
-      <Typography padding="2rem" variant="h3">
-        フォトボイス・プロジェクトへようこそ
-      </Typography>
-      <Typography padding="2rem" variant="h3">
-        Welcome to The PhotoVoice Project
-      </Typography>
+      <Box display="flex" alignItems="center" flexDirection="column">
+        <Typography padding="2rem" variant="h3">
+          フォトボイス・プロジェクトへようこそ
+        </Typography>
+        <Typography padding="2rem" variant="h3">
+          Welcome to The PhotoVoice Project
+        </Typography>
+      </Box>
+      <Box
+        display="flex"
+        alignItems="center"
+        flexDirection="column"
+        paddingTop="10rem"
+      >
+        <Typography variant="h6">
+          年賀寄付金配分事業の助成金により制作
+        </Typography>
+        <Typography variant="h6">
+          Made with Support from the New Year&apos;s Postcard Donations Aid
+          Program
+        </Typography>
+      </Box>
     </Box>
   );
 };
