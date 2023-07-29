@@ -56,7 +56,7 @@ export const Home: React.FC = () => {
           年賀寄付金配分事業の助成金により制作
         </Typography>
         <Typography variant="h6">
-          Made with Support from the New Year&apos;s Postcard Donations Aid
+          Supported by the New Year&apos;s Postcard Donations Aid
           Program
         </Typography>
       </Box>
