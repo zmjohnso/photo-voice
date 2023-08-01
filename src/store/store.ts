@@ -1,23 +1,26 @@
 import { create } from "zustand";
 import { VoiceEntry } from "../shared/content-types";
 import { Entry } from "contentful";
+import { DateData, NameOrLocationData, SearchState } from "../shared/utilities";
 
 interface State {
-  photoLocations: string[];
-  japaneseAuthorNames: string[];
-  englishAuthorNames: string[];
-  photoStartDate: Date | null;
-  photoEndDate: Date | null;
+  photoLocations: NameOrLocationData[];
+  japaneseAuthorNames: NameOrLocationData[];
+  englishAuthorNames: NameOrLocationData[];
+  photoStartDate: DateData | null;
+  photoEndDate: DateData | null;
   currentEntry: Entry<VoiceEntry> | null;
+  searchState: SearchState;
 }
 
 interface Action {
-  addPhotoLocations: (locations: string[]) => void;
-  addJapaneseAuthorNames: (names: string[]) => void;
-  addEnglishAuthorNames: (names: string[]) => void;
-  addPhotoStartDate: (date: Date) => void;
-  addPhotoEndDate: (date: Date) => void;
+  addPhotoLocations: (locations: NameOrLocationData[]) => void;
+  addJapaneseAuthorNames: (names: NameOrLocationData[]) => void;
+  addEnglishAuthorNames: (names: NameOrLocationData[]) => void;
+  addPhotoStartDate: (date: DateData) => void;
+  addPhotoEndDate: (date: DateData) => void;
   addCurrentEntry: (entry: Entry<VoiceEntry>) => void;
+  setSearchState: (state: SearchState) => void;
   reset: () => void;
 }
 
@@ -28,6 +31,7 @@ const initialState: State = {
   photoStartDate: null,
   photoEndDate: null,
   currentEntry: null,
+  searchState: SearchState.None,
 };
 
 export const useStore = create<State & Action>()((set) => ({
@@ -47,20 +51,25 @@ export const useStore = create<State & Action>()((set) => ({
       englishAuthorNames: names,
     })),
   photoStartDate: null,
-  addPhotoStartDate: (date: Date) =>
+  addPhotoStartDate: (date) =>
     set(() => ({
       photoStartDate: date,
     })),
   photoEndDate: null,
-  addPhotoEndDate: (date: Date) =>
+  addPhotoEndDate: (date) =>
     set(() => ({
       photoEndDate: date,
     })),
   voiceStartDate: null,
   currentEntry: null,
-  addCurrentEntry: (entry: Entry<VoiceEntry>) =>
+  addCurrentEntry: (entry) =>
     set(() => ({
       currentEntry: entry,
+    })),
+  searchState: SearchState.None,
+  setSearchState: (state) =>
+    set(() => ({
+      searchState: state,
     })),
   reset: () => {
     set(initialState);

@@ -11,6 +11,7 @@ import { LoadingIndicator } from "../../loading-indicator/loading-indicator";
 // once site language selection is enabled
 import dayjs from "dayjs";
 import "dayjs/locale/ja";
+import { LogicalOperators } from "../../../shared/utilities";
 
 dayjs.locale("ja");
 
@@ -63,7 +64,15 @@ export const SimpleSearch: React.FC<Props> = (props) => {
             id="photo-locations"
             options={photoLocationOptions}
             sx={{ width: 480 }}
-            onChange={(_event, value) => value && addPhotoLocations([value])}
+            onChange={(_event, value) =>
+              value &&
+              addPhotoLocations([
+                {
+                  value: value,
+                  operator: LogicalOperators.None,
+                },
+              ])
+            }
             renderInput={(params) => (
               <TextField {...params} label="撮影場所・Photo Location" />
             )}
@@ -83,7 +92,7 @@ export const SimpleSearch: React.FC<Props> = (props) => {
                   addPhotoStartDate(value.$d);
                 }}
                 disableFuture
-                maxDate={dayjs(photoEndDate)}
+                maxDate={dayjs(photoEndDate?.value)}
               />
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -100,7 +109,7 @@ export const SimpleSearch: React.FC<Props> = (props) => {
                   addPhotoEndDate(value.$d);
                 }}
                 disableFuture
-                minDate={dayjs(photoStartDate)}
+                minDate={dayjs(photoStartDate?.value)}
               />
             </LocalizationProvider>
           </Stack>
@@ -112,8 +121,18 @@ export const SimpleSearch: React.FC<Props> = (props) => {
             onChange={(_event, value) => {
               if (value) {
                 const namePair = value.split("・");
-                addJapaneseAuthorNames([namePair[0]]);
-                addEnglishAuthorNames([namePair[1]]);
+                addJapaneseAuthorNames([
+                  {
+                    value: namePair[0],
+                    operator: LogicalOperators.None,
+                  },
+                ]);
+                addEnglishAuthorNames([
+                  {
+                    value: namePair[1],
+                    operator: LogicalOperators.None,
+                  },
+                ]);
               }
             }}
             renderInput={(params) => (

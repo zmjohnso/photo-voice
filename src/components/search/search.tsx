@@ -6,10 +6,14 @@ import { AdvancedSearch } from "./advanced-search/advanced-search";
 import { Entry } from "contentful";
 import { getClient } from "../../services/contentful/client";
 import { PhotoLocation, VoiceAuthor } from "../../shared/content-types";
+import { SearchState } from "../../shared/utilities";
 
 export const Search: React.FC = () => {
   const [tabValue, setTabValue] = useState(0);
-  const [reset] = useStore((state) => [state.reset]);
+  const [setSearchState, reset] = useStore((state) => [
+    state.setSearchState,
+    state.reset,
+  ]);
   const client = getClient();
   const [photoLocations, setPhotoLocations] = useState<
     Entry<PhotoLocation>[] | undefined
@@ -21,6 +25,8 @@ export const Search: React.FC = () => {
   useEffect(() => {
     // clear store search values on page load
     reset();
+    // default to simple search since that is the default tab
+    setSearchState(SearchState.Simple);
   }, []);
 
   useEffect(() => {
@@ -59,6 +65,10 @@ export const Search: React.FC = () => {
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
+    console.log({ newValue });
+    newValue === 0
+      ? setSearchState(SearchState.Simple)
+      : setSearchState(SearchState.Advanced);
   };
 
   return (

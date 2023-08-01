@@ -6,14 +6,18 @@ import { EntryPreview } from "../entry-preview/entry-preview";
 import { useStore } from "../../store/store";
 import { getClient } from "../../services/contentful/client";
 import { LoadingIndicator } from "../loading-indicator/loading-indicator";
+import {
+  DateLogicalOperators,
+  LogicalOperators,
+  SearchState,
+} from "../../shared/utilities";
 
 export const IconDisplay: React.FC = () => {
   const photoLocations = useStore((state) => state.photoLocations);
   const englishAuthorNames = useStore((state) => state.englishAuthorNames);
   const photoStartDate = useStore((state) => state.photoStartDate);
   const photoEndDate = useStore((state) => state.photoEndDate);
-  // const voiceStartDate = useStore((state) => state.voiceStartDate);
-  // const voiceEndDate = useStore((state) => state.voiceEndDate);
+  const searchState = useStore((state) => state.searchState);
 
   const [voiceEntries, setVoiceEntries] = useState<
     Entry<VoiceEntry>[] | undefined
@@ -32,71 +36,76 @@ export const IconDisplay: React.FC = () => {
       .catch(console.error); // Add error handling
   }, []);
 
+  // filter logic
   useEffect(() => {
     const tempFilteredVoiceEntries: Entry<VoiceEntry>[] = [];
+    console.log("filtering" + searchState);
 
-    // filter by author name
-    // only need to check one of the English or Japanese names
-    if (englishAuthorNames.length) {
-      voiceEntries?.forEach((entry) => {
-        const authorNameFields = entry.fields.voiceAuthor.fields;
-        englishAuthorNames.forEach((name) => {
-          if (
-            authorNameFields.englishName === name &&
-            !tempFilteredVoiceEntries?.includes(entry)
-          ) {
-            tempFilteredVoiceEntries.push(entry);
-          }
-        });
-      });
-    }
-
-    // filter by photo date
-    if (photoStartDate && photoEndDate) {
-      voiceEntries?.forEach((entry) => {
-        const photoDate = new Date(entry.fields.photoDate);
-        if (photoDate.getFullYear() > photoStartDate.getFullYear()) {
-          if (photoDate.getFullYear() < photoEndDate.getFullYear()) {
-            tempFilteredVoiceEntries.push(entry);
-          } else if (photoDate.getFullYear() === photoEndDate.getFullYear()) {
-            if (photoDate.getMonth() >= photoStartDate.getMonth()) {
-              tempFilteredVoiceEntries.push(entry);
-            }
-          }
+    switch (searchState) {
+      case SearchState.Simple:
+        console.log("in simple search filter");
+        // filter by photo location
+        if (photoLocations.length) {
+          voiceEntries?.forEach((entry) => {
+            const photoFields = entry.fields.photoLocation.fields;
+            photoLocations.forEach((location) => {
+              if (
+                location.operator === LogicalOperators.None &&
+                (photoFields.photoPrefecture.includes(location.value) ||
+                  photoFields.photoCity?.includes(location.value)) &&
+                !tempFilteredVoiceEntries?.includes(entry)
+              ) {
+                console.log("-added" + entry);
+                tempFilteredVoiceEntries.push(entry);
+              }
+            });
+          });
         }
-      });
-    }
 
-    // filter by voice date
-    // if (voiceStartDate && voiceEndDate) {
-    //   voiceEntries?.forEach((entry) => {
-    //     const voiceDate = new Date(entry.fields.voiceDate);
-    //     if (voiceDate.getFullYear() > voiceStartDate.getFullYear()) {
-    //       if (voiceDate.getFullYear() < voiceEndDate.getFullYear()) {
-    //         tempFilteredVoiceEntries.push(entry);
-    //       } else if (voiceDate.getFullYear() === voiceEndDate.getFullYear()) {
-    //         if (voiceDate.getMonth() >= voiceStartDate.getMonth()) {
-    //           tempFilteredVoiceEntries.push(entry);
-    //         }
-    //       }
-    //     }
-    //   });
-    // }
+        // filter by photo date
+        if (
+          photoStartDate &&
+          photoEndDate &&
+          photoStartDate.operator === DateLogicalOperators.None &&
+          photoEndDate.operator === DateLogicalOperators.None
+        ) {
+          voiceEntries?.forEach((entry) => {
+            const photoDate = new Date(entry.fields.photoDate);
+            if (photoDate.getFullYear() > photoStartDate.value.getFullYear()) {
+              if (photoDate.getFullYear() < photoEndDate.value.getFullYear()) {
+                tempFilteredVoiceEntries.push(entry);
+              } else if (
+                photoDate.getFullYear() === photoEndDate.value.getFullYear()
+              ) {
+                if (photoDate.getMonth() >= photoStartDate.value.getMonth()) {
+                  tempFilteredVoiceEntries.push(entry);
+                }
+              }
+            }
+          });
+        }
 
-    // filter by photo location
-    if (photoLocations.length) {
-      voiceEntries?.forEach((entry) => {
-        const photoFields = entry.fields.photoLocation.fields;
-        photoLocations.forEach((location) => {
-          if (
-            (photoFields.photoPrefecture.includes(location) ||
-              photoFields.photoCity?.includes(location)) &&
-            !tempFilteredVoiceEntries?.includes(entry)
-          ) {
-            tempFilteredVoiceEntries.push(entry);
-          }
-        });
-      });
+        // filter by author name
+        // only need to check one of the English or Japanese names
+        if (englishAuthorNames.length) {
+          voiceEntries?.forEach((entry) => {
+            const authorNameFields = entry.fields.voiceAuthor.fields;
+            englishAuthorNames.forEach((name) => {
+              if (
+                name.operator === LogicalOperators.None &&
+                authorNameFields.englishName === name.value &&
+                !tempFilteredVoiceEntries?.includes(entry)
+              ) {
+                tempFilteredVoiceEntries.push(entry);
+              }
+            });
+          });
+        }
+        break;
+      case SearchState.Advanced:
+        break;
+      default:
+        break;
     }
 
     // if store is empty use voiceEntries as "default", else use filtered entries list
@@ -104,8 +113,6 @@ export const IconDisplay: React.FC = () => {
       !englishAuthorNames.length &&
       !photoStartDate &&
       !photoEndDate &&
-      // !voiceStartDate &&
-      // !voiceEndDate &&
       !photoLocations.length
     ) {
       setFilteredVoiceEntries(voiceEntries);
@@ -116,8 +123,6 @@ export const IconDisplay: React.FC = () => {
     photoLocations,
     englishAuthorNames,
     voiceEntries,
-    // voiceStartDate,
-    // voiceEndDate,
     photoStartDate,
     photoEndDate,
   ]);

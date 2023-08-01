@@ -16,18 +16,13 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../../store/store";
 import { useState } from "react";
-import { dateFormatOptions } from "../../../shared/utilities";
-
-enum LogicalOperators {
-  And = "AND",
-  Or = "OR",
-  Not = "NOT",
-}
-
-enum DateLogicalOperators {
-  Before = "BEFORE",
-  After = "AFTER",
-}
+import {
+  DateData,
+  DateLogicalOperators,
+  LogicalOperators,
+  NameOrLocationData,
+  dateFormatOptions,
+} from "../../../shared/utilities";
 
 enum SearchCriteriaType {
   Location,
@@ -54,6 +49,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
     photoStartDate,
     addPhotoEndDate,
     photoEndDate,
+    reset,
   ] = useStore((state) => [
     state.addPhotoLocations,
     state.photoLocations,
@@ -65,22 +61,33 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
     state.photoStartDate,
     state.addPhotoEndDate,
     state.photoEndDate,
+    state.reset,
   ]);
 
-  const [photoLocationCriteria, setPhotoLocationCriteria] = useState<string[]>(
+  const [photoLocation, setPhotoLocation] = useState("");
+
+  const [photoLocationCriteriaVerbiage, setPhotoLocationCriteriaVerbiage] =
+    useState<string[]>([]);
+
+  const [photoDateCriteriaVerbiage, setPhotoDateCriteriaVerbiage] = useState<
+    string[]
+  >([]);
+
+  const [englishName, setEnglishName] = useState("");
+  const [japaneseName, setJapaneseName] = useState("");
+
+  const [nameCriteriaVerbiage, setNameCriteriaVerbiage] = useState<string[]>(
     []
   );
 
-  const [photoDateCriteria, setPhotoDateCriteria] = useState<string[]>([]);
-
-  const [nameCriteria, setNameCriteria] = useState<string[]>([]);
-
   const [photoLocationSearchOperator, setPhotoLocationSearchOperator] =
-    useState("");
+    useState<LogicalOperators>(LogicalOperators.None);
 
-  const [photoDateSearchOperator, setPhotoDateSearchOperator] = useState("");
+  const [photoDateSearchOperator, setPhotoDateSearchOperator] =
+    useState<DateLogicalOperators>(DateLogicalOperators.None);
 
-  const [nameSearchOperator, setNameSearchOperator] = useState("");
+  const [nameSearchOperator, setNameSearchOperator] =
+    useState<LogicalOperators>(LogicalOperators.None);
 
   const handlePhotoLocationSearchOperatorChange = (
     event: SelectChangeEvent
@@ -89,7 +96,20 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
   };
 
   const handlePhotoDateSearchOperatorChange = (event: SelectChangeEvent) => {
-    setPhotoDateSearchOperator(event.target.value as DateLogicalOperators);
+    const operator = event.target.value as DateLogicalOperators;
+    setPhotoDateSearchOperator(operator);
+    if (operator == DateLogicalOperators.Before && photoDate) {
+      addPhotoEndDate({
+        value: photoDate,
+        operator: DateLogicalOperators.Before,
+      });
+    }
+    if (operator == DateLogicalOperators.After && photoDate) {
+      addPhotoStartDate({
+        value: photoDate,
+        operator: DateLogicalOperators.After,
+      });
+    }
   };
 
   const handleNameSearchOperatorChange = (event: SelectChangeEvent) => {
@@ -97,10 +117,13 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
   };
 
   const handleRemoveSearchCriteria = () => {
-    setPhotoLocationCriteria([]);
-    setNameCriteria([]);
-    setPhotoDateCriteria([]);
+    setPhotoLocationCriteriaVerbiage([]);
+    setNameCriteriaVerbiage([]);
+    setPhotoDateCriteriaVerbiage([]);
+    reset();
   };
+
+  const [photoDate, setPhotoDate] = useState<Date | null>();
 
   const handleAddSearchCriteria = (fieldType: SearchCriteriaType) => {
     let newCriteria = "";
@@ -120,8 +143,14 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
             newCriteria += "INVALID";
             break;
         }
-        newCriteria += " " + photoLocations;
-        setPhotoLocationCriteria([...photoLocationCriteria, newCriteria]);
+        newCriteria += " " + photoLocation;
+        setPhotoLocationCriteriaVerbiage([
+          ...photoLocationCriteriaVerbiage,
+          newCriteria,
+        ]);
+        addPhotoLocations([
+          { value: photoLocation, operator: photoLocationSearchOperator },
+        ]);
         break;
       case SearchCriteriaType.Name:
         switch (nameSearchOperator) {
@@ -138,8 +167,14 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
             newCriteria += "INVALID";
             break;
         }
-        newCriteria += " " + japaneseAuthorNames + "・" + englishAuthorNames;
-        setNameCriteria([...nameCriteria, newCriteria]);
+        newCriteria += " " + japaneseName + "・" + englishName;
+        setNameCriteriaVerbiage([...nameCriteriaVerbiage, newCriteria]);
+        addJapaneseAuthorNames([
+          { value: japaneseName, operator: nameSearchOperator },
+        ]);
+        addEnglishAuthorNames([
+          { value: englishName, operator: nameSearchOperator },
+        ]);
         break;
       case SearchCriteriaType.Date:
         switch (photoDateSearchOperator) {
@@ -150,16 +185,32 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
             newCriteria += "AFTER";
             break;
         }
-        if (photoDateSearchOperator == DateLogicalOperators.Before) {
+        if (
+          photoDateSearchOperator == DateLogicalOperators.Before &&
+          photoDate
+        ) {
           newCriteria +=
-            " " + photoEndDate?.toLocaleDateString("en-US", dateFormatOptions);
+            " " + photoDate.toLocaleDateString("en-US", dateFormatOptions);
+          addPhotoEndDate({
+            value: photoDate,
+            operator: photoDateSearchOperator,
+          });
         }
-        if (photoDateSearchOperator == DateLogicalOperators.After) {
+        if (
+          photoDateSearchOperator == DateLogicalOperators.After &&
+          photoDate
+        ) {
           newCriteria +=
-            " " +
-            photoStartDate?.toLocaleDateString("en-US", dateFormatOptions);
+            " " + photoDate.toLocaleDateString("en-US", dateFormatOptions);
+          addPhotoStartDate({
+            value: photoDate,
+            operator: photoDateSearchOperator,
+          });
         }
-        setPhotoDateCriteria([...photoDateCriteria, newCriteria]);
+        setPhotoDateCriteriaVerbiage([
+          ...photoDateCriteriaVerbiage,
+          newCriteria,
+        ]);
         break;
       default:
         break;
@@ -199,13 +250,14 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
               id="photo-locations"
               options={photoLocationOptions}
               sx={{ width: 480 }}
-              onChange={(_event, value) => value && addPhotoLocations([value])}
+              onChange={(_event, value) => value && setPhotoLocation(value)}
               renderInput={(params) => (
                 <TextField {...params} label="撮影場所・Photo Location" />
               )}
             />
             <Button
               variant="contained"
+              disabled={!photoLocation || !photoLocationSearchOperator}
               onClick={() =>
                 handleAddSearchCriteria(SearchCriteriaType.Location)
               }
@@ -239,18 +291,14 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
                 views={["month", "year"]}
                 // TODO: find a better type here
                 onChange={(value: any) => {
-                  if (photoDateSearchOperator == DateLogicalOperators.Before) {
-                    addPhotoEndDate(value.$d);
-                  }
-                  if (photoDateSearchOperator == DateLogicalOperators.After) {
-                    addPhotoStartDate(value.$d);
-                  }
+                  setPhotoDate(value.$d);
                 }}
                 disableFuture
               />
             </LocalizationProvider>
             <Button
               variant="contained"
+              disabled={!photoDate || !photoDateSearchOperator}
               onClick={() => handleAddSearchCriteria(SearchCriteriaType.Date)}
             >
               Add
@@ -281,13 +329,9 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
               options={authorNameOptions}
               sx={{ width: 480 }}
               onChange={(_event, value) => {
-                const japaneseNames: string[] = [];
-                const englishNames: string[] = [];
                 const namePair = (value ?? "").split("・");
-                japaneseNames.push(namePair[0]);
-                englishNames.push(namePair[1]);
-                japaneseNames.length && addJapaneseAuthorNames(japaneseNames);
-                englishNames.length && addEnglishAuthorNames(englishNames);
+                setJapaneseName(namePair[0]);
+                setEnglishName(namePair[1]);
               }}
               renderInput={(params) => (
                 <TextField
@@ -298,6 +342,8 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
             />
             <Button
               variant="contained"
+              // only need to check englishName OR japaneseName
+              disabled={!englishName || !nameSearchOperator}
               onClick={() => handleAddSearchCriteria(SearchCriteriaType.Name)}
             >
               Add
@@ -306,18 +352,18 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
         </Stack>
         <Stack spacing={2}>
           <Button variant="outlined" onClick={handleRemoveSearchCriteria}>
-            Remove All Search Criteria
+            Remove All Conditions
           </Button>
           <Typography variant="h6">Search Criteria</Typography>
-          {photoLocationCriteria.length ||
-          nameCriteria.length ||
-          photoDateCriteria.length ? (
+          {photoLocationCriteriaVerbiage.length ||
+          nameCriteriaVerbiage.length ||
+          photoDateCriteriaVerbiage.length ? (
             <Typography component="span" variant="body1">
-              {photoLocationCriteria.length ? (
+              {photoLocationCriteriaVerbiage.length ? (
                 <ul>
                   <li>撮影場所・Photo Location:</li>
                   <ul>
-                    {photoLocationCriteria.map((string, index) => (
+                    {photoLocationCriteriaVerbiage.map((string, index) => (
                       <li key={index}>{string}</li>
                     ))}
                   </ul>
@@ -325,11 +371,11 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
               ) : (
                 <></>
               )}
-              {photoDateCriteria.length ? (
+              {photoDateCriteriaVerbiage.length ? (
                 <ul>
                   <li>撮影年月・Date of Photo</li>
                   <ul>
-                    {photoDateCriteria.map((string, index) => (
+                    {photoDateCriteriaVerbiage.map((string, index) => (
                       <li key={index}>{string}</li>
                     ))}
                   </ul>
@@ -337,11 +383,11 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
               ) : (
                 <></>
               )}
-              {nameCriteria.length ? (
+              {nameCriteriaVerbiage.length ? (
                 <ul>
                   <li>撮影者・筆者名・Author/Photographer Name:</li>
                   <ul>
-                    {nameCriteria.map((string, index) => (
+                    {nameCriteriaVerbiage.map((string, index) => (
                       <li key={index}>{string}</li>
                     ))}
                   </ul>
