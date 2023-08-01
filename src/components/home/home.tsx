@@ -52,12 +52,11 @@ export const Home: React.FC = () => {
         flexDirection="column"
         paddingTop="10rem"
       >
-        <Typography variant="h6">
-          年賀寄付金配分事業の助成金により制作
+        <Typography variant="body1">
+          2022年度年賀寄付金配分事業の助成金により制作
         </Typography>
-        <Typography variant="h6">
-          Supported by the New Year&apos;s Postcard Donations Aid
-          Program
+        <Typography variant="body1">
+          Supported by the FY2022 New Year&apos;s Postcard Donations Aid Program
         </Typography>
       </Box>
     </Box>
