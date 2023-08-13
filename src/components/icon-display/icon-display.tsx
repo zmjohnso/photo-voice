@@ -13,12 +13,11 @@ import {
 } from "../../shared/utilities";
 
 export const IconDisplay: React.FC = () => {
+  const searchState = useStore((state) => state.searchState);
   const photoLocations = useStore((state) => state.photoLocations);
   const englishAuthorNames = useStore((state) => state.englishAuthorNames);
   const photoStartDate = useStore((state) => state.photoStartDate);
   const photoEndDate = useStore((state) => state.photoEndDate);
-  const searchState = useStore((state) => state.searchState);
-
   const [voiceEntries, setVoiceEntries] = useState<
     Entry<VoiceEntry>[] | undefined
   >();
@@ -36,14 +35,11 @@ export const IconDisplay: React.FC = () => {
       .catch(console.error); // Add error handling
   }, []);
 
-  // filter logic
   useEffect(() => {
     const tempFilteredVoiceEntries: Entry<VoiceEntry>[] = [];
-    console.log("filtering" + searchState);
 
     switch (searchState) {
       case SearchState.Simple:
-        console.log("in simple search filter");
         // filter by photo location
         if (photoLocations.length) {
           voiceEntries?.forEach((entry) => {
@@ -116,8 +112,10 @@ export const IconDisplay: React.FC = () => {
       !photoLocations.length
     ) {
       setFilteredVoiceEntries(voiceEntries);
+      // return voiceEntries;
     } else {
       setFilteredVoiceEntries(tempFilteredVoiceEntries);
+      // return tempFilteredVoiceEntries;
     }
   }, [
     photoLocations,

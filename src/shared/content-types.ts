@@ -14,7 +14,7 @@ export interface VoiceEntry {
 }
 
 // TODO: can this type be cleaned up?
-interface Photo {
+export interface Photo {
   fields: {
     description: string;
     file: {
