@@ -11,7 +11,10 @@ import { LoadingIndicator } from "../../loading-indicator/loading-indicator";
 // once site language selection is enabled
 import dayjs from "dayjs";
 import "dayjs/locale/ja";
-import { LogicalOperators } from "../../../shared/utilities";
+import {
+  DateLogicalOperators,
+  LogicalOperators,
+} from "../../../shared/utilities";
 
 dayjs.locale("ja");
 
@@ -89,7 +92,10 @@ export const SimpleSearch: React.FC<Props> = (props) => {
                 }}
                 // TODO: find a better type here
                 onChange={(value: any) => {
-                  addPhotoStartDate(value.$d);
+                  addPhotoStartDate({
+                    value: value.$d,
+                    operator: DateLogicalOperators.None,
+                  });
                 }}
                 disableFuture
                 maxDate={dayjs(photoEndDate?.value)}
@@ -106,7 +112,10 @@ export const SimpleSearch: React.FC<Props> = (props) => {
                 }}
                 // TODO: find a better type here
                 onChange={(value: any) => {
-                  addPhotoEndDate(value.$d);
+                  addPhotoEndDate({
+                    value: value.$d,
+                    operator: DateLogicalOperators.None,
+                  });
                 }}
                 disableFuture
                 minDate={dayjs(photoStartDate?.value)}

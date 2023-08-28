@@ -6,11 +6,7 @@ import { EntryPreview } from "../entry-preview/entry-preview";
 import { useStore } from "../../store/store";
 import { getClient } from "../../services/contentful/client";
 import { LoadingIndicator } from "../loading-indicator/loading-indicator";
-import {
-  DateLogicalOperators,
-  LogicalOperators,
-  SearchState,
-} from "../../shared/utilities";
+import { LogicalOperators, SearchState } from "../../shared/utilities";
 
 export const IconDisplay: React.FC = () => {
   const searchState = useStore((state) => state.searchState);
@@ -40,63 +36,46 @@ export const IconDisplay: React.FC = () => {
 
     switch (searchState) {
       case SearchState.Simple:
-        // filter by photo location
-        if (photoLocations.length) {
-          voiceEntries?.forEach((entry) => {
-            const photoFields = entry.fields.photoLocation.fields;
-            photoLocations.forEach((location) => {
-              if (
-                location.operator === LogicalOperators.None &&
-                (photoFields.photoPrefecture.includes(location.value) ||
-                  photoFields.photoCity?.includes(location.value)) &&
-                !tempFilteredVoiceEntries?.includes(entry)
-              ) {
-                console.log("-added" + entry);
-                tempFilteredVoiceEntries.push(entry);
-              }
-            });
-          });
-        }
+        voiceEntries?.forEach((entry) => {
+          const photoLocationFields = entry.fields.photoLocation.fields;
+          const photoDate = new Date(entry.fields.photoDate);
+          const authorNameFields = entry.fields.voiceAuthor.fields;
 
-        // filter by photo date
-        if (
-          photoStartDate &&
-          photoEndDate &&
-          photoStartDate.operator === DateLogicalOperators.None &&
-          photoEndDate.operator === DateLogicalOperators.None
-        ) {
-          voiceEntries?.forEach((entry) => {
-            const photoDate = new Date(entry.fields.photoDate);
-            if (photoDate.getFullYear() > photoStartDate.value.getFullYear()) {
-              if (photoDate.getFullYear() < photoEndDate.value.getFullYear()) {
-                tempFilteredVoiceEntries.push(entry);
-              } else if (
-                photoDate.getFullYear() === photoEndDate.value.getFullYear()
-              ) {
-                if (photoDate.getMonth() >= photoStartDate.value.getMonth()) {
-                  tempFilteredVoiceEntries.push(entry);
-                }
-              }
-            }
+          const hasMatchingLocation = photoLocations.every((location) => {
+            return (
+              location.operator === LogicalOperators.None &&
+              (photoLocationFields.photoPrefecture.includes(location.value) ||
+                photoLocationFields.photoCity?.includes(location.value))
+            );
           });
-        }
 
-        // filter by author name
-        // only need to check one of the English or Japanese names
-        if (englishAuthorNames.length) {
-          voiceEntries?.forEach((entry) => {
-            const authorNameFields = entry.fields.voiceAuthor.fields;
-            englishAuthorNames.forEach((name) => {
-              if (
-                name.operator === LogicalOperators.None &&
-                authorNameFields.englishName === name.value &&
-                !tempFilteredVoiceEntries?.includes(entry)
-              ) {
-                tempFilteredVoiceEntries.push(entry);
-              }
-            });
-          });
-        }
+          const isWithinDateRange =
+            photoStartDate &&
+            photoEndDate &&
+            photoDate.getFullYear() > photoStartDate.value.getFullYear() &&
+            photoDate.getFullYear() < photoEndDate.value.getFullYear() &&
+            (photoDate.getFullYear() === photoEndDate.value.getFullYear()
+              ? photoDate.getMonth() >= photoStartDate.value.getMonth()
+              : true);
+
+          const hasMatchingAuthor =
+            englishAuthorNames.length !== 0
+              ? englishAuthorNames.some((name) => {
+                  return (
+                    name.operator === LogicalOperators.None &&
+                    authorNameFields.englishName === name.value
+                  );
+                })
+              : true;
+
+          if (
+            hasMatchingLocation !== false &&
+            isWithinDateRange !== false &&
+            hasMatchingAuthor !== false
+          ) {
+            tempFilteredVoiceEntries.push(entry);
+          }
+        });
         break;
       case SearchState.Advanced:
         break;
@@ -112,10 +91,8 @@ export const IconDisplay: React.FC = () => {
       !photoLocations.length
     ) {
       setFilteredVoiceEntries(voiceEntries);
-      // return voiceEntries;
     } else {
       setFilteredVoiceEntries(tempFilteredVoiceEntries);
-      // return tempFilteredVoiceEntries;
     }
   }, [
     photoLocations,
