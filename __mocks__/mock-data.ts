@@ -64,7 +64,6 @@ export const mockVoiceEntry: Entry<VoiceEntry> = {
     photo: [mockPhoto],
     photoDate: new Date(),
     photoLocation: mockPhotoLocation as unknown as Entry<PhotoLocation>,
-    voiceDate: new Date(),
     entryId: 1,
     voiceAuthor: mockVoiceAuthor as unknown as Entry<VoiceAuthor>,
   },

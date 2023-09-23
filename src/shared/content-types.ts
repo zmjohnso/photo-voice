@@ -8,7 +8,6 @@ export interface VoiceEntry {
   photo: Photo[];
   photoDate: Date;
   photoLocation: Entry<PhotoLocation>;
-  voiceDate: Date;
   entryId: number;
   voiceAuthor: Entry<VoiceAuthor>;
 }

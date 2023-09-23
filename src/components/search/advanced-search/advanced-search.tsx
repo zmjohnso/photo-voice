@@ -17,10 +17,8 @@ import { useNavigate } from "react-router-dom";
 import { useStore } from "../../../store/store";
 import { useState } from "react";
 import {
-  DateData,
   DateLogicalOperators,
   LogicalOperators,
-  NameOrLocationData,
   dateFormatOptions,
 } from "../../../shared/utilities";
 
@@ -40,27 +38,15 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
   const navigate = useNavigate();
   const [
     addPhotoLocations,
-    photoLocations,
     addJapaneseAuthorNames,
-    japaneseAuthorNames,
     addEnglishAuthorNames,
-    englishAuthorNames,
-    addPhotoStartDate,
-    photoStartDate,
-    addPhotoEndDate,
-    photoEndDate,
+    addPhotoDate,
     reset,
   ] = useStore((state) => [
     state.addPhotoLocations,
-    state.photoLocations,
     state.addJapaneseAuthorNames,
-    state.japaneseAuthorNames,
     state.addEnglishAuthorNames,
-    state.englishAuthorNames,
-    state.addPhotoStartDate,
-    state.photoStartDate,
-    state.addPhotoEndDate,
-    state.photoEndDate,
+    state.addPhotoDate,
     state.reset,
   ]);
 
@@ -81,13 +67,13 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
   );
 
   const [photoLocationSearchOperator, setPhotoLocationSearchOperator] =
-    useState<LogicalOperators>(LogicalOperators.None);
+    useState<LogicalOperators>(LogicalOperators.And);
 
   const [photoDateSearchOperator, setPhotoDateSearchOperator] =
-    useState<DateLogicalOperators>(DateLogicalOperators.None);
+    useState<DateLogicalOperators>(DateLogicalOperators.Before);
 
   const [nameSearchOperator, setNameSearchOperator] =
-    useState<LogicalOperators>(LogicalOperators.None);
+    useState<LogicalOperators>(LogicalOperators.And);
 
   const handlePhotoLocationSearchOperatorChange = (
     event: SelectChangeEvent
@@ -96,20 +82,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
   };
 
   const handlePhotoDateSearchOperatorChange = (event: SelectChangeEvent) => {
-    const operator = event.target.value as DateLogicalOperators;
-    setPhotoDateSearchOperator(operator);
-    if (operator == DateLogicalOperators.Before && photoDate) {
-      addPhotoEndDate({
-        value: photoDate,
-        operator: DateLogicalOperators.Before,
-      });
-    }
-    if (operator == DateLogicalOperators.After && photoDate) {
-      addPhotoStartDate({
-        value: photoDate,
-        operator: DateLogicalOperators.After,
-      });
-    }
+    setPhotoDateSearchOperator(event.target.value as DateLogicalOperators);
   };
 
   const handleNameSearchOperatorChange = (event: SelectChangeEvent) => {
@@ -185,32 +158,20 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
             newCriteria += "AFTER";
             break;
         }
-        if (
-          photoDateSearchOperator == DateLogicalOperators.Before &&
-          photoDate
-        ) {
-          newCriteria +=
-            " " + photoDate.toLocaleDateString("en-US", dateFormatOptions);
-          addPhotoEndDate({
-            value: photoDate,
-            operator: photoDateSearchOperator,
-          });
-        }
-        if (
-          photoDateSearchOperator == DateLogicalOperators.After &&
-          photoDate
-        ) {
-          newCriteria +=
-            " " + photoDate.toLocaleDateString("en-US", dateFormatOptions);
-          addPhotoStartDate({
-            value: photoDate,
-            operator: photoDateSearchOperator,
-          });
-        }
+        newCriteria +=
+          " " + photoDate?.toLocaleDateString("en-US", dateFormatOptions);
+
         setPhotoDateCriteriaVerbiage([
           ...photoDateCriteriaVerbiage,
           newCriteria,
         ]);
+        photoDate &&
+          addPhotoDate([
+            {
+              value: photoDate,
+              operator: photoDateSearchOperator,
+            },
+          ]);
         break;
       default:
         break;
@@ -290,9 +251,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
                 label={"撮影年月・Date of Photo"}
                 views={["month", "year"]}
                 // TODO: find a better type here
-                onChange={(value: any) => {
-                  setPhotoDate(value.$d);
-                }}
+                onChange={(value: any) => setPhotoDate(value.$d)}
                 disableFuture
               />
             </LocalizationProvider>

@@ -65,7 +65,6 @@ export const Search: React.FC = () => {
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
-    console.log({ newValue });
     newValue === 0
       ? setSearchState(SearchState.Simple)
       : setSearchState(SearchState.Advanced);

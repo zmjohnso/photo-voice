@@ -7,8 +7,9 @@ interface State {
   photoLocations: NameOrLocationData[];
   japaneseAuthorNames: NameOrLocationData[];
   englishAuthorNames: NameOrLocationData[];
-  photoStartDate: DateData | null;
-  photoEndDate: DateData | null;
+  photoStartDate: DateData[];
+  photoEndDate: DateData[];
+  photoDate: DateData[];
   currentEntry: Entry<VoiceEntry> | null;
   searchState: SearchState;
 }
@@ -17,8 +18,9 @@ interface Action {
   addPhotoLocations: (locations: NameOrLocationData[]) => void;
   addJapaneseAuthorNames: (names: NameOrLocationData[]) => void;
   addEnglishAuthorNames: (names: NameOrLocationData[]) => void;
-  addPhotoStartDate: (date: DateData) => void;
-  addPhotoEndDate: (date: DateData) => void;
+  addPhotoStartDate: (date: DateData[]) => void;
+  addPhotoEndDate: (date: DateData[]) => void;
+  addPhotoDate: (date: DateData[]) => void;
   addCurrentEntry: (entry: Entry<VoiceEntry>) => void;
   setSearchState: (state: SearchState) => void;
   reset: () => void;
@@ -28,8 +30,9 @@ const initialState: State = {
   photoLocations: [],
   japaneseAuthorNames: [],
   englishAuthorNames: [],
-  photoStartDate: null,
-  photoEndDate: null,
+  photoStartDate: [],
+  photoEndDate: [],
+  photoDate: [],
   currentEntry: null,
   searchState: SearchState.None,
 };
@@ -37,30 +40,34 @@ const initialState: State = {
 export const useStore = create<State & Action>()((set) => ({
   photoLocations: [],
   addPhotoLocations: (locations) =>
-    set(() => ({
-      photoLocations: locations,
+    set((state) => ({
+      photoLocations: [...state.photoLocations, ...locations],
     })),
   japaneseAuthorNames: [],
   addJapaneseAuthorNames: (names) =>
-    set(() => ({
-      japaneseAuthorNames: names,
+    set((state) => ({
+      japaneseAuthorNames: [...state.japaneseAuthorNames, ...names],
     })),
   englishAuthorNames: [],
   addEnglishAuthorNames: (names) =>
-    set(() => ({
-      englishAuthorNames: names,
+    set((state) => ({
+      englishAuthorNames: [...state.englishAuthorNames, ...names],
     })),
-  photoStartDate: null,
+  photoStartDate: [],
   addPhotoStartDate: (date) =>
-    set(() => ({
-      photoStartDate: date,
+    set((state) => ({
+      photoStartDate: [...state.photoStartDate, ...date],
     })),
-  photoEndDate: null,
+  photoEndDate: [],
   addPhotoEndDate: (date) =>
-    set(() => ({
-      photoEndDate: date,
+    set((state) => ({
+      photoEndDate: [...state.photoEndDate, ...date],
     })),
-  voiceStartDate: null,
+  photoDate: [],
+  addPhotoDate: (date) =>
+    set((state) => ({
+      photoDate: [...state.photoDate, ...date],
+    })),
   currentEntry: null,
   addCurrentEntry: (entry) =>
     set(() => ({

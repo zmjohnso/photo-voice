@@ -92,13 +92,15 @@ export const SimpleSearch: React.FC<Props> = (props) => {
                 }}
                 // TODO: find a better type here
                 onChange={(value: any) => {
-                  addPhotoStartDate({
-                    value: value.$d,
-                    operator: DateLogicalOperators.None,
-                  });
+                  addPhotoStartDate([
+                    {
+                      value: value.$d,
+                      operator: DateLogicalOperators.None,
+                    },
+                  ]);
                 }}
                 disableFuture
-                maxDate={dayjs(photoEndDate?.value)}
+                // maxDate={dayjs(photoEndDate.value)}
               />
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -112,13 +114,15 @@ export const SimpleSearch: React.FC<Props> = (props) => {
                 }}
                 // TODO: find a better type here
                 onChange={(value: any) => {
-                  addPhotoEndDate({
-                    value: value.$d,
-                    operator: DateLogicalOperators.None,
-                  });
+                  addPhotoEndDate([
+                    {
+                      value: value.$d,
+                      operator: DateLogicalOperators.None,
+                    },
+                  ]);
                 }}
                 disableFuture
-                minDate={dayjs(photoStartDate?.value)}
+                // minDate={photoStartDate?[0] && dayjs(photoStartDate[0].value)}
               />
             </LocalizationProvider>
           </Stack>

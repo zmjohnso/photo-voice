@@ -6,7 +6,11 @@ import { EntryPreview } from "../entry-preview/entry-preview";
 import { useStore } from "../../store/store";
 import { getClient } from "../../services/contentful/client";
 import { LoadingIndicator } from "../loading-indicator/loading-indicator";
-import { LogicalOperators, SearchState } from "../../shared/utilities";
+import {
+  DateLogicalOperators,
+  LogicalOperators,
+  SearchState,
+} from "../../shared/utilities";
 
 export const IconDisplay: React.FC = () => {
   const searchState = useStore((state) => state.searchState);
@@ -14,6 +18,7 @@ export const IconDisplay: React.FC = () => {
   const englishAuthorNames = useStore((state) => state.englishAuthorNames);
   const photoStartDate = useStore((state) => state.photoStartDate);
   const photoEndDate = useStore((state) => state.photoEndDate);
+  const photoDate = useStore((state) => state.photoDate);
   const [voiceEntries, setVoiceEntries] = useState<
     Entry<VoiceEntry>[] | undefined
   >();
@@ -50,23 +55,22 @@ export const IconDisplay: React.FC = () => {
           });
 
           const isWithinDateRange =
-            photoStartDate &&
-            photoEndDate &&
-            photoDate.getFullYear() > photoStartDate.value.getFullYear() &&
-            photoDate.getFullYear() < photoEndDate.value.getFullYear() &&
-            (photoDate.getFullYear() === photoEndDate.value.getFullYear()
-              ? photoDate.getMonth() >= photoStartDate.value.getMonth()
+            photoStartDate.length &&
+            photoEndDate.length &&
+            photoDate.getFullYear() > photoStartDate[0].value.getFullYear() &&
+            photoDate.getFullYear() < photoEndDate[0].value.getFullYear() &&
+            (photoDate.getFullYear() === photoEndDate[0].value.getFullYear()
+              ? photoDate.getMonth() >= photoStartDate[0].value.getMonth()
               : true);
 
-          const hasMatchingAuthor =
-            englishAuthorNames.length !== 0
-              ? englishAuthorNames.some((name) => {
-                  return (
-                    name.operator === LogicalOperators.None &&
-                    authorNameFields.englishName === name.value
-                  );
-                })
-              : true;
+          const hasMatchingAuthor = englishAuthorNames.length
+            ? englishAuthorNames.some((name) => {
+                return (
+                  name.operator === LogicalOperators.None &&
+                  authorNameFields.englishName === name.value
+                );
+              })
+            : true;
 
           if (
             hasMatchingLocation !== false &&
@@ -78,6 +82,133 @@ export const IconDisplay: React.FC = () => {
         });
         break;
       case SearchState.Advanced:
+        voiceEntries?.forEach((entry) => {
+          const entryPhotoLocation = entry.fields.photoLocation.fields;
+          const entryPhotoDate = new Date(entry.fields.photoDate);
+          const entryVoiceAuthor = entry.fields.voiceAuthor.fields;
+
+          const andLocations: string[] = [];
+          const orLocations: string[] = [];
+          const notLocations: string[] = [];
+
+          const beforeDates: Date[] = [];
+          const afterDates: Date[] = [];
+
+          const andAuthors: string[] = [];
+          const orAuthors: string[] = [];
+          const notAuthors: string[] = [];
+
+          // location logic
+          photoLocations.forEach((location) => {
+            const hasMatchingLocation =
+              entryPhotoLocation.photoPrefecture.includes(location.value) ||
+              entryPhotoLocation.photoCity?.includes(location.value);
+
+            switch (location.operator) {
+              case LogicalOperators.And:
+                hasMatchingLocation && andLocations.push(location.value);
+                break;
+              case LogicalOperators.Or:
+                hasMatchingLocation && orLocations.push(location.value);
+                break;
+              case LogicalOperators.Not:
+                hasMatchingLocation && notLocations.push(location.value);
+                break;
+              case LogicalOperators.None:
+                break;
+              default:
+                break;
+            }
+          });
+
+          // photo date logic
+          photoDate.length &&
+            photoDate.forEach((date) => {
+              const d = new Date(date.value);
+              switch (date.operator) {
+                case DateLogicalOperators.Before:
+                  entryPhotoDate < d && beforeDates.push(d);
+                  break;
+                case DateLogicalOperators.After:
+                  entryPhotoDate > d && afterDates.push(d);
+                  break;
+                case DateLogicalOperators.None:
+                  break;
+                default:
+                  break;
+              }
+            });
+
+          // author logic
+          englishAuthorNames.forEach((name) => {
+            switch (name.operator) {
+              case LogicalOperators.And:
+                entryVoiceAuthor.englishName === name.value &&
+                  andAuthors.push(name.value);
+                break;
+              case LogicalOperators.Or:
+                entryVoiceAuthor.englishName === name.value &&
+                  orAuthors.push(name.value);
+                break;
+              case LogicalOperators.Not:
+                entryVoiceAuthor.englishName === name.value &&
+                  notAuthors.push(name.value);
+                break;
+              case LogicalOperators.None:
+                break;
+              default:
+                break;
+            }
+          });
+
+          // do filtering logic on entry
+          const notLocationCheck = notLocations.includes(
+            entry.fields.photoLocation.fields.photoPrefecture ||
+              (entry.fields.photoLocation.fields.photoCity ?? "")
+          );
+          const notAuthorCheck = notAuthors.includes(
+            entry.fields.voiceAuthor.fields.englishName
+          );
+          const dateCheck = () => {
+            if (!beforeDates.length && !afterDates.length) {
+              return false;
+            }
+
+            const entryDate = new Date(entry.fields.photoDate);
+            let isBefore = false;
+            let isAfter = false;
+
+            for (const date of beforeDates) {
+              const beforeDate = new Date(date);
+              if (entryDate < beforeDate) {
+                isBefore = true;
+                break;
+              }
+            }
+            for (const date of afterDates) {
+              const afterDate = new Date(date);
+              if (entryDate > afterDate) {
+                isAfter = true;
+                break;
+              }
+            }
+
+            if (!beforeDates.length) {
+              return isAfter;
+            }
+            if (!afterDates.length) {
+              return isBefore;
+            }
+
+            return isBefore && isAfter;
+          };
+
+          if (!notLocationCheck || !notAuthorCheck) {
+            if (dateCheck()) {
+              tempFilteredVoiceEntries.push(entry);
+            }
+          }
+        });
         break;
       default:
         break;
