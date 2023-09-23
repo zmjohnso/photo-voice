@@ -100,7 +100,9 @@ export const SimpleSearch: React.FC<Props> = (props) => {
                   ]);
                 }}
                 disableFuture
-                // maxDate={dayjs(photoEndDate.value)}
+                maxDate={
+                  photoEndDate.length ? dayjs(photoEndDate[0].value) : null
+                }
               />
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -122,7 +124,9 @@ export const SimpleSearch: React.FC<Props> = (props) => {
                   ]);
                 }}
                 disableFuture
-                // minDate={photoStartDate?[0] && dayjs(photoStartDate[0].value)}
+                minDate={
+                  photoStartDate.length ? dayjs(photoStartDate[0].value) : null
+                }
               />
             </LocalizationProvider>
           </Stack>
