@@ -161,53 +161,132 @@ export const IconDisplay: React.FC = () => {
             }
           });
 
-          // do filtering logic on entry
-          const notLocationCheck = notLocations.includes(
+          /***************************** */
+          /* Start entry filtering logic */
+
+          const notLocationCheck = !notLocations.includes(
             entry.fields.photoLocation.fields.photoPrefecture ||
               (entry.fields.photoLocation.fields.photoCity ?? "")
           );
-          const notAuthorCheck = notAuthors.includes(
+          const notAuthorCheck = !notAuthors.includes(
             entry.fields.voiceAuthor.fields.englishName
           );
+
           const dateCheck = () => {
-            if (!beforeDates.length && !afterDates.length) {
-              return false;
+            if (
+              !beforeDates.length &&
+              !afterDates.length &&
+              !photoDate.length
+            ) {
+              return true;
             }
 
             const entryDate = new Date(entry.fields.photoDate);
-            let isBefore = false;
-            let isAfter = false;
 
-            for (const date of beforeDates) {
-              const beforeDate = new Date(date);
-              if (entryDate < beforeDate) {
-                isBefore = true;
-                break;
-              }
-            }
-            for (const date of afterDates) {
-              const afterDate = new Date(date);
-              if (entryDate > afterDate) {
-                isAfter = true;
-                break;
-              }
-            }
+            const isBefore = beforeDates.some(
+              (date) => entryDate < new Date(date)
+            );
+            const isAfter = afterDates.some(
+              (date) => entryDate > new Date(date)
+            );
 
-            if (!beforeDates.length) {
+            if (
+              !beforeDates.length &&
+              beforeDates.length + afterDates.length === photoDate.length
+            ) {
               return isAfter;
             }
-            if (!afterDates.length) {
+
+            if (
+              !afterDates.length &&
+              beforeDates.length + afterDates.length === photoDate.length
+            ) {
               return isBefore;
             }
 
             return isBefore && isAfter;
           };
 
-          if (!notLocationCheck || !notAuthorCheck) {
-            if (dateCheck()) {
-              tempFilteredVoiceEntries.push(entry);
+          const countOperators = (
+            array: { operator: LogicalOperators }[],
+            targetOperator: LogicalOperators
+          ) => array.filter((item) => item.operator === targetOperator).length;
+
+          const checkAndOperators = (
+            count: number,
+            items: string[],
+            fieldType: "location" | "author"
+          ) => {
+            if (count === 0) {
+              return true;
+            } else if (count === 1) {
+              if (fieldType === "location") {
+                return items.includes(
+                  entry.fields.photoLocation.fields.photoPrefecture ||
+                    (entry.fields.photoLocation.fields.photoCity ?? "")
+                );
+              } else if (fieldType === "author") {
+                return items.includes(
+                  entry.fields.voiceAuthor.fields.englishName
+                );
+              }
+            } else {
+              return false;
             }
-          }
+          };
+
+          const andLocationCount = countOperators(
+            photoLocations,
+            LogicalOperators.And
+          );
+          const andLocationCheck = checkAndOperators(
+            andLocationCount,
+            andLocations,
+            "location"
+          );
+
+          const orLocationCount = countOperators(
+            photoLocations,
+            LogicalOperators.Or
+          );
+          const orLocationCheck =
+            orLocationCount === 0
+              ? true
+              : orLocations.includes(
+                  entry.fields.photoLocation.fields.photoPrefecture ||
+                    (entry.fields.photoLocation.fields.photoCity ?? "")
+                );
+
+          const andAuthorCount = countOperators(
+            englishAuthorNames,
+            LogicalOperators.And
+          );
+          const andAuthorCheck = checkAndOperators(
+            andAuthorCount,
+            andAuthors,
+            "author"
+          );
+
+          const orAuthorCount = countOperators(
+            englishAuthorNames,
+            LogicalOperators.Or
+          );
+          const orAuthorCheck =
+            orAuthorCount === 0
+              ? true
+              : orAuthors.includes(entry.fields.voiceAuthor.fields.englishName);
+
+          /* End entry filtering logic */
+          /*************************** */
+
+          if (!notLocationCheck) return;
+          if (!notAuthorCheck) return;
+          if (!dateCheck()) return;
+          if (!andLocationCheck) return;
+          if (!andAuthorCheck) return;
+          if (!(orLocationCheck || orAuthorCheck)) return;
+
+          tempFilteredVoiceEntries.push(entry);
         });
         break;
       default:
