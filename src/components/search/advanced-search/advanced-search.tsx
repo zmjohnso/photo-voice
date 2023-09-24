@@ -159,7 +159,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
             break;
         }
         newCriteria +=
-          " " + photoDate?.toLocaleDateString("en-US", dateFormatOptions);
+          " " + photoDate?.toLocaleDateString("ja-JP", dateFormatOptions);
 
         setPhotoDateCriteriaVerbiage([
           ...photoDateCriteriaVerbiage,
