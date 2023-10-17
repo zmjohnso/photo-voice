@@ -10,6 +10,7 @@ import { About } from "./components/about/about";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./shared/theme";
 import { Search } from "./components/search/search";
+import { Contact } from "./components/contact/contact";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "display",
         element: <EntryDisplay />,
+      },
+      {
+        path: "contact",
+        element: <Contact />,
       },
     ],
   },
