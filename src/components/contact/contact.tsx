@@ -106,6 +106,9 @@ export const Contact: React.FC = () => {
                 flexDirection: "column",
               }}
             >
+              <Typography color="text.secondary" gutterBottom>
+                Message
+              </Typography>
               <TextField
                 variant="outlined"
                 label="Full Name"
