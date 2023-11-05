@@ -24,6 +24,7 @@ interface Props {
 }
 
 export const SimpleSearch: React.FC<Props> = (props) => {
+  dayjs.locale("ja");
   const { photoLocationOptions, authorNameOptions } = props;
   const [
     addPhotoLocations,
