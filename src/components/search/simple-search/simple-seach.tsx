@@ -1,88 +1,51 @@
 import { Autocomplete, Box, Button, Stack, TextField } from "@mui/material";
-import { useStore } from "../../store/store";
+import { useStore } from "../../../store/store";
 import { useNavigate } from "react-router-dom";
-import { Entry } from "contentful";
-import { VoiceAuthor, PhotoLocation } from "../../shared/content-types";
-import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { getClient } from "../../services/contentful/client";
-import { LoadingIndicator } from "../loading-indicator/loading-indicator";
+import { LoadingIndicator } from "../../loading-indicator/loading-indicator";
 
 // make date pickers readable for Japanese speakers
 // eventually allow the date selection for English and Japanes
 // once site language selection is enabled
 import dayjs from "dayjs";
 import "dayjs/locale/ja";
+import {
+  DateLogicalOperators,
+  LogicalOperators,
+} from "../../../shared/utilities";
 
 dayjs.locale("ja");
 
-export const SimpleSearch: React.FC = () => {
+interface Props {
+  photoLocationOptions: string[];
+  authorNameOptions: string[];
+}
+
+export const SimpleSearch: React.FC<Props> = (props) => {
+  dayjs.locale("ja");
+  const { photoLocationOptions, authorNameOptions } = props;
   const [
     addPhotoLocations,
     addJapaneseAuthorNames,
     addEnglishAuthorNames,
     addPhotoStartDate,
+    photoStartDate,
     addPhotoEndDate,
-    reset,
+    photoEndDate,
   ] = useStore((state) => [
     state.addPhotoLocations,
     state.addJapaneseAuthorNames,
     state.addEnglishAuthorNames,
     state.addPhotoStartDate,
+    state.photoStartDate,
     state.addPhotoEndDate,
-    state.reset,
+    state.photoEndDate,
   ]);
   const navigate = useNavigate();
-  const client = getClient();
-  const [photoLocations, setPhotoLocations] = useState<
-    Entry<PhotoLocation>[] | undefined
-  >();
-  const [voiceAuthors, setVoiceAuthors] = useState<
-    Entry<VoiceAuthor>[] | undefined
-  >();
 
-  useEffect(() => {
-    // clear store search values on page load
-    reset();
-  }, []);
-
-  useEffect(() => {
-    client
-      .getEntries<PhotoLocation>({ content_type: "photoLocation" })
-      .then((locations) => setPhotoLocations(locations.items))
-      .catch(console.error); // Add error handling
-
-    client
-      .getEntries<VoiceAuthor>({ content_type: "author" })
-      .then((authors) => setVoiceAuthors(authors.items))
-      .catch(console.error); // Add error handling
-  }, []);
-
-  const prefectures = [
-    ...new Set(
-      photoLocations?.map((x) => x.fields.photoPrefecture).filter((x) => x) ??
-        []
-    ),
-  ];
-  const cities = [
-    ...new Set(
-      photoLocations?.map((x) => x.fields.photoCity ?? "").filter((x) => x) ??
-        []
-    ),
-  ];
-  const photoLocationOptions = [...prefectures, ...cities];
-
-  const authorNameOptions = [
-    ...new Set(
-      voiceAuthors?.map(
-        (x) => `${x.fields.japaneseName}・${x.fields.englishName}`
-      )
-    ),
-  ];
-
-  if (photoLocations === undefined || voiceAuthors === undefined) {
+  if (!photoLocationOptions.length || !authorNameOptions.length) {
     return <LoadingIndicator />;
   }
 
@@ -102,12 +65,18 @@ export const SimpleSearch: React.FC = () => {
         </Stack>
         <Stack spacing={2}>
           <Autocomplete
-            multiple
             id="photo-locations"
-            limitTags={2}
             options={photoLocationOptions}
             sx={{ width: 480 }}
-            onChange={(_event, value) => addPhotoLocations(value)}
+            onChange={(_event, value) =>
+              value &&
+              addPhotoLocations([
+                {
+                  value: value,
+                  operator: LogicalOperators.None,
+                },
+              ])
+            }
             renderInput={(params) => (
               <TextField {...params} label="撮影場所・Photo Location" />
             )}
@@ -124,9 +93,17 @@ export const SimpleSearch: React.FC = () => {
                 }}
                 // TODO: find a better type here
                 onChange={(value: any) => {
-                  addPhotoStartDate(value.$d);
+                  addPhotoStartDate([
+                    {
+                      value: value.$d,
+                      operator: DateLogicalOperators.None,
+                    },
+                  ]);
                 }}
                 disableFuture
+                maxDate={
+                  photoEndDate.length ? dayjs(photoEndDate[0].value) : null
+                }
               />
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -140,29 +117,41 @@ export const SimpleSearch: React.FC = () => {
                 }}
                 // TODO: find a better type here
                 onChange={(value: any) => {
-                  addPhotoEndDate(value.$d);
+                  addPhotoEndDate([
+                    {
+                      value: value.$d,
+                      operator: DateLogicalOperators.None,
+                    },
+                  ]);
                 }}
                 disableFuture
+                minDate={
+                  photoStartDate.length ? dayjs(photoStartDate[0].value) : null
+                }
               />
             </LocalizationProvider>
           </Stack>
           <Autocomplete
-            multiple
             disablePortal
             id="author-names"
-            limitTags={2}
             options={authorNameOptions}
             sx={{ width: 480 }}
             onChange={(_event, value) => {
-              const japaneseNames: string[] = [];
-              const englishNames: string[] = [];
-              value.forEach((nameSet) => {
-                const namePair = nameSet.split("・");
-                japaneseNames.push(namePair[0]);
-                englishNames.push(namePair[1]);
-              });
-              japaneseNames.length && addJapaneseAuthorNames(japaneseNames);
-              englishNames.length && addEnglishAuthorNames(englishNames);
+              if (value) {
+                const namePair = value.split("・");
+                addJapaneseAuthorNames([
+                  {
+                    value: namePair[0],
+                    operator: LogicalOperators.None,
+                  },
+                ]);
+                addEnglishAuthorNames([
+                  {
+                    value: namePair[1],
+                    operator: LogicalOperators.None,
+                  },
+                ]);
+              }
             }}
             renderInput={(params) => (
               <TextField

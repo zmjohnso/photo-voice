@@ -11,14 +11,10 @@ import {
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { useStore } from "../../store/store";
+import { dateFormatOptions } from "../../shared/utilities";
 
 export const EntryDisplay: React.FC = () => {
   const currentEntry = useStore((state) => state.currentEntry);
-
-  const dateFormatOptions: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-  };
 
   if (!currentEntry) {
     return <Box>No Entry is currently selected.</Box>;

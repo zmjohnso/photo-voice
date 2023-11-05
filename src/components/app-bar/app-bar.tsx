@@ -26,6 +26,7 @@ export const PhotoVoiceAppBar: React.FC = () => {
     ["ホーム・Home", "/"],
     ["検索・Search", "/search"],
     ["事業概要・About", "/about"],
+    ["お問い合わせ・Contact", "/contact"],
   ]);
 
   return (
