@@ -11,6 +11,7 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "./shared/theme";
 import { Search } from "./components/search/search";
 import { Contact } from "./components/contact/contact";
+import { AboutLoader } from "./loaders/about-loader";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
       {
         path: "about",
         element: <About />,
+        loader: AboutLoader,
       },
       {
         path: "icon",

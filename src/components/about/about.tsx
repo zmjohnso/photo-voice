@@ -1,24 +1,15 @@
 import { Box, CardMedia, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { getClient } from "../../services/contentful/client";
+import React from "react";
 import { AboutPage } from "../../shared/content-types";
 import { Entry } from "contentful";
 import { LoadingIndicator } from "../loading-indicator/loading-indicator";
+import { useLoaderData, useNavigation } from "react-router-dom";
 
 export const About: React.FC = () => {
-  const client = getClient();
+  const aboutPage = useLoaderData() as Entry<AboutPage> | undefined;
+  const navigation = useNavigation();
 
-  // TODO: there will ever only be one about page, fix this array type?
-  const [aboutPage, setAboutPage] = useState<Entry<AboutPage>[] | undefined>();
-
-  useEffect(() => {
-    client
-      .getEntries<AboutPage>({ content_type: "about" })
-      .then((aboutPageContent) => setAboutPage(aboutPageContent.items))
-      .catch(console.error); // Add error handling;
-  }, []);
-
-  if (aboutPage === undefined) {
+  if (navigation.state === "loading") {
     return <LoadingIndicator />;
   }
 
@@ -34,7 +25,7 @@ export const About: React.FC = () => {
         <CardMedia
           component="img"
           sx={{ width: "450px" }}
-          image={aboutPage[0].fields.aboutPicture.fields.file.url}
+          image={aboutPage.fields.aboutPicture.fields.file.url}
           alt="About Page Image"
         />
       )}
