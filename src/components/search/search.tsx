@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Box, Tabs, Tab } from "@mui/material";
 import { SimpleSearch } from "./simple-search/simple-seach";
 import { useStore } from "../../store/store";
 import { AdvancedSearch } from "./advanced-search/advanced-search";
-import { Entry } from "contentful";
-import { getClient } from "../../services/contentful/client";
-import { PhotoLocation, VoiceAuthor } from "../../shared/content-types";
 import { SearchState } from "../../shared/utilities";
+import { useLoaderData } from "react-router-dom";
+import { SearchLoaderValue } from "../../loaders/search-loader";
 
 export const Search: React.FC = () => {
   const [tabValue, setTabValue] = useState(0);
@@ -14,31 +13,13 @@ export const Search: React.FC = () => {
     state.setSearchState,
     state.reset,
   ]);
-  const client = getClient();
-  const [photoLocations, setPhotoLocations] = useState<
-    Entry<PhotoLocation>[] | undefined
-  >();
-  const [voiceAuthors, setVoiceAuthors] = useState<
-    Entry<VoiceAuthor>[] | undefined
-  >();
+  const { photoLocations, voiceAuthors } = useLoaderData() as SearchLoaderValue;
 
   useEffect(() => {
     // clear store search values on page load
     reset();
     // default to simple search since that is the default tab
     setSearchState(SearchState.Simple);
-  }, []);
-
-  useEffect(() => {
-    client
-      .getEntries<PhotoLocation>({ content_type: "photoLocation" })
-      .then((locations) => setPhotoLocations(locations.items))
-      .catch(console.error); // Add error handling
-
-    client
-      .getEntries<VoiceAuthor>({ content_type: "author" })
-      .then((authors) => setVoiceAuthors(authors.items))
-      .catch(console.error); // Add error handling
   }, []);
 
   const prefectures = [

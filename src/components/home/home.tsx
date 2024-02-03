@@ -1,29 +1,19 @@
 import { Box, CardMedia, IconButton, Typography } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { Entry } from "contentful";
-import React, { useEffect, useState } from "react";
-import { HomePage } from "../../shared/content-types";
-import { getClient } from "../../services/contentful/client";
+import React from "react";
 import { LoadingIndicator } from "../loading-indicator/loading-indicator";
+import { useLoaderData, useNavigation } from "react-router-dom";
+import { HomeLoaderValue } from "../../loaders/home-loader";
 
 export const Home: React.FC = () => {
-  const client = getClient();
-
-  // TODO: there will ever only be one home page, fix this array type?
-  const [homePage, setHomePage] = useState<Entry<HomePage>[] | undefined>();
+  const navigation = useNavigation();
+  const homePage = useLoaderData() as HomeLoaderValue;
 
   const handleClick = () => {
     window.open("https://github.com/zmjohnso/photo-voice", "_blank");
   };
 
-  useEffect(() => {
-    client
-      .getEntries<HomePage>({ content_type: "homepage" })
-      .then((homePageContent) => setHomePage(homePageContent.items))
-      .catch(console.error); // Add error handling;
-  }, []);
-
-  if (homePage === undefined) {
+  if (navigation.state === "loading") {
     return <LoadingIndicator />;
   }
 

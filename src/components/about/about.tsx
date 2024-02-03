@@ -1,12 +1,11 @@
 import { Box, CardMedia, Typography } from "@mui/material";
 import React from "react";
-import { AboutPage } from "../../shared/content-types";
-import { Entry } from "contentful";
 import { LoadingIndicator } from "../loading-indicator/loading-indicator";
 import { useLoaderData, useNavigation } from "react-router-dom";
+import { AboutLoaderValue } from "../../loaders/about-loader";
 
 export const About: React.FC = () => {
-  const aboutPage = useLoaderData() as Entry<AboutPage> | undefined;
+  const aboutPage = useLoaderData() as AboutLoaderValue;
   const navigation = useNavigation();
 
   if (navigation.state === "loading") {

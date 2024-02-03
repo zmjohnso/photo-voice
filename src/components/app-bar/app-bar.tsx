@@ -8,7 +8,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 export const PhotoVoiceAppBar: React.FC = () => {
@@ -45,14 +45,18 @@ export const PhotoVoiceAppBar: React.FC = () => {
           </IconButton>
           <Menu id="menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
             {Array.from(navItems.entries()).map((item) => (
-              <MenuItem
-                key={item[0]}
-                onClick={() => {
-                  navigate(item[1]);
-                  handleClose();
-                }}
-              >
-                {item[0]}
+              <MenuItem key={item[0]}>
+                <NavLink
+                  style={({ isActive }) => {
+                    return {
+                      color: isActive ? "green" : "inherit",
+                    };
+                  }}
+                  to={item[1]}
+                  onClick={handleClose}
+                >
+                  {item[0]}
+                </NavLink>
               </MenuItem>
             ))}
           </Menu>
@@ -78,6 +82,7 @@ export const PhotoVoiceAppBar: React.FC = () => {
           </Box>
         </Toolbar>
       </AppBar>
+      <Outlet />
     </Box>
   );
 };
