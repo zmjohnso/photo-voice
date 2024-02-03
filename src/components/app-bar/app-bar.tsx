@@ -1,18 +1,16 @@
 import {
   AppBar,
   Box,
-  Button,
   IconButton,
   Menu,
   MenuItem,
   Toolbar,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import { useState } from "react";
 
 export const PhotoVoiceAppBar: React.FC = () => {
-  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -28,6 +26,27 @@ export const PhotoVoiceAppBar: React.FC = () => {
     ["事業概要・About", "/about"],
     ["お問い合わせ・Contact", "/contact"],
   ]);
+
+  interface NavLinkItemProps {
+    location: string;
+    title: string;
+    activeColor: string;
+  }
+
+  const NavLinkItem: React.FC<NavLinkItemProps> = (props) => (
+    <NavLink
+      style={({ isActive }) => {
+        return {
+          color: isActive ? props.activeColor : "inherit",
+          textDecoration: "none",
+        };
+      }}
+      to={props.location}
+      onClick={handleClose}
+    >
+      {props.title}
+    </NavLink>
+  );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -46,17 +65,11 @@ export const PhotoVoiceAppBar: React.FC = () => {
           <Menu id="menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
             {Array.from(navItems.entries()).map((item) => (
               <MenuItem key={item[0]}>
-                <NavLink
-                  style={({ isActive }) => {
-                    return {
-                      color: isActive ? "green" : "inherit",
-                    };
-                  }}
-                  to={item[1]}
-                  onClick={handleClose}
-                >
-                  {item[0]}
-                </NavLink>
+                <NavLinkItem
+                  title={item[0]}
+                  location={item[1]}
+                  activeColor="green"
+                />
               </MenuItem>
             ))}
           </Menu>
@@ -68,16 +81,12 @@ export const PhotoVoiceAppBar: React.FC = () => {
             }}
           >
             {Array.from(navItems.entries()).map((item) => (
-              <Button
+              <NavLinkItem
                 key={item[0]}
-                onClick={() => {
-                  navigate(item[1]);
-                  handleClose();
-                }}
-                sx={{ color: "#fff" }}
-              >
-                {item[0]}
-              </Button>
+                title={item[0]}
+                location={item[1]}
+                activeColor="black"
+              />
             ))}
           </Box>
         </Toolbar>

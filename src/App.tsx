@@ -10,6 +10,7 @@ import { SearchLoader } from "./loaders/search-loader";
 import ErrorPage from "./routes/error-page";
 import { Search } from "./components/search/search";
 import { Home } from "./components/home/home";
+import { IconDisplayLoader } from "./loaders/icon-display-loader";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
       {
         path: "icon",
         element: <IconDisplay />,
+        loader: IconDisplayLoader,
       },
       {
         path: "display",

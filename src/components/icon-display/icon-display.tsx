@@ -4,13 +4,14 @@ import { VoiceEntry } from "../../shared/content-types";
 import { Box, Grid, Typography } from "@mui/material";
 import { EntryPreview } from "../entry-preview/entry-preview";
 import { useStore } from "../../store/store";
-import { getClient } from "../../services/contentful/client";
 import { LoadingIndicator } from "../loading-indicator/loading-indicator";
 import {
   DateLogicalOperators,
   LogicalOperators,
   SearchState,
 } from "../../shared/utilities";
+import { useLoaderData } from "react-router-dom";
+import { IconDisplayLoaderValue } from "../../loaders/icon-display-loader";
 
 export const IconDisplay: React.FC = () => {
   const searchState = useStore((state) => state.searchState);
@@ -19,22 +20,11 @@ export const IconDisplay: React.FC = () => {
   const photoStartDate = useStore((state) => state.photoStartDate);
   const photoEndDate = useStore((state) => state.photoEndDate);
   const photoDate = useStore((state) => state.photoDate);
-  const [voiceEntries, setVoiceEntries] = useState<
-    Entry<VoiceEntry>[] | undefined
-  >();
+  const voiceEntries = useLoaderData() as IconDisplayLoaderValue;
 
   const [filteredVoiceEntries, setFilteredVoiceEntries] = useState<
     Entry<VoiceEntry>[] | undefined
   >();
-
-  const client = getClient();
-
-  useEffect(() => {
-    client
-      .getEntries<VoiceEntry>({ content_type: "entry" })
-      .then((entries) => setVoiceEntries(entries.items))
-      .catch(console.error); // Add error handling
-  }, []);
 
   useEffect(() => {
     const tempFilteredVoiceEntries: Entry<VoiceEntry>[] = [];
