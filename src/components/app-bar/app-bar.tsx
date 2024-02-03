@@ -39,6 +39,8 @@ export const PhotoVoiceAppBar: React.FC = () => {
         return {
           color: isActive ? props.activeColor : "inherit",
           textDecoration: "none",
+          fontFamily: "Roboto, sans-serif",
+          fontWeight: 500,
         };
       }}
       to={props.location}
