@@ -1,4 +1,4 @@
-import { Box, CardMedia, Typography } from "@mui/material";
+import { Box, CardMedia, Typography, useTheme } from "@mui/material";
 import React from "react";
 import { LoadingIndicator } from "../loading-indicator/loading-indicator";
 import { useLoaderData, useNavigation } from "react-router-dom";
@@ -7,6 +7,7 @@ import { AboutLoaderValue } from "../../loaders/about-loader";
 export const About: React.FC = () => {
   const aboutPage = useLoaderData() as AboutLoaderValue;
   const navigation = useNavigation();
+  const theme = useTheme();
 
   if (navigation.state === "loading") {
     return <LoadingIndicator />;
@@ -14,11 +15,16 @@ export const About: React.FC = () => {
 
   return (
     <Box
-      sx={{ display: "flex", flexDirection: "column" }}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: theme.palette.background.default,
+      }}
       paddingLeft="15rem"
       paddingRight="15rem"
       paddingTop="1rem"
       alignItems="center"
+      color={theme.palette.text.primary}
     >
       {aboutPage && (
         <CardMedia

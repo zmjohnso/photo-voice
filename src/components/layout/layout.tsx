@@ -5,19 +5,32 @@ import {
   Menu,
   MenuItem,
   Toolbar,
+  useTheme,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { NavLink, Outlet } from "react-router-dom";
 import { useState } from "react";
+import React from "react";
+import { useStore } from "../../store/store";
 
-export const PhotoVoiceAppBar: React.FC = () => {
+export const Layout: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const theme = useTheme();
+  const [colorMode, setColorMode] = useStore((state) => [
+    state.colorMode,
+    state.setColorMode,
+  ]);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const handleColorMode = () => {
+    setColorMode(colorMode === "light" ? "dark" : "light");
   };
 
   const navItems = new Map<string, string>([
@@ -30,14 +43,14 @@ export const PhotoVoiceAppBar: React.FC = () => {
   interface NavLinkItemProps {
     location: string;
     title: string;
-    activeColor: string;
+    color: string;
   }
 
   const NavLinkItem: React.FC<NavLinkItemProps> = (props) => (
     <NavLink
       style={({ isActive }) => {
         return {
-          color: isActive ? props.activeColor : "inherit",
+          color: isActive ? props.color : "inherit",
           textDecoration: "none",
           fontFamily: "Roboto, sans-serif",
           fontWeight: 500,
@@ -51,13 +64,15 @@ export const PhotoVoiceAppBar: React.FC = () => {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box
+      height="100vh"
+      sx={{ backgroundColor: theme.palette.background.default }}
+    >
       <AppBar position="static">
         <Toolbar>
           <IconButton
             size="large"
             edge="start"
-            color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
             onClick={handleClick}
@@ -70,7 +85,7 @@ export const PhotoVoiceAppBar: React.FC = () => {
                 <NavLinkItem
                   title={item[0]}
                   location={item[1]}
-                  activeColor="green"
+                  color={theme.palette.primary.main}
                 />
               </MenuItem>
             ))}
@@ -78,7 +93,8 @@ export const PhotoVoiceAppBar: React.FC = () => {
           <Box
             sx={{
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "center",
+              gap: "7rem",
               width: "95%",
             }}
           >
@@ -87,10 +103,17 @@ export const PhotoVoiceAppBar: React.FC = () => {
                 key={item[0]}
                 title={item[0]}
                 location={item[1]}
-                activeColor="black"
+                color={
+                  colorMode === "light"
+                    ? theme.palette.secondary.contrastText
+                    : theme.palette.primary.main
+                }
               />
             ))}
           </Box>
+          <IconButton onClick={handleColorMode} color="inherit">
+            {colorMode === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Outlet />

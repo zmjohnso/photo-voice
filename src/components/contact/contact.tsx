@@ -1,7 +1,14 @@
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
-import { Box, Card, Divider, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  Divider,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -19,6 +26,7 @@ export const Contact: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>();
+  const theme = useTheme();
   const emailAddress = "photovoicejapan@gmail.com";
 
   const requiredErrorMessage = "Field is required.";
@@ -33,11 +41,15 @@ export const Contact: React.FC = () => {
 
   return (
     <Box
+      sx={{
+        backgroundColor: theme.palette.background.default,
+      }}
       display="flex"
       justifyContent="center"
       paddingTop="5rem"
       paddingLeft="5rem"
       paddingRight="5rem"
+      color={theme.palette.text.primary}
     >
       <Card variant="outlined" sx={{ display: "flex" }}>
         <Box display="flex" flexDirection="column">
