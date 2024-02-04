@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { VoiceEntry } from "../shared/content-types";
 import { Entry } from "contentful";
 import { DateData, NameOrLocationData, SearchState } from "../shared/utilities";
+import { PaletteMode } from "@mui/material";
 
 interface State {
   photoLocations: NameOrLocationData[];
@@ -12,6 +13,7 @@ interface State {
   photoDate: DateData[];
   currentEntry: Entry<VoiceEntry> | null;
   searchState: SearchState;
+  colorMode: PaletteMode;
 }
 
 interface Action {
@@ -23,6 +25,7 @@ interface Action {
   addPhotoDate: (date: DateData[]) => void;
   addCurrentEntry: (entry: Entry<VoiceEntry>) => void;
   setSearchState: (state: SearchState) => void;
+  setColorMode: (mode: PaletteMode) => void;
   reset: () => void;
 }
 
@@ -35,6 +38,7 @@ const initialState: State = {
   photoDate: [],
   currentEntry: null,
   searchState: SearchState.None,
+  colorMode: "light",
 };
 
 export const useStore = create<State & Action>()((set) => ({
@@ -78,7 +82,15 @@ export const useStore = create<State & Action>()((set) => ({
     set(() => ({
       searchState: state,
     })),
+  colorMode: "light",
+  setColorMode: (mode) =>
+    set(() => ({
+      colorMode: mode,
+    })),
   reset: () => {
-    set(initialState);
+    set((state) => ({
+      ...initialState,
+      colorMode: state.colorMode, // retain the current colorMode
+    }));
   },
 }));

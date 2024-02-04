@@ -1,6 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { About } from "./components/about/about";
-import { PhotoVoiceAppBar } from "./components/app-bar/app-bar";
+import { Layout } from "./components/layout/layout";
 import { Contact } from "./components/contact/contact";
 import { EntryDisplay } from "./components/entry-display/entry-display";
 import { IconDisplay } from "./components/icon-display/icon-display";
@@ -11,11 +11,15 @@ import ErrorPage from "./routes/error-page";
 import { Search } from "./components/search/search";
 import { Home } from "./components/home/home";
 import { IconDisplayLoader } from "./loaders/icon-display-loader";
+import { ThemeProvider, useMediaQuery } from "@mui/material";
+import { theme } from "./shared/theme";
+import { useStore } from "./store/store";
+import { useMemo } from "react";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <PhotoVoiceAppBar />,
+    element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -51,7 +55,20 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  const [colorMode, setColorMode] = useStore((state) => [
+    state.colorMode,
+    state.setColorMode,
+  ]);
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  useMemo(() => {
+    setColorMode(prefersDarkMode ? "dark" : "light");
+  }, [prefersDarkMode, setColorMode]);
+
+  return (
+    <ThemeProvider theme={theme(colorMode)}>
+      <RouterProvider router={router} />
+    </ThemeProvider>
+  );
 }
 
 export default App;

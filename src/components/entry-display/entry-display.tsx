@@ -7,6 +7,7 @@ import {
   ImageListItem,
   Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
 import React from "react";
 import ReactMarkdown from "react-markdown";
@@ -15,9 +16,19 @@ import { dateFormatOptions } from "../../shared/utilities";
 
 export const EntryDisplay: React.FC = () => {
   const currentEntry = useStore((state) => state.currentEntry);
+  const theme = useTheme();
 
   if (!currentEntry) {
-    return <Box>No Entry is currently selected.</Box>;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        paddingTop="2rem"
+        color={theme.palette.text.primary}
+      >
+        No Entry is currently selected.
+      </Box>
+    );
   }
 
   return (
@@ -34,7 +45,7 @@ export const EntryDisplay: React.FC = () => {
       {currentEntry.fields.photo.length === 1 && (
         <CardMedia
           component="img"
-          sx={{ width: "50vw" }}
+          sx={{ width: "50vw", maxHeight: "75%" }}
           image={currentEntry.fields.photo[0].fields.file.url}
           alt={currentEntry.fields.photo[0].fields.title}
         />

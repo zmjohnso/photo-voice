@@ -1,7 +1,7 @@
 import { Entry } from "contentful";
 import React, { useEffect, useState } from "react";
 import { VoiceEntry } from "../../shared/content-types";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography, useTheme } from "@mui/material";
 import { EntryPreview } from "../entry-preview/entry-preview";
 import { useStore } from "../../store/store";
 import { LoadingIndicator } from "../loading-indicator/loading-indicator";
@@ -21,6 +21,7 @@ export const IconDisplay: React.FC = () => {
   const photoEndDate = useStore((state) => state.photoEndDate);
   const photoDate = useStore((state) => state.photoDate);
   const voiceEntries = useLoaderData() as IconDisplayLoaderValue;
+  const theme = useTheme();
 
   const [filteredVoiceEntries, setFilteredVoiceEntries] = useState<
     Entry<VoiceEntry>[] | undefined
@@ -309,7 +310,11 @@ export const IconDisplay: React.FC = () => {
   return (
     <>
       {filteredVoiceEntries?.length ? (
-        <Box>
+        <Box
+          sx={{
+            backgroundColor: theme.palette.background.default,
+          }}
+        >
           <Grid container spacing={10} style={{ padding: "24px" }}>
             {filteredVoiceEntries.map((entry) => (
               <Grid
@@ -334,6 +339,7 @@ export const IconDisplay: React.FC = () => {
           paddingLeft="15rem"
           paddingRight="15rem"
           alignItems="center"
+          color={theme.palette.text.primary}
         >
           <Typography variant="body1">
             検索結果がありません。ご検索条件を変更して、再試行してください。
