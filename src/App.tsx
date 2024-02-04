@@ -11,9 +11,10 @@ import ErrorPage from "./routes/error-page";
 import { Search } from "./components/search/search";
 import { Home } from "./components/home/home";
 import { IconDisplayLoader } from "./loaders/icon-display-loader";
-import { ThemeProvider } from "@mui/material";
+import { ThemeProvider, useMediaQuery } from "@mui/material";
 import { theme } from "./shared/theme";
 import { useStore } from "./store/store";
+import { useMemo } from "react";
 
 const router = createBrowserRouter([
   {
@@ -54,7 +55,14 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const [colorMode] = useStore((state) => [state.colorMode]);
+  const [colorMode, setColorMode] = useStore((state) => [
+    state.colorMode,
+    state.setColorMode,
+  ]);
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  useMemo(() => {
+    setColorMode(prefersDarkMode ? "dark" : "light");
+  }, [prefersDarkMode, setColorMode]);
 
   return (
     <ThemeProvider theme={theme(colorMode)}>

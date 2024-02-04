@@ -38,7 +38,7 @@ const initialState: State = {
   photoDate: [],
   currentEntry: null,
   searchState: SearchState.None,
-  colorMode: "light", // change to set based on system preference
+  colorMode: "light",
 };
 
 export const useStore = create<State & Action>()((set) => ({
@@ -82,7 +82,7 @@ export const useStore = create<State & Action>()((set) => ({
     set(() => ({
       searchState: state,
     })),
-  colorMode: "light", // change to set based on system preference
+  colorMode: "light",
   setColorMode: (mode) =>
     set(() => ({
       colorMode: mode,

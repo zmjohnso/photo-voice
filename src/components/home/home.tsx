@@ -24,8 +24,6 @@ export const Home: React.FC = () => {
     return <LoadingIndicator />;
   }
 
-  console.log(homePage);
-
   return (
     <Box
       sx={{
