@@ -9,6 +9,7 @@ import {
   SelectChangeEvent,
   Stack,
   TextField,
+  useTheme,
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
@@ -36,6 +37,7 @@ interface Props {
 export const AdvancedSearch: React.FC<Props> = (props) => {
   const { photoLocationOptions, authorNameOptions } = props;
   const navigate = useNavigate();
+  const theme = useTheme();
   const [
     addPhotoLocations,
     addJapaneseAuthorNames,
@@ -185,6 +187,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
       display="flex"
       justifyContent="center"
       paddingTop="1rem"
+      color={theme.palette.text.primary}
     >
       <Stack spacing={2} direction="row">
         <Stack spacing={2} alignItems="flex-end">
