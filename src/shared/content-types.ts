@@ -1,3 +1,4 @@
+import { Photo } from "@mui/icons-material";
 import { Entry } from "contentful";
 
 export interface VoiceEntry {
@@ -49,6 +50,8 @@ export interface VoiceAuthor {
 export interface HomePage {
   logo: Photo;
   logoDark: Photo;
+  welcomeText: string;
+  supportDescription: string;
 }
 
 export interface AboutPage {

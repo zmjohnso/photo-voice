@@ -24,6 +24,9 @@ export const Home: React.FC = () => {
     return <LoadingIndicator />;
   }
 
+  // why does the media image not load correctly when the locale is "ja"?
+  console.log(homePage);
+
   return (
     <Box
       sx={{
@@ -37,24 +40,21 @@ export const Home: React.FC = () => {
       alignItems="center"
       color={theme.palette.text.primary}
     >
-      {homePage && (
+      {homePage.fields.logo.fields.file && (
         <CardMedia
           component="img"
           sx={{ width: "450px" }}
           image={
             theme.palette.mode === "light"
-              ? homePage[0].fields.logo.fields.file.url
-              : homePage[0].fields.logoDark.fields.file.url
+              ? homePage.fields.logo.fields.file.url
+              : homePage.fields.logoDark.fields.file.url
           }
           alt="Photo Voice Logo"
         />
       )}
       <Box display="flex" alignItems="center" flexDirection="column">
         <Typography padding="2rem" variant="h3">
-          フォトボイス・プロジェクトへようこそ
-        </Typography>
-        <Typography padding="2rem" variant="h3">
-          Welcome to The PhotoVoice Project
+          {homePage.fields.welcomeText}
         </Typography>
       </Box>
       <Box
@@ -64,10 +64,7 @@ export const Home: React.FC = () => {
         paddingTop="5rem"
       >
         <Typography variant="body1">
-          2022年度年賀寄付金配分事業の助成金により制作
-        </Typography>
-        <Typography variant="body1">
-          Supported by the FY2022 New Year&apos;s Postcard Donations Aid Program
+          {homePage.fields.supportDescription}
         </Typography>
         <IconButton color="inherit" onClick={handleClick}>
           <GitHubIcon />

@@ -15,50 +15,57 @@ import { ThemeProvider, useMediaQuery } from "@mui/material";
 import { theme } from "./shared/theme";
 import { useStore } from "./store/store";
 import { useMemo } from "react";
+import { Locale } from "./shared/utilities";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        index: true,
-        element: <Home />,
-        loader: HomeLoader,
-      },
-      {
-        path: "search",
-        element: <Search />,
-        loader: SearchLoader,
-      },
-      {
-        path: "about",
-        element: <About />,
-        loader: AboutLoader,
-      },
-      {
-        path: "icon",
-        element: <IconDisplay />,
-        loader: IconDisplayLoader,
-      },
-      {
-        path: "display",
-        element: <EntryDisplay />,
-      },
-      {
-        path: "contact",
-        element: <Contact />,
-      },
-    ],
-  },
-]);
+const router = (languageMode: Locale) =>
+  createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          index: true,
+          element: <Home />,
+          loader: async () => {
+            const entry = await HomeLoader(languageMode);
+            return entry;
+          },
+        },
+        {
+          path: "search",
+          element: <Search />,
+          loader: SearchLoader,
+        },
+        {
+          path: "about",
+          element: <About />,
+          loader: AboutLoader,
+        },
+        {
+          path: "icon",
+          element: <IconDisplay />,
+          loader: IconDisplayLoader,
+        },
+        {
+          path: "display",
+          element: <EntryDisplay />,
+        },
+        {
+          path: "contact",
+          element: <Contact />,
+        },
+      ],
+    },
+  ]);
 
 function App() {
-  const [colorMode, setColorMode] = useStore((state) => [
+  const [colorMode, setColorMode, languageMode] = useStore((state) => [
     state.colorMode,
     state.setColorMode,
+    state.languageMode,
   ]);
+  // use some hook to determin the user's current locale
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   useMemo(() => {
     setColorMode(prefersDarkMode ? "dark" : "light");
@@ -66,7 +73,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme(colorMode)}>
-      <RouterProvider router={router} />
+      <RouterProvider router={router(languageMode)} />
     </ThemeProvider>
   );
 }

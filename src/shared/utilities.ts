@@ -31,3 +31,5 @@ export interface DateData {
   value: Date;
   operator: DateLogicalOperators;
 }
+
+export type Locale = "en-US" | "ja";

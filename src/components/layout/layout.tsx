@@ -10,6 +10,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
+import TranslateIcon from "@mui/icons-material/Translate";
 import { NavLink, Outlet } from "react-router-dom";
 import { useState } from "react";
 import React from "react";
@@ -18,16 +19,23 @@ import { useStore } from "../../store/store";
 export const Layout: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const theme = useTheme();
-  const [colorMode, setColorMode] = useStore((state) => [
-    state.colorMode,
-    state.setColorMode,
-  ]);
+  const [colorMode, setColorMode, languageMode, setLanguageMode] = useStore(
+    (state) => [
+      state.colorMode,
+      state.setColorMode,
+      state.languageMode,
+      state.setLanguageMode,
+    ]
+  );
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const handleLanguageMode = () => {
+    setLanguageMode(languageMode === "en-US" ? "ja" : "en-US");
   };
   const handleColorMode = () => {
     setColorMode(colorMode === "light" ? "dark" : "light");
@@ -111,6 +119,9 @@ export const Layout: React.FC = () => {
               />
             ))}
           </Box>
+          <IconButton onClick={handleLanguageMode} color="inherit">
+            <TranslateIcon />
+          </IconButton>
           <IconButton onClick={handleColorMode} color="inherit">
             {colorMode === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
           </IconButton>

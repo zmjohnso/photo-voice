@@ -1,7 +1,12 @@
 import { create } from "zustand";
 import { VoiceEntry } from "../shared/content-types";
 import { Entry } from "contentful";
-import { DateData, NameOrLocationData, SearchState } from "../shared/utilities";
+import {
+  DateData,
+  Locale,
+  NameOrLocationData,
+  SearchState,
+} from "../shared/utilities";
 import { PaletteMode } from "@mui/material";
 
 interface State {
@@ -14,6 +19,7 @@ interface State {
   currentEntry: Entry<VoiceEntry> | null;
   searchState: SearchState;
   colorMode: PaletteMode;
+  languageMode: Locale;
 }
 
 interface Action {
@@ -26,6 +32,7 @@ interface Action {
   addCurrentEntry: (entry: Entry<VoiceEntry>) => void;
   setSearchState: (state: SearchState) => void;
   setColorMode: (mode: PaletteMode) => void;
+  setLanguageMode: (mode: Locale) => void;
   reset: () => void;
 }
 
@@ -39,6 +46,7 @@ const initialState: State = {
   currentEntry: null,
   searchState: SearchState.None,
   colorMode: "light",
+  languageMode: "en-US",
 };
 
 export const useStore = create<State & Action>()((set) => ({
@@ -87,10 +95,17 @@ export const useStore = create<State & Action>()((set) => ({
     set(() => ({
       colorMode: mode,
     })),
+  languageMode: "en-US",
+  setLanguageMode: (mode) =>
+    set(() => ({
+      languageMode: mode,
+    })),
   reset: () => {
     set((state) => ({
       ...initialState,
-      colorMode: state.colorMode, // retain the current colorMode
+      // retain the current colorMode and languageMode
+      colorMode: state.colorMode,
+      languageMode: state.languageMode,
     }));
   },
 }));
