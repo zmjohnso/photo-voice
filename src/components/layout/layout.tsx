@@ -41,12 +41,22 @@ export const Layout: React.FC = () => {
     setColorMode(colorMode === "light" ? "dark" : "light");
   };
 
-  const navItems = new Map<string, string>([
-    ["ホーム・Home", "/"],
-    ["検索・Search", "/search"],
-    ["事業概要・About", "/about"],
-    ["お問い合わせ・Contact", "/contact"],
+  const navItemsEnglish = new Map<string, string>([
+    ["Home", "/"],
+    ["Search", "/search"],
+    ["About", "/about"],
+    ["Contact", "/contact"],
   ]);
+
+  const navItemsJapanese = new Map<string, string>([
+    ["ホーム", "/"],
+    ["検索", "/search"],
+    ["事業概要", "/about"],
+    ["お問い合わせ", "/contact"],
+  ]);
+
+  const navItems =
+    languageMode === "en-US" ? navItemsEnglish : navItemsJapanese;
 
   interface NavLinkItemProps {
     location: string;
