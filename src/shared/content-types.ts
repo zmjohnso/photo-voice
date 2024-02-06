@@ -56,4 +56,5 @@ export interface HomePage {
 
 export interface AboutPage {
   aboutPicture: Photo;
+  description: string;
 }

@@ -40,7 +40,10 @@ const router = (languageMode: Locale) =>
         {
           path: "about",
           element: <About />,
-          loader: AboutLoader,
+          loader: async () => {
+            const entry = await AboutLoader(languageMode);
+            return entry;
+          },
         },
         {
           path: "icon",
