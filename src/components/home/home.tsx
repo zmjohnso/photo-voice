@@ -1,11 +1,5 @@
-import {
-  Box,
-  CardMedia,
-  IconButton,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import GitHubIcon from "@mui/icons-material/GitHub";
+import { Box, CardMedia, Typography, useTheme } from "@mui/material";
+
 import React from "react";
 import { LoadingIndicator } from "../loading-indicator/loading-indicator";
 import { useLoaderData, useNavigation } from "react-router-dom";
@@ -15,10 +9,6 @@ export const Home: React.FC = () => {
   const navigation = useNavigation();
   const homePage = useLoaderData() as HomeLoaderValue;
   const theme = useTheme();
-
-  const handleClick = () => {
-    window.open("https://github.com/zmjohnso/photo-voice", "_blank");
-  };
 
   if (navigation.state === "loading") {
     return <LoadingIndicator />;
@@ -61,9 +51,6 @@ export const Home: React.FC = () => {
         <Typography variant="body1">
           {homePage.fields.supportDescription}
         </Typography>
-        <IconButton color="inherit" onClick={handleClick}>
-          <GitHubIcon />
-        </IconButton>
       </Box>
     </Box>
   );

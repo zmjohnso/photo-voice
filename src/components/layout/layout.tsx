@@ -12,12 +12,15 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import TranslateIcon from "@mui/icons-material/Translate";
 import { NavLink, Outlet } from "react-router-dom";
+import GitHubIcon from "@mui/icons-material/GitHub";
 import { useState } from "react";
 import React from "react";
 import { useStore } from "../../store/store";
 
 export const Layout: React.FC = () => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const [translateAnchorEl, setTranslateMenuAnchorEl] =
+    useState<null | HTMLElement>(null);
   const theme = useTheme();
   const [colorMode, setColorMode, languageMode, setLanguageMode] = useStore(
     (state) => [
@@ -27,16 +30,34 @@ export const Layout: React.FC = () => {
       state.setLanguageMode,
     ]
   );
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+
+  const menuOpen = Boolean(menuAnchorEl);
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setMenuAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null);
   };
-  const handleLanguageMode = () => {
-    setLanguageMode(languageMode === "en-US" ? "ja" : "en-US");
+
+  const handleGithubClick = () => {
+    window.open("https://github.com/zmjohnso/photo-voice", "_blank");
   };
+
+  const translateOpen = Boolean(translateAnchorEl);
+  const handleTranslateMenuClose = () => {
+    setTranslateMenuAnchorEl(null);
+  };
+  const handleTranslateMenuClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    setTranslateMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleLanguageMode = (currentLanguage: string) => {
+    const newLanguageMode = currentLanguage === "English" ? "en-US" : "ja";
+    setLanguageMode(newLanguageMode);
+  };
+
   const handleColorMode = () => {
     setColorMode(colorMode === "light" ? "dark" : "light");
   };
@@ -58,6 +79,8 @@ export const Layout: React.FC = () => {
   const navItems =
     languageMode === "en-US" ? navItemsEnglish : navItemsJapanese;
 
+  const languageOptions = ["English", "日本語"];
+
   interface NavLinkItemProps {
     location: string;
     title: string;
@@ -75,7 +98,7 @@ export const Layout: React.FC = () => {
         };
       }}
       to={props.location}
-      onClick={handleClose}
+      onClick={handleMenuClose}
     >
       {props.title}
     </NavLink>
@@ -93,11 +116,16 @@ export const Layout: React.FC = () => {
             edge="start"
             aria-label="menu"
             sx={{ mr: 2 }}
-            onClick={handleClick}
+            onClick={handleMenuClick}
           >
             <MenuIcon />
           </IconButton>
-          <Menu id="menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
+          <Menu
+            id="menu"
+            anchorEl={menuAnchorEl}
+            open={menuOpen}
+            onClose={handleMenuClose}
+          >
             {Array.from(navItems.entries()).map((item) => (
               <MenuItem key={item[0]}>
                 <NavLinkItem
@@ -129,9 +157,34 @@ export const Layout: React.FC = () => {
               />
             ))}
           </Box>
-          <IconButton onClick={handleLanguageMode} color="inherit">
+          <IconButton color="inherit" onClick={handleGithubClick}>
+            <GitHubIcon />
+          </IconButton>
+          <IconButton
+            aria-label="translate button"
+            color="inherit"
+            onClick={handleTranslateMenuClick}
+          >
             <TranslateIcon />
           </IconButton>
+          <Menu
+            id="translate-menu"
+            anchorEl={translateAnchorEl}
+            open={translateOpen}
+            onClose={handleTranslateMenuClose}
+          >
+            {languageOptions.map((item) => (
+              <MenuItem
+                key={item}
+                onClick={() => {
+                  handleLanguageMode(item);
+                  handleTranslateMenuClose();
+                }}
+              >
+                {item}
+              </MenuItem>
+            ))}
+          </Menu>
           <IconButton onClick={handleColorMode} color="inherit">
             {colorMode === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
           </IconButton>
