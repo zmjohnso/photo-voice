@@ -19,7 +19,6 @@ export enum DateLogicalOperators {
 export enum SearchState {
   Simple = "SIMPLE",
   Advanced = "ADVANCED",
-  None = "NONE",
 }
 
 export interface NameOrLocationData {

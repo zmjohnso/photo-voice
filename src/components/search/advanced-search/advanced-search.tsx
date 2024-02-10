@@ -22,6 +22,7 @@ import {
   LogicalOperators,
   dateFormatOptions,
 } from "../../../shared/utilities";
+import { getSearchTextConstants } from "../constants";
 
 enum SearchCriteriaType {
   Location,
@@ -44,12 +45,14 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
     addEnglishAuthorNames,
     addPhotoDate,
     reset,
+    languageMode,
   ] = useStore((state) => [
     state.addPhotoLocations,
     state.addJapaneseAuthorNames,
     state.addEnglishAuthorNames,
     state.addPhotoDate,
     state.reset,
+    state.languageMode,
   ]);
 
   const [photoLocation, setPhotoLocation] = useState("");
@@ -161,7 +164,11 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
             break;
         }
         newCriteria +=
-          " " + photoDate?.toLocaleDateString("ja-JP", dateFormatOptions);
+          " " +
+          photoDate?.toLocaleDateString(
+            languageMode === "ja" ? "ja-JP" : "en-US",
+            dateFormatOptions
+          );
 
         setPhotoDateCriteriaVerbiage([
           ...photoDateCriteriaVerbiage,
@@ -180,6 +187,9 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
     }
   };
 
+  const { searchText, photoLocationText, dateOfPhotoText, authorNameText } =
+    getSearchTextConstants(languageMode);
+
   return (
     <Box
       width="auto"
@@ -192,7 +202,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
       <Stack spacing={2} direction="row">
         <Stack spacing={2} alignItems="flex-end">
           <Stack direction="row" spacing={2} alignItems="center">
-            <Typography>撮影場所・Photo Location</Typography>
+            <Typography>{photoLocationText}</Typography>
             <Box sx={{ minWidth: 120 }}>
               <FormControl fullWidth>
                 <InputLabel id="photo-location-search-operator-select">
@@ -216,7 +226,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
               sx={{ width: 480 }}
               onChange={(_event, value) => value && setPhotoLocation(value)}
               renderInput={(params) => (
-                <TextField {...params} label="撮影場所・Photo Location" />
+                <TextField {...params} label={photoLocationText} />
               )}
             />
             <Button
@@ -230,7 +240,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
             </Button>
           </Stack>
           <Stack direction="row" spacing={2} alignItems="center">
-            <Typography>撮影年月・Date of Photo</Typography>
+            <Typography>{dateOfPhotoText}</Typography>
             <Box sx={{ minWidth: 120 }}>
               <FormControl fullWidth>
                 <InputLabel id="photo-date-search-operator-select">
@@ -251,7 +261,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
             </Box>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                label={"撮影年月・Date of Photo"}
+                label={dateOfPhotoText}
                 views={["month", "year"]}
                 // TODO: find a better type here
                 onChange={(value: any) => setPhotoDate(value.$d)}
@@ -267,7 +277,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
             </Button>
           </Stack>
           <Stack direction="row" spacing={2} alignItems="center">
-            <Typography>撮影者・筆者名・Author/Photographer Name</Typography>
+            <Typography>{authorNameText}</Typography>
             <Box sx={{ minWidth: 120 }}>
               <FormControl fullWidth>
                 <InputLabel id="name-search-operator-select">
@@ -296,10 +306,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
                 setEnglishName(namePair[1]);
               }}
               renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="撮影者・筆者名・Author/Photographer Name"
-                />
+                <TextField {...params} label={authorNameText} />
               )}
             />
             <Button
@@ -323,7 +330,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
             <Typography component="span" variant="body1">
               {photoLocationCriteriaVerbiage.length ? (
                 <ul>
-                  <li>撮影場所・Photo Location:</li>
+                  <li>{photoLocationText}:</li>
                   <ul>
                     {photoLocationCriteriaVerbiage.map((string, index) => (
                       <li key={index}>{string}</li>
@@ -335,7 +342,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
               )}
               {photoDateCriteriaVerbiage.length ? (
                 <ul>
-                  <li>撮影年月・Date of Photo</li>
+                  <li>{dateOfPhotoText}</li>
                   <ul>
                     {photoDateCriteriaVerbiage.map((string, index) => (
                       <li key={index}>{string}</li>
@@ -347,7 +354,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
               )}
               {nameCriteriaVerbiage.length ? (
                 <ul>
-                  <li>撮影者・筆者名・Author/Photographer Name:</li>
+                  <li>{authorNameText}:</li>
                   <ul>
                     {nameCriteriaVerbiage.map((string, index) => (
                       <li key={index}>{string}</li>
@@ -363,7 +370,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
           )}
           <Stack spacing={2} direction="row" justifyContent="center">
             <Button variant="outlined" onClick={() => navigate("/icon")}>
-              検索・Search
+              {searchText}
             </Button>
           </Stack>
         </Stack>

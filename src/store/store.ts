@@ -44,7 +44,7 @@ const initialState: State = {
   photoEndDate: [],
   photoDate: [],
   currentEntry: null,
-  searchState: SearchState.None,
+  searchState: SearchState.Simple,
   colorMode: "light",
   languageMode: "en-US",
 };
@@ -85,7 +85,7 @@ export const useStore = create<State & Action>()((set) => ({
     set(() => ({
       currentEntry: entry,
     })),
-  searchState: SearchState.None,
+  searchState: SearchState.Simple,
   setSearchState: (state) =>
     set(() => ({
       searchState: state,
