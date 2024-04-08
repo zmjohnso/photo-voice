@@ -20,7 +20,7 @@ import { useState } from "react";
 import {
   DateLogicalOperators,
   LogicalOperators,
-  dateFormatOptions,
+  DATE_FORMAT_OPTIONS,
 } from "../../../shared/utilities";
 import { getSearchTextConstants } from "../constants";
 
@@ -39,21 +39,14 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
   const { photoLocationOptions, authorNameOptions } = props;
   const navigate = useNavigate();
   const theme = useTheme();
-  const [
-    addPhotoLocations,
-    addJapaneseAuthorNames,
-    addEnglishAuthorNames,
-    addPhotoDate,
-    reset,
-    languageMode,
-  ] = useStore((state) => [
-    state.addPhotoLocations,
-    state.addJapaneseAuthorNames,
-    state.addEnglishAuthorNames,
-    state.addPhotoDate,
-    state.reset,
-    state.languageMode,
-  ]);
+  const [addPhotoLocations, addAuthorNames, addPhotoDate, reset, languageMode] =
+    useStore((state) => [
+      state.addPhotoLocations,
+      state.addAuthorNames,
+      state.addPhotoDate,
+      state.reset,
+      state.languageMode,
+    ]);
 
   const [photoLocation, setPhotoLocation] = useState("");
 
@@ -64,8 +57,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
     string[]
   >([]);
 
-  const [englishName, setEnglishName] = useState("");
-  const [japaneseName, setJapaneseName] = useState("");
+  const [name, setName] = useState("");
 
   const [nameCriteriaVerbiage, setNameCriteriaVerbiage] = useState<string[]>(
     []
@@ -145,14 +137,9 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
             newCriteria += "INVALID";
             break;
         }
-        newCriteria += " " + japaneseName + "・" + englishName;
+        newCriteria += " " + name;
         setNameCriteriaVerbiage([...nameCriteriaVerbiage, newCriteria]);
-        addJapaneseAuthorNames([
-          { value: japaneseName, operator: nameSearchOperator },
-        ]);
-        addEnglishAuthorNames([
-          { value: englishName, operator: nameSearchOperator },
-        ]);
+        addAuthorNames([{ value: name, operator: nameSearchOperator }]);
         break;
       case SearchCriteriaType.Date:
         switch (photoDateSearchOperator) {
@@ -167,7 +154,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
           " " +
           photoDate?.toLocaleDateString(
             languageMode === "ja" ? "ja-JP" : "en-US",
-            dateFormatOptions
+            DATE_FORMAT_OPTIONS
           );
 
         setPhotoDateCriteriaVerbiage([
@@ -301,9 +288,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
               options={authorNameOptions}
               sx={{ width: 480 }}
               onChange={(_event, value) => {
-                const namePair = (value ?? "").split("・");
-                setJapaneseName(namePair[0]);
-                setEnglishName(namePair[1]);
+                setName(value ?? "");
               }}
               renderInput={(params) => (
                 <TextField {...params} label={authorNameText} />
@@ -311,8 +296,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
             />
             <Button
               variant="contained"
-              // only need to check englishName OR japaneseName
-              disabled={!englishName || !nameSearchOperator}
+              disabled={!name || !nameSearchOperator}
               onClick={() => handleAddSearchCriteria(SearchCriteriaType.Name)}
             >
               Add

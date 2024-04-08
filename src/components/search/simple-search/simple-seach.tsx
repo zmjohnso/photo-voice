@@ -23,8 +23,7 @@ export const SimpleSearch: React.FC<Props> = (props) => {
   const { photoLocationOptions, authorNameOptions } = props;
   const [
     addPhotoLocations,
-    addJapaneseAuthorNames,
-    addEnglishAuthorNames,
+    addAuthorNames,
     addPhotoStartDate,
     photoStartDate,
     addPhotoEndDate,
@@ -32,8 +31,7 @@ export const SimpleSearch: React.FC<Props> = (props) => {
     languageMode,
   ] = useStore((state) => [
     state.addPhotoLocations,
-    state.addJapaneseAuthorNames,
-    state.addEnglishAuthorNames,
+    state.addAuthorNames,
     state.addPhotoStartDate,
     state.photoStartDate,
     state.addPhotoEndDate,
@@ -151,16 +149,9 @@ export const SimpleSearch: React.FC<Props> = (props) => {
             sx={{ width: 480 }}
             onChange={(_event, value) => {
               if (value) {
-                const namePair = value.split("・");
-                addJapaneseAuthorNames([
+                addAuthorNames([
                   {
-                    value: namePair[0],
-                    operator: LogicalOperators.None,
-                  },
-                ]);
-                addEnglishAuthorNames([
-                  {
-                    value: namePair[1],
+                    value: value,
                     operator: LogicalOperators.None,
                   },
                 ]);

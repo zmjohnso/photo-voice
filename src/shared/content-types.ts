@@ -2,15 +2,13 @@ import { Photo } from "@mui/icons-material";
 import { Entry } from "contentful";
 
 export interface VoiceEntry {
-  japaneseTitle: string;
-  englishTitle: string;
-  japaneseVoice: string;
-  englishVoice?: string;
+  title: string;
+  voice: string;
   photo: Photo[];
   photoDate: Date;
   photoLocation: Entry<PhotoLocation>;
-  entryId: number;
   voiceAuthor: Entry<VoiceAuthor>;
+  entryId: number;
 }
 
 // TODO: can this type be cleaned up?
@@ -40,10 +38,8 @@ export interface PhotoLocation {
 }
 
 export interface VoiceAuthor {
-  japaneseName: string;
-  englishName: string;
-  japaneseBiography?: string;
-  englishBiography?: string;
+  name: string;
+  biography?: string;
   groupLocation: string;
 }
 

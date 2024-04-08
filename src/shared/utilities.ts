@@ -1,4 +1,4 @@
-export const dateFormatOptions: Intl.DateTimeFormatOptions = {
+export const DATE_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = {
   year: "numeric",
   month: "long",
 };

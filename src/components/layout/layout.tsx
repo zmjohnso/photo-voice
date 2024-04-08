@@ -40,7 +40,11 @@ export const Layout: React.FC = () => {
   };
 
   const handleGithubClick = () => {
-    window.open("https://github.com/zmjohnso/photo-voice", "_blank");
+    window.open(
+      "https://github.com/zmjohnso/photo-voice",
+      "_blank",
+      "noopener noreferrer"
+    );
   };
 
   const translateOpen = Boolean(translateAnchorEl);

@@ -14,12 +14,23 @@ import { useLoaderData } from "react-router-dom";
 import { IconDisplayLoaderValue } from "../../loaders/icon-display-loader";
 
 export const IconDisplay: React.FC = () => {
-  const searchState = useStore((state) => state.searchState);
-  const photoLocations = useStore((state) => state.photoLocations);
-  const englishAuthorNames = useStore((state) => state.englishAuthorNames);
-  const photoStartDate = useStore((state) => state.photoStartDate);
-  const photoEndDate = useStore((state) => state.photoEndDate);
-  const photoDate = useStore((state) => state.photoDate);
+  const [
+    searchState,
+    photoLocations,
+    authorNames,
+    photoStartDate,
+    photoEndDate,
+    photoDate,
+    languageMode,
+  ] = useStore((state) => [
+    state.searchState,
+    state.photoLocations,
+    state.authorNames,
+    state.photoStartDate,
+    state.photoEndDate,
+    state.photoDate,
+    state.languageMode,
+  ]);
   const voiceEntries = useLoaderData() as IconDisplayLoaderValue;
   const theme = useTheme();
 
@@ -54,11 +65,11 @@ export const IconDisplay: React.FC = () => {
               ? photoDate.getMonth() >= photoStartDate[0].value.getMonth()
               : true);
 
-          const hasMatchingAuthor = englishAuthorNames.length
-            ? englishAuthorNames.some((name) => {
+          const hasMatchingAuthor = authorNames.length
+            ? authorNames.some((name) => {
                 return (
                   name.operator === LogicalOperators.None &&
-                  authorNameFields.englishName === name.value
+                  authorNameFields.name === name.value
                 );
               })
             : true;
@@ -131,18 +142,18 @@ export const IconDisplay: React.FC = () => {
             });
 
           // author logic
-          englishAuthorNames.forEach((name) => {
+          authorNames.forEach((name) => {
             switch (name.operator) {
               case LogicalOperators.And:
-                entryVoiceAuthor.englishName === name.value &&
+                entryVoiceAuthor.name === name.value &&
                   andAuthors.push(name.value);
                 break;
               case LogicalOperators.Or:
-                entryVoiceAuthor.englishName === name.value &&
+                entryVoiceAuthor.name === name.value &&
                   orAuthors.push(name.value);
                 break;
               case LogicalOperators.Not:
-                entryVoiceAuthor.englishName === name.value &&
+                entryVoiceAuthor.name === name.value &&
                   notAuthors.push(name.value);
                 break;
               case LogicalOperators.None:
@@ -160,7 +171,7 @@ export const IconDisplay: React.FC = () => {
               (entry.fields.photoLocation.fields.photoCity ?? "")
           );
           const notAuthorCheck = !notAuthors.includes(
-            entry.fields.voiceAuthor.fields.englishName
+            entry.fields.voiceAuthor.fields.name
           );
 
           const dateCheck = () => {
@@ -217,9 +228,7 @@ export const IconDisplay: React.FC = () => {
                     (entry.fields.photoLocation.fields.photoCity ?? "")
                 );
               } else if (fieldType === "author") {
-                return items.includes(
-                  entry.fields.voiceAuthor.fields.englishName
-                );
+                return items.includes(entry.fields.voiceAuthor.fields.name);
               }
             } else {
               return false;
@@ -249,7 +258,7 @@ export const IconDisplay: React.FC = () => {
                 );
 
           const andAuthorCount = countOperators(
-            englishAuthorNames,
+            authorNames,
             LogicalOperators.And
           );
           const andAuthorCheck = checkAndOperators(
@@ -259,13 +268,13 @@ export const IconDisplay: React.FC = () => {
           );
 
           const orAuthorCount = countOperators(
-            englishAuthorNames,
+            authorNames,
             LogicalOperators.Or
           );
           const orAuthorCheck =
             orAuthorCount === 0
               ? true
-              : orAuthors.includes(entry.fields.voiceAuthor.fields.englishName);
+              : orAuthors.includes(entry.fields.voiceAuthor.fields.name);
 
           /* End entry filtering logic */
           /*************************** */
@@ -286,7 +295,7 @@ export const IconDisplay: React.FC = () => {
 
     // if store is empty use voiceEntries as "default", else use filtered entries list
     if (
-      !englishAuthorNames.length &&
+      !authorNames.length &&
       !photoStartDate &&
       !photoEndDate &&
       !photoLocations.length
@@ -295,13 +304,7 @@ export const IconDisplay: React.FC = () => {
     } else {
       setFilteredVoiceEntries(tempFilteredVoiceEntries);
     }
-  }, [
-    photoLocations,
-    englishAuthorNames,
-    voiceEntries,
-    photoStartDate,
-    photoEndDate,
-  ]);
+  }, [photoLocations, authorNames, voiceEntries, photoStartDate, photoEndDate]);
 
   if (voiceEntries === undefined) {
     return <LoadingIndicator />;
@@ -341,13 +344,16 @@ export const IconDisplay: React.FC = () => {
           alignItems="center"
           color={theme.palette.text.primary}
         >
-          <Typography variant="body1">
-            検索結果がありません。ご検索条件を変更して、再試行してください。
-          </Typography>
-          <Typography variant="body1">
-            No voices found for your search parameters. Please alter your search
-            and try again.
-          </Typography>
+          {languageMode === "en-US" ? (
+            <Typography variant="body1">
+              No voices found for your search parameters. Please alter your
+              search and try again.
+            </Typography>
+          ) : (
+            <Typography variant="body1">
+              検索結果がありません。ご検索条件を変更して、再試行してください。
+            </Typography>
+          )}
         </Box>
       )}
     </>

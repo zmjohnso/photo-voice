@@ -36,11 +36,7 @@ export const Search: React.FC = () => {
   const photoLocationOptions = [...prefectures, ...cities];
 
   const authorNameOptions = [
-    ...new Set(
-      voiceAuthors?.map(
-        (x) => `${x.fields.japaneseName}・${x.fields.englishName}`
-      )
-    ),
+    ...new Set(voiceAuthors?.map((x) => `${x.fields.name}`)),
   ];
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {

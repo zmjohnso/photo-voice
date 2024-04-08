@@ -35,7 +35,10 @@ const router = (languageMode: Locale) =>
         {
           path: "search",
           element: <Search />,
-          loader: SearchLoader,
+          loader: async () => {
+            const entry = await SearchLoader(languageMode);
+            return entry;
+          },
         },
         {
           path: "about",
