@@ -69,7 +69,7 @@ export const SimpleSearch: React.FC<Props> = (props) => {
     >
       <Stack spacing={2}>
         <Stack spacing={2} direction="row" justifyContent="center">
-          <Button variant="outlined" onClick={() => navigate("/icon")}>
+          <Button variant="outlined" onClick={() => navigate("/display")}>
             {searchText}
           </Button>
         </Stack>

@@ -1,6 +1,4 @@
 import { create } from "zustand";
-import { VoiceEntry } from "../shared/content-types";
-import { Entry } from "contentful";
 import {
   DateData,
   Locale,
@@ -15,7 +13,6 @@ interface State {
   photoStartDate: DateData[];
   photoEndDate: DateData[];
   photoDate: DateData[];
-  currentEntry: Entry<VoiceEntry> | null;
   searchState: SearchState;
   colorMode: PaletteMode;
   languageMode: Locale;
@@ -27,7 +24,6 @@ interface Action {
   addPhotoStartDate: (date: DateData[]) => void;
   addPhotoEndDate: (date: DateData[]) => void;
   addPhotoDate: (date: DateData[]) => void;
-  addCurrentEntry: (entry: Entry<VoiceEntry>) => void;
   setSearchState: (state: SearchState) => void;
   setColorMode: (mode: PaletteMode) => void;
   setLanguageMode: (mode: Locale) => void;
@@ -40,7 +36,6 @@ const initialState: State = {
   photoStartDate: [],
   photoEndDate: [],
   photoDate: [],
-  currentEntry: null,
   searchState: SearchState.Simple,
   colorMode: "light",
   languageMode: "en-US",
@@ -71,11 +66,6 @@ export const useStore = create<State & Action>()((set) => ({
   addPhotoDate: (date) =>
     set((state) => ({
       photoDate: [...state.photoDate, ...date],
-    })),
-  currentEntry: null,
-  addCurrentEntry: (entry) =>
-    set(() => ({
-      currentEntry: entry,
     })),
   searchState: SearchState.Simple,
   setSearchState: (state) =>
