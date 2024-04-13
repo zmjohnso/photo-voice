@@ -11,8 +11,7 @@ import { PaletteMode } from "@mui/material";
 
 interface State {
   photoLocations: NameOrLocationData[];
-  japaneseAuthorNames: NameOrLocationData[];
-  englishAuthorNames: NameOrLocationData[];
+  authorNames: NameOrLocationData[];
   photoStartDate: DateData[];
   photoEndDate: DateData[];
   photoDate: DateData[];
@@ -24,8 +23,7 @@ interface State {
 
 interface Action {
   addPhotoLocations: (locations: NameOrLocationData[]) => void;
-  addJapaneseAuthorNames: (names: NameOrLocationData[]) => void;
-  addEnglishAuthorNames: (names: NameOrLocationData[]) => void;
+  addAuthorNames: (names: NameOrLocationData[]) => void;
   addPhotoStartDate: (date: DateData[]) => void;
   addPhotoEndDate: (date: DateData[]) => void;
   addPhotoDate: (date: DateData[]) => void;
@@ -38,13 +36,12 @@ interface Action {
 
 const initialState: State = {
   photoLocations: [],
-  japaneseAuthorNames: [],
-  englishAuthorNames: [],
+  authorNames: [],
   photoStartDate: [],
   photoEndDate: [],
   photoDate: [],
   currentEntry: null,
-  searchState: SearchState.None,
+  searchState: SearchState.Simple,
   colorMode: "light",
   languageMode: "en-US",
 };
@@ -55,15 +52,10 @@ export const useStore = create<State & Action>()((set) => ({
     set((state) => ({
       photoLocations: [...state.photoLocations, ...locations],
     })),
-  japaneseAuthorNames: [],
-  addJapaneseAuthorNames: (names) =>
+  authorNames: [],
+  addAuthorNames: (names) =>
     set((state) => ({
-      japaneseAuthorNames: [...state.japaneseAuthorNames, ...names],
-    })),
-  englishAuthorNames: [],
-  addEnglishAuthorNames: (names) =>
-    set((state) => ({
-      englishAuthorNames: [...state.englishAuthorNames, ...names],
+      authorNames: [...state.authorNames, ...names],
     })),
   photoStartDate: [],
   addPhotoStartDate: (date) =>
@@ -85,7 +77,7 @@ export const useStore = create<State & Action>()((set) => ({
     set(() => ({
       currentEntry: entry,
     })),
-  searchState: SearchState.None,
+  searchState: SearchState.Simple,
   setSearchState: (state) =>
     set(() => ({
       searchState: state,

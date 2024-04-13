@@ -9,17 +9,16 @@ import { SearchLoaderValue } from "../../loaders/search-loader";
 
 export const Search: React.FC = () => {
   const [tabValue, setTabValue] = useState(0);
-  const [setSearchState, reset] = useStore((state) => [
+  const [setSearchState, reset, languageMode] = useStore((state) => [
     state.setSearchState,
     state.reset,
+    state.languageMode,
   ]);
   const { photoLocations, voiceAuthors } = useLoaderData() as SearchLoaderValue;
 
   useEffect(() => {
     // clear store search values on page load
     reset();
-    // default to simple search since that is the default tab
-    setSearchState(SearchState.Simple);
   }, []);
 
   const prefectures = [
@@ -37,11 +36,7 @@ export const Search: React.FC = () => {
   const photoLocationOptions = [...prefectures, ...cities];
 
   const authorNameOptions = [
-    ...new Set(
-      voiceAuthors?.map(
-        (x) => `${x.fields.japaneseName}・${x.fields.englishName}`
-      )
-    ),
+    ...new Set(voiceAuthors?.map((x) => `${x.fields.name}`)),
   ];
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
@@ -50,6 +45,13 @@ export const Search: React.FC = () => {
       ? setSearchState(SearchState.Simple)
       : setSearchState(SearchState.Advanced);
   };
+
+  const searchTabsEnglish = ["Simple", "Advanced"];
+  // get real translations
+  const searchTabsJapanese = ["シンプル", "高度"];
+
+  const searchTabs =
+    languageMode === "en-US" ? searchTabsEnglish : searchTabsJapanese;
 
   return (
     <Box>
@@ -60,8 +62,9 @@ export const Search: React.FC = () => {
           centered
           aria-label="search tabs"
         >
-          <Tab label="Simple" id={"search-tab-0"} />
-          <Tab label="Advanced" id={"search-tab-1"} />
+          {searchTabs.map((tab, index) => (
+            <Tab label={tab} id={`search-tab-${index}`} key={index} />
+          ))}
         </Tabs>
       </Box>
       {tabValue === 0 && (

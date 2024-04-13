@@ -33,10 +33,7 @@ export const EntryPreview: React.FC<Props> = (props) => {
         />
         <CardContent>
           <Typography gutterBottom variant="body1">
-            {props.entry.fields.japaneseTitle}
-          </Typography>
-          <Typography gutterBottom variant="body1">
-            {props.entry.fields.englishTitle}
+            {props.entry.fields.title}
           </Typography>
         </CardContent>
       </CardActionArea>

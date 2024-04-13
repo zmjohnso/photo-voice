@@ -35,12 +35,18 @@ const router = (languageMode: Locale) =>
         {
           path: "search",
           element: <Search />,
-          loader: SearchLoader,
+          loader: async () => {
+            const entry = await SearchLoader(languageMode);
+            return entry;
+          },
         },
         {
           path: "about",
           element: <About />,
-          loader: AboutLoader,
+          loader: async () => {
+            const entry = await AboutLoader(languageMode);
+            return entry;
+          },
         },
         {
           path: "icon",
@@ -60,16 +66,26 @@ const router = (languageMode: Locale) =>
   ]);
 
 function App() {
-  const [colorMode, setColorMode, languageMode] = useStore((state) => [
-    state.colorMode,
-    state.setColorMode,
-    state.languageMode,
-  ]);
-  // use some hook to determin the user's current locale
+  const [colorMode, setColorMode, languageMode, setLanguageMode] = useStore(
+    (state) => [
+      state.colorMode,
+      state.setColorMode,
+      state.languageMode,
+      state.setLanguageMode,
+    ]
+  );
+
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   useMemo(() => {
     setColorMode(prefersDarkMode ? "dark" : "light");
   }, [prefersDarkMode, setColorMode]);
+
+  const currentLanguage = navigator.language;
+  useMemo(() => {
+    const japanese = ["ja", "ja-JP"];
+    // default to English if user is not using Japanese
+    setLanguageMode(japanese.includes(currentLanguage) ? "ja" : "en-US");
+  }, [currentLanguage, setLanguageMode]);
 
   return (
     <ThemeProvider theme={theme(colorMode)}>
