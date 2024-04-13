@@ -83,7 +83,7 @@ function App() {
   const currentLanguage = navigator.language;
   useMemo(() => {
     const japanese = ["ja", "ja-JP"];
-    // default to english if user is not using japanese
+    // default to English if user is not using Japanese
     setLanguageMode(japanese.includes(currentLanguage) ? "ja" : "en-US");
   }, [currentLanguage, setLanguageMode]);
 
