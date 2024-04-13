@@ -353,7 +353,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
             <Typography variant="caption">None yet.</Typography>
           )}
           <Stack spacing={2} direction="row" justifyContent="center">
-            <Button variant="outlined" onClick={() => navigate("/icon")}>
+            <Button variant="outlined" onClick={() => navigate("/display")}>
               {searchText}
             </Button>
           </Stack>

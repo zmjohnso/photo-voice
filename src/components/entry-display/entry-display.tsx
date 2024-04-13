@@ -13,15 +13,15 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import { useStore } from "../../store/store";
 import { DATE_FORMAT_OPTIONS } from "../../shared/utilities";
+import { useLoaderData } from "react-router-dom";
+import { DisplayEntryLoaderValue } from "../../loaders/display-entry-loader";
 
 export const EntryDisplay: React.FC = () => {
-  const [currentEntry, languageMode] = useStore((state) => [
-    state.currentEntry,
-    state.languageMode,
-  ]);
+  const [languageMode] = useStore((state) => [state.languageMode]);
+  const voiceEntry = useLoaderData() as DisplayEntryLoaderValue;
   const theme = useTheme();
 
-  if (!currentEntry) {
+  if (!voiceEntry) {
     return (
       <Box
         display="flex"
@@ -36,7 +36,7 @@ export const EntryDisplay: React.FC = () => {
 
   return (
     <Card
-      key={currentEntry.fields.entryId}
+      key={voiceEntry.fields.entryId}
       sx={{
         display: "flex",
         height: "95%",
@@ -45,35 +45,37 @@ export const EntryDisplay: React.FC = () => {
       }}
       variant="outlined"
     >
-      {currentEntry.fields.photo.length === 1 && (
-        <CardMedia
-          component="img"
-          sx={{ width: "50vw", maxHeight: "75%" }}
-          image={currentEntry.fields.photo[0].fields.file.url}
-          alt={currentEntry.fields.photo[0].fields.title}
-        />
-      )}
-      {currentEntry.fields.photo.length > 1 && (
-        <ImageList
-          sx={{
-            width: "70vw",
-            height: "95%",
-          }}
-          cols={1}
-          rowHeight={"auto"}
-        >
-          {currentEntry.fields.photo.map((photo) => (
-            <ImageListItem key={photo.fields.title}>
-              <img
-                src={photo.fields.file.url}
-                srcSet={photo.fields.file.url}
-                alt={photo.fields.title}
-                loading="lazy"
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>
-      )}
+      {voiceEntry.fields.photo[0].fields.file &&
+        voiceEntry.fields.photo.length === 1 && (
+          <CardMedia
+            component="img"
+            sx={{ width: "50vw", maxHeight: "75%" }}
+            image={voiceEntry.fields.photo[0].fields.file.url}
+            alt={voiceEntry.fields.photo[0].fields.title}
+          />
+        )}
+      {voiceEntry.fields.photo[0].fields.file &&
+        voiceEntry.fields.photo.length > 1 && (
+          <ImageList
+            sx={{
+              width: "70vw",
+              height: "95%",
+            }}
+            cols={1}
+            rowHeight={"auto"}
+          >
+            {voiceEntry.fields.photo.map((photo) => (
+              <ImageListItem key={photo.fields.title}>
+                <img
+                  src={photo.fields.file.url}
+                  srcSet={photo.fields.file.url}
+                  alt={photo.fields.title}
+                  loading="lazy"
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        )}
       <Box
         sx={{
           display: "flex",
@@ -83,33 +85,33 @@ export const EntryDisplay: React.FC = () => {
         <CardContent sx={{ flex: "1 0 auto" }}>
           <Stack spacing={2}>
             <Typography gutterBottom component="div" variant="h5">
-              {currentEntry.fields.title}
+              {voiceEntry.fields.title}
             </Typography>
-            {currentEntry.fields.voice && (
+            {voiceEntry.fields.voice && (
               <Typography gutterBottom variant="body1" component="div">
-                <ReactMarkdown>{currentEntry.fields.voice}</ReactMarkdown>
+                <ReactMarkdown>{voiceEntry.fields.voice}</ReactMarkdown>
               </Typography>
             )}
           </Stack>
           <Stack alignItems="flex-end">
             <Typography gutterBottom variant="body2" component="div">
-              {currentEntry.fields.voiceAuthor.fields.name}
+              {voiceEntry.fields.voiceAuthor.fields.name}
             </Typography>
             <Typography variant="body2" component="div">
-              {currentEntry.fields.photoLocation.fields.photoPrefecture}
+              {voiceEntry.fields.photoLocation.fields.photoPrefecture}
             </Typography>
-            {currentEntry.fields.photoLocation.fields.photoCity && (
+            {voiceEntry.fields.photoLocation.fields.photoCity && (
               <Typography variant="body2" component="div">
-                {currentEntry.fields.photoLocation.fields.photoCity}
+                {voiceEntry.fields.photoLocation.fields.photoCity}
               </Typography>
             )}
-            {currentEntry.fields.photoLocation.fields.photoLocationDetail && (
+            {voiceEntry.fields.photoLocation.fields.photoLocationDetail && (
               <Typography gutterBottom variant="body2" component="div">
-                {currentEntry.fields.photoLocation.fields.photoLocationDetail}
+                {voiceEntry.fields.photoLocation.fields.photoLocationDetail}
               </Typography>
             )}
             <Typography variant="body2" component="div">
-              {new Date(currentEntry.fields.photoDate).toLocaleDateString(
+              {new Date(voiceEntry.fields.photoDate).toLocaleDateString(
                 languageMode === "ja" ? "ja-JP" : "en-US",
                 DATE_FORMAT_OPTIONS
               )}

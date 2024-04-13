@@ -14,9 +14,6 @@ export const Home: React.FC = () => {
     return <LoadingIndicator />;
   }
 
-  // why does the media image not load correctly when the locale is "ja"?
-  console.log(homePage);
-
   return (
     <Box
       sx={{

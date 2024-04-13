@@ -16,6 +16,7 @@ import { theme } from "./shared/theme";
 import { useStore } from "./store/store";
 import { useMemo } from "react";
 import { Locale } from "./shared/utilities";
+import { DisplayEntryLoader } from "./loaders/display-entry-loader";
 
 const router = (languageMode: Locale) =>
   createBrowserRouter([
@@ -28,34 +29,42 @@ const router = (languageMode: Locale) =>
           index: true,
           element: <Home />,
           loader: async () => {
-            const entry = await HomeLoader(languageMode);
-            return entry;
+            const loader = await HomeLoader(languageMode);
+            return loader;
           },
         },
         {
           path: "search",
           element: <Search />,
           loader: async () => {
-            const entry = await SearchLoader(languageMode);
-            return entry;
+            const loader = await SearchLoader(languageMode);
+            return loader;
           },
         },
         {
           path: "about",
           element: <About />,
           loader: async () => {
-            const entry = await AboutLoader(languageMode);
-            return entry;
+            const loader = await AboutLoader(languageMode);
+            return loader;
           },
         },
         {
-          path: "icon",
+          path: "display",
           element: <IconDisplay />,
-          loader: IconDisplayLoader,
+          loader: async () => {
+            const loader = await IconDisplayLoader(languageMode);
+            return loader;
+          },
         },
         {
-          path: "display",
+          path: "display/:entryId",
           element: <EntryDisplay />,
+          loader: async ({ params }) => {
+            const { entryId } = params;
+            const loader = await DisplayEntryLoader(languageMode, entryId);
+            return loader;
+          },
         },
         {
           path: "contact",
