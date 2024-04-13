@@ -1,44 +1,49 @@
 import { create } from "zustand";
 import { VoiceEntry } from "../shared/content-types";
 import { Entry } from "contentful";
-import { DateData, NameOrLocationData, SearchState } from "../shared/utilities";
+import {
+  DateData,
+  Locale,
+  NameOrLocationData,
+  SearchState,
+} from "../shared/utilities";
 import { PaletteMode } from "@mui/material";
 
 interface State {
   photoLocations: NameOrLocationData[];
-  japaneseAuthorNames: NameOrLocationData[];
-  englishAuthorNames: NameOrLocationData[];
+  authorNames: NameOrLocationData[];
   photoStartDate: DateData[];
   photoEndDate: DateData[];
   photoDate: DateData[];
   currentEntry: Entry<VoiceEntry> | null;
   searchState: SearchState;
   colorMode: PaletteMode;
+  languageMode: Locale;
 }
 
 interface Action {
   addPhotoLocations: (locations: NameOrLocationData[]) => void;
-  addJapaneseAuthorNames: (names: NameOrLocationData[]) => void;
-  addEnglishAuthorNames: (names: NameOrLocationData[]) => void;
+  addAuthorNames: (names: NameOrLocationData[]) => void;
   addPhotoStartDate: (date: DateData[]) => void;
   addPhotoEndDate: (date: DateData[]) => void;
   addPhotoDate: (date: DateData[]) => void;
   addCurrentEntry: (entry: Entry<VoiceEntry>) => void;
   setSearchState: (state: SearchState) => void;
   setColorMode: (mode: PaletteMode) => void;
+  setLanguageMode: (mode: Locale) => void;
   reset: () => void;
 }
 
 const initialState: State = {
   photoLocations: [],
-  japaneseAuthorNames: [],
-  englishAuthorNames: [],
+  authorNames: [],
   photoStartDate: [],
   photoEndDate: [],
   photoDate: [],
   currentEntry: null,
-  searchState: SearchState.None,
+  searchState: SearchState.Simple,
   colorMode: "light",
+  languageMode: "en-US",
 };
 
 export const useStore = create<State & Action>()((set) => ({
@@ -47,15 +52,10 @@ export const useStore = create<State & Action>()((set) => ({
     set((state) => ({
       photoLocations: [...state.photoLocations, ...locations],
     })),
-  japaneseAuthorNames: [],
-  addJapaneseAuthorNames: (names) =>
+  authorNames: [],
+  addAuthorNames: (names) =>
     set((state) => ({
-      japaneseAuthorNames: [...state.japaneseAuthorNames, ...names],
-    })),
-  englishAuthorNames: [],
-  addEnglishAuthorNames: (names) =>
-    set((state) => ({
-      englishAuthorNames: [...state.englishAuthorNames, ...names],
+      authorNames: [...state.authorNames, ...names],
     })),
   photoStartDate: [],
   addPhotoStartDate: (date) =>
@@ -77,7 +77,7 @@ export const useStore = create<State & Action>()((set) => ({
     set(() => ({
       currentEntry: entry,
     })),
-  searchState: SearchState.None,
+  searchState: SearchState.Simple,
   setSearchState: (state) =>
     set(() => ({
       searchState: state,
@@ -87,10 +87,17 @@ export const useStore = create<State & Action>()((set) => ({
     set(() => ({
       colorMode: mode,
     })),
+  languageMode: "en-US",
+  setLanguageMode: (mode) =>
+    set(() => ({
+      languageMode: mode,
+    })),
   reset: () => {
     set((state) => ({
       ...initialState,
-      colorMode: state.colorMode, // retain the current colorMode
+      // retain the current colorMode and languageMode
+      colorMode: state.colorMode,
+      languageMode: state.languageMode,
     }));
   },
 }));

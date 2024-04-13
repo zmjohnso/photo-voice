@@ -1,17 +1,23 @@
-import { Box, Button, Typography } from "@mui/material";
-import { isRouteErrorResponse, useRouteError } from "react-router-dom";
+import { Box, Button, Typography, useTheme } from "@mui/material";
+import { Link, isRouteErrorResponse, useRouteError } from "react-router-dom";
 
 export default function ErrorPage() {
   const error = useRouteError();
+  const theme = useTheme();
 
   return (
     <Box
+      sx={{
+        backgroundColor: theme.palette.background.default,
+      }}
+      height="100vh"
       display="flex"
       flexDirection="column"
       paddingTop="1rem"
       paddingLeft="15rem"
       paddingRight="15rem"
       alignItems="center"
+      color={theme.palette.text.primary}
     >
       <Typography variant="h6">
         Oops, something went wrong. Please return to the home page.
@@ -28,7 +34,9 @@ export default function ErrorPage() {
           )}
         </>
       )}
-      <Button></Button>
+      <Typography variant="h6">
+        Please hit the back button in your browser and try again.
+      </Typography>
     </Box>
   );
 }

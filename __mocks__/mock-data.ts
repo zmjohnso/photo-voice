@@ -19,10 +19,8 @@ const mockPhotoLocation: PhotoLocation = {
 };
 
 const mockVoiceAuthor: VoiceAuthor = {
-  japaneseName: "山田太郎",
-  englishName: "Taro Yamada",
-  japaneseBiography: "声優のプロフィール",
-  englishBiography: "Voice actor's biography",
+  name: "Taro Yamada",
+  biography: "Voice actor's biography",
   groupLocation: "Tokyo, Japan",
 };
 
@@ -57,10 +55,8 @@ export const mockVoiceEntry: Entry<VoiceEntry> = {
     },
   },
   fields: {
-    japaneseTitle: "タイトル",
-    englishTitle: "Title",
-    japaneseVoice: "声データ",
-    englishVoice: "Voice Data",
+    title: "Title",
+    voice: "Voice Data",
     photo: [mockPhoto],
     photoDate: new Date(),
     photoLocation: mockPhotoLocation as unknown as Entry<PhotoLocation>,

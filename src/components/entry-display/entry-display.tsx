@@ -12,10 +12,13 @@ import {
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { useStore } from "../../store/store";
-import { dateFormatOptions } from "../../shared/utilities";
+import { DATE_FORMAT_OPTIONS } from "../../shared/utilities";
 
 export const EntryDisplay: React.FC = () => {
-  const currentEntry = useStore((state) => state.currentEntry);
+  const [currentEntry, languageMode] = useStore((state) => [
+    state.currentEntry,
+    state.languageMode,
+  ]);
   const theme = useTheme();
 
   if (!currentEntry) {
@@ -80,98 +83,35 @@ export const EntryDisplay: React.FC = () => {
         <CardContent sx={{ flex: "1 0 auto" }}>
           <Stack spacing={2}>
             <Typography gutterBottom component="div" variant="h5">
-              {currentEntry.fields.japaneseTitle}
+              {currentEntry.fields.title}
             </Typography>
-            <Typography gutterBottom variant="body1" component="div">
-              <ReactMarkdown>{currentEntry.fields.japaneseVoice}</ReactMarkdown>
-            </Typography>
-            <Stack alignItems="flex-end">
-              <Typography gutterBottom variant="body2" component="div">
-                {currentEntry.fields.voiceAuthor.fields.japaneseName}
-              </Typography>
-              <Typography variant="body2" component="div">
-                {
-                  currentEntry.fields.photoLocation.fields.photoPrefecture.split(
-                    "・"
-                  )[0]
-                }
-              </Typography>
-              {currentEntry.fields.photoLocation.fields.photoCity && (
-                <Typography variant="body2" component="div">
-                  {
-                    currentEntry.fields.photoLocation.fields.photoCity.split(
-                      "・"
-                    )[0]
-                  }
-                </Typography>
-              )}
-              {currentEntry.fields.photoLocation.fields.photoLocationDetail && (
-                <Typography gutterBottom variant="body2" component="div">
-                  {
-                    currentEntry.fields.photoLocation.fields.photoLocationDetail.split(
-                      "・"
-                    )[0]
-                  }
-                </Typography>
-              )}
-              <Typography variant="body2" component="div">
-                {new Date(currentEntry.fields.photoDate).toLocaleDateString(
-                  "ja-JP",
-                  dateFormatOptions
-                )}
-              </Typography>
-            </Stack>
-          </Stack>
-
-          <br></br>
-          <br></br>
-          <br></br>
-
-          <Stack spacing={2}>
-            <Typography gutterBottom component="div" variant="h5">
-              {currentEntry.fields.englishTitle}
-            </Typography>
-            {currentEntry.fields.englishVoice && (
+            {currentEntry.fields.voice && (
               <Typography gutterBottom variant="body1" component="div">
-                <ReactMarkdown>
-                  {currentEntry.fields.englishVoice}
-                </ReactMarkdown>
+                <ReactMarkdown>{currentEntry.fields.voice}</ReactMarkdown>
               </Typography>
             )}
           </Stack>
           <Stack alignItems="flex-end">
             <Typography gutterBottom variant="body2" component="div">
-              {currentEntry.fields.voiceAuthor.fields.englishName}
+              {currentEntry.fields.voiceAuthor.fields.name}
             </Typography>
             <Typography variant="body2" component="div">
-              {
-                currentEntry.fields.photoLocation.fields.photoPrefecture.split(
-                  "・"
-                )[1]
-              }
+              {currentEntry.fields.photoLocation.fields.photoPrefecture}
             </Typography>
             {currentEntry.fields.photoLocation.fields.photoCity && (
               <Typography variant="body2" component="div">
-                {
-                  currentEntry.fields.photoLocation.fields.photoCity.split(
-                    "・"
-                  )[1]
-                }
+                {currentEntry.fields.photoLocation.fields.photoCity}
               </Typography>
             )}
             {currentEntry.fields.photoLocation.fields.photoLocationDetail && (
               <Typography gutterBottom variant="body2" component="div">
-                {
-                  currentEntry.fields.photoLocation.fields.photoLocationDetail.split(
-                    "・"
-                  )[1]
-                }
+                {currentEntry.fields.photoLocation.fields.photoLocationDetail}
               </Typography>
             )}
             <Typography variant="body2" component="div">
               {new Date(currentEntry.fields.photoDate).toLocaleDateString(
-                "en-US",
-                dateFormatOptions
+                languageMode === "ja" ? "ja-JP" : "en-US",
+                DATE_FORMAT_OPTIONS
               )}
             </Typography>
           </Stack>

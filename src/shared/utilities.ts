@@ -1,4 +1,4 @@
-export const dateFormatOptions: Intl.DateTimeFormatOptions = {
+export const DATE_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = {
   year: "numeric",
   month: "long",
 };
@@ -19,7 +19,6 @@ export enum DateLogicalOperators {
 export enum SearchState {
   Simple = "SIMPLE",
   Advanced = "ADVANCED",
-  None = "NONE",
 }
 
 export interface NameOrLocationData {
@@ -31,3 +30,5 @@ export interface DateData {
   value: Date;
   operator: DateLogicalOperators;
 }
+
+export type Locale = "en-US" | "ja";
