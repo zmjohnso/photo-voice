@@ -179,8 +179,6 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
 
   return (
     <Box
-      // width="auto"
-      // height="500px"
       display="flex"
       justifyContent="center"
       paddingTop="1rem"
