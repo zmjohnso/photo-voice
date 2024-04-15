@@ -339,8 +339,8 @@ export const IconDisplay: React.FC = () => {
           display="flex"
           flexDirection="column"
           paddingTop="1rem"
-          paddingLeft="15rem"
-          paddingRight="15rem"
+          paddingLeft={{ xs: "1rem", md: "15rem" }}
+          paddingRight={{ xs: "1rem", md: "15rem" }}
           alignItems="center"
           color={theme.palette.text.primary}
         >

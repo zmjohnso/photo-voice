@@ -1,6 +1,7 @@
 import {
   AppBar,
   Box,
+  Container,
   IconButton,
   Menu,
   MenuItem,
@@ -110,91 +111,107 @@ export const Layout: React.FC = () => {
 
   return (
     <Box
-      height="100vh"
-      sx={{ backgroundColor: theme.palette.background.default }}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+      }}
     >
       <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-            onClick={handleMenuClick}
+        <Container maxWidth="xl">
+          <Toolbar
+            disableGutters
+            sx={{ justifyContent: { xs: "space-between", md: "center" } }}
           >
-            <MenuIcon />
-          </IconButton>
-          <Menu
-            id="menu"
-            anchorEl={menuAnchorEl}
-            open={menuOpen}
-            onClose={handleMenuClose}
-          >
-            {Array.from(navItems.entries()).map((item) => (
-              <MenuItem key={item[0]}>
+            <IconButton size="large" onClick={handleMenuClick}>
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu"
+              anchorEl={menuAnchorEl}
+              open={menuOpen}
+              onClose={handleMenuClose}
+            >
+              {Array.from(navItems.entries()).map((item) => (
+                <MenuItem key={item[0]}>
+                  <NavLinkItem
+                    title={item[0]}
+                    location={item[1]}
+                    color={theme.palette.primary.main}
+                  />
+                </MenuItem>
+              ))}
+            </Menu>
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: { xs: "none", md: "flex" },
+                justifyContent: "center",
+                gap: "7rem",
+              }}
+            >
+              {Array.from(navItems.entries()).map((item) => (
                 <NavLinkItem
+                  key={item[0]}
                   title={item[0]}
                   location={item[1]}
-                  color={theme.palette.primary.main}
+                  color={
+                    colorMode === "light"
+                      ? theme.palette.secondary.contrastText
+                      : theme.palette.primary.main
+                  }
                 />
-              </MenuItem>
-            ))}
-          </Menu>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "7rem",
-              width: "95%",
-            }}
-          >
-            {Array.from(navItems.entries()).map((item) => (
-              <NavLinkItem
-                key={item[0]}
-                title={item[0]}
-                location={item[1]}
-                color={
-                  colorMode === "light"
-                    ? theme.palette.secondary.contrastText
-                    : theme.palette.primary.main
-                }
-              />
-            ))}
-          </Box>
-          <IconButton color="inherit" onClick={handleGithubClick}>
-            <GitHubIcon />
-          </IconButton>
-          <IconButton
-            aria-label="translate button"
-            color="inherit"
-            onClick={handleTranslateMenuClick}
-          >
-            <TranslateIcon />
-          </IconButton>
-          <Menu
-            id="translate-menu"
-            anchorEl={translateAnchorEl}
-            open={translateOpen}
-            onClose={handleTranslateMenuClose}
-          >
-            {languageOptions.map((item) => (
-              <MenuItem
-                key={item}
-                onClick={() => {
-                  handleLanguageMode(item);
-                  handleTranslateMenuClose();
-                }}
+              ))}
+            </Box>
+            <Box>
+              <IconButton color="inherit" onClick={handleGithubClick}>
+                <GitHubIcon />
+              </IconButton>
+              <IconButton
+                aria-label="translate button"
+                color="inherit"
+                onClick={handleTranslateMenuClick}
               >
-                {item}
-              </MenuItem>
-            ))}
-          </Menu>
-          <IconButton onClick={handleColorMode} color="inherit">
-            {colorMode === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
-          </IconButton>
-        </Toolbar>
+                <TranslateIcon />
+              </IconButton>
+              <Menu
+                id="translate-menu"
+                anchorEl={translateAnchorEl}
+                open={translateOpen}
+                onClose={handleTranslateMenuClose}
+              >
+                {languageOptions.map((item) => (
+                  <MenuItem
+                    key={item}
+                    onClick={() => {
+                      handleLanguageMode(item);
+                      handleTranslateMenuClose();
+                    }}
+                  >
+                    {item}
+                  </MenuItem>
+                ))}
+              </Menu>
+              <IconButton onClick={handleColorMode} color="inherit">
+                {colorMode === "light" ? (
+                  <Brightness4Icon />
+                ) : (
+                  <Brightness7Icon />
+                )}
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </Container>
       </AppBar>
-      <Outlet />
+      <Box
+        sx={{
+          flex: 1,
+          overflow: "auto",
+          backgroundColor: theme.palette.background.default,
+        }}
+      >
+        <Outlet />
+      </Box>
     </Box>
   );
 };

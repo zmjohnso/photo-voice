@@ -21,15 +21,17 @@ export const Home: React.FC = () => {
         flexDirection: "column",
         backgroundColor: theme.palette.background.default,
       }}
-      paddingLeft="1rem"
-      paddingRight="1rem"
-      paddingTop="1rem"
+      justifyContent={{ xs: "space-around", md: "flex-start" }}
+      height="100%"
+      paddingLeft={{ xs: "0", md: "1rem" }}
+      paddingRight={{ xs: "0", md: "1rem" }}
+      paddingTop={{ xs: "0", md: "1rem" }}
       alignItems="center"
       color={theme.palette.text.primary}
     >
       <CardMedia
         component="img"
-        sx={{ width: "450px" }}
+        sx={{ width: { xs: 350, md: 450 } }}
         image={
           theme.palette.mode === "light"
             ? homePage.fields.logo.fields.file.url
@@ -37,18 +39,18 @@ export const Home: React.FC = () => {
         }
         alt="Photo Voice Logo"
       />
-      <Box display="flex" alignItems="center" flexDirection="column">
-        <Typography padding="2rem" variant="h3">
+      <Box display="flex" alignItems="center" textAlign="center">
+        <Typography padding={{ xs: "1rem", md: "2rem" }} variant="h3">
           {homePage.fields.welcomeText}
         </Typography>
       </Box>
       <Box
         display="flex"
         alignItems="center"
-        flexDirection="column"
-        paddingTop="5rem"
+        textAlign="center"
+        paddingTop={{ xs: "1rem", md: "4rem" }}
       >
-        <Typography variant="body1">
+        <Typography padding={{ xs: "1rem", md: "2rem" }} variant="body1">
           {homePage.fields.supportDescription}
         </Typography>
       </Box>
