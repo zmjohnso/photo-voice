@@ -46,22 +46,22 @@ export const Contact: React.FC = () => {
       }}
       display="flex"
       justifyContent="center"
-      paddingTop="5rem"
-      paddingLeft="5rem"
-      paddingRight="5rem"
+      paddingTop={{ xs: "1rem", md: "5rem" }}
+      paddingLeft={{ xs: "1rem", md: "5rem" }}
+      paddingRight={{ xs: "1rem", md: "5rem" }}
+      paddingBottom={{ xs: "1rem", md: "5rem" }}
       color={theme.palette.text.primary}
     >
-      <Card variant="outlined" sx={{ display: "flex" }}>
+      <Card
+        variant="outlined"
+        sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}
+      >
         <Box display="flex" flexDirection="column">
           <CardContent>
             <Typography color="text.secondary" gutterBottom>
               Address
             </Typography>
-            <Typography
-              variant="h5"
-              component="div"
-              style={{ whiteSpace: "nowrap" }}
-            >
+            <Typography variant="h5" component="div">
               OWL 6th Floor
               <br />
               2-6-8 Shiba-koen Minato-ku
@@ -86,11 +86,7 @@ export const Contact: React.FC = () => {
           </CardActions>
           <Divider variant="middle" />
           <CardContent>
-            <Typography
-              variant="h5"
-              component="div"
-              style={{ whiteSpace: "nowrap" }}
-            >
+            <Typography variant="h5" component="div">
               NPO法人 フォトボイス・プロジェクト
               <br />
               Email: {emailAddress}
@@ -108,7 +104,16 @@ export const Contact: React.FC = () => {
             </Typography>
           </CardContent>
         </Box>
-        <Divider variant="fullWidth" orientation="vertical"></Divider>
+        <Divider
+          variant="fullWidth"
+          orientation="vertical"
+          sx={{ display: { xs: "none", md: "flex" } }}
+        />
+        <Divider
+          variant="middle"
+          orientation="horizontal"
+          sx={{ display: { xs: "flex", md: "none" } }}
+        />
         <form onSubmit={handleSubmit(onSubmit)}>
           <Box display="flex" flexDirection="column" style={{ height: "100%" }}>
             <CardContent

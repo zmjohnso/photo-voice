@@ -60,24 +60,18 @@ export const SimpleSearch: React.FC<Props> = (props) => {
   } = getSearchTextConstants(languageMode);
 
   return (
-    <Box
-      width="500px"
-      height="500px"
-      marginLeft="auto"
-      marginRight="auto"
-      paddingTop="1rem"
-    >
+    <Box marginLeft="auto" marginRight="auto" paddingTop="1rem">
       <Stack spacing={2}>
         <Stack spacing={2} direction="row" justifyContent="center">
           <Button variant="outlined" onClick={() => navigate("/display")}>
             {searchText}
           </Button>
         </Stack>
-        <Stack spacing={2}>
+        <Stack spacing={2} alignItems="center">
           <Autocomplete
             id="photo-locations"
             options={photoLocationOptions}
-            sx={{ width: 480 }}
+            sx={{ width: { xs: 300, md: 480 } }}
             onChange={(_event, value) =>
               value &&
               addPhotoLocations([
@@ -91,7 +85,11 @@ export const SimpleSearch: React.FC<Props> = (props) => {
               <TextField {...params} label={photoLocationText} />
             )}
           />
-          <Stack direction="row" spacing={2} sx={{ width: 480 }}>
+          <Stack
+            direction={{ xs: "column", md: "row" }}
+            spacing={2}
+            sx={{ width: { xs: 300, md: 480 } }}
+          >
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label={dateOfPhotoText}
@@ -146,7 +144,7 @@ export const SimpleSearch: React.FC<Props> = (props) => {
             disablePortal
             id="author-names"
             options={authorNameOptions}
-            sx={{ width: 480 }}
+            sx={{ width: { xs: 300, md: 480 } }}
             onChange={(_event, value) => {
               if (value) {
                 addAuthorNames([

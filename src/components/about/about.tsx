@@ -21,15 +21,16 @@ export const About: React.FC = () => {
         flexDirection: "column",
         backgroundColor: theme.palette.background.default,
       }}
-      paddingLeft="15rem"
-      paddingRight="15rem"
+      justifyContent={{ xs: "space-around", md: "flex-start" }}
+      paddingLeft={{ xs: "0", md: "15rem" }}
+      paddingRight={{ xs: "0", md: "15rem" }}
       paddingTop="1rem"
       alignItems="center"
       color={theme.palette.text.primary}
     >
       <CardMedia
         component="img"
-        sx={{ width: "450px" }}
+        sx={{ width: { xs: 350, md: 450 } }}
         image={aboutPage.fields.aboutPicture.fields.file.url}
         alt="About Page Image"
       />

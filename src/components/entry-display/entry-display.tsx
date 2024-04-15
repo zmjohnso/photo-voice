@@ -39,6 +39,7 @@ export const EntryDisplay: React.FC = () => {
       key={voiceEntry.fields.entryId}
       sx={{
         display: "flex",
+        flexDirection: { xs: "column", md: "row" },
         height: "95%",
         marginTop: "1rem",
         marginBottom: "1rem",
@@ -49,7 +50,7 @@ export const EntryDisplay: React.FC = () => {
         voiceEntry.fields.photo.length === 1 && (
           <CardMedia
             component="img"
-            sx={{ width: "50vw", maxHeight: "75%" }}
+            sx={{ width: { xs: "100vw", md: "50vw" }, maxHeight: "75%" }}
             image={voiceEntry.fields.photo[0].fields.file.url}
             alt={voiceEntry.fields.photo[0].fields.title}
           />

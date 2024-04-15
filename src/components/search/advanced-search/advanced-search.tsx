@@ -179,18 +179,21 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
 
   return (
     <Box
-      width="auto"
-      height="500px"
       display="flex"
       justifyContent="center"
       paddingTop="1rem"
+      paddingBottom="1rem"
       color={theme.palette.text.primary}
     >
-      <Stack spacing={2} direction="row">
-        <Stack spacing={2} alignItems="flex-end">
-          <Stack direction="row" spacing={2} alignItems="center">
+      <Stack spacing={2} direction={{ xs: "column", md: "row" }}>
+        <Stack spacing={2} alignItems={{ xs: "flex-start", md: "flex-end" }}>
+          <Stack
+            direction={{ xs: "column", md: "row" }}
+            spacing={2}
+            alignItems={{ xs: "flex-start", md: "center" }}
+          >
             <Typography>{photoLocationText}</Typography>
-            <Box sx={{ minWidth: 120 }}>
+            <Box>
               <FormControl fullWidth>
                 <InputLabel id="photo-location-search-operator-select">
                   Operator
@@ -210,7 +213,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
             <Autocomplete
               id="photo-locations"
               options={photoLocationOptions}
-              sx={{ width: 480 }}
+              sx={{ width: { xs: 300, md: 480 } }}
               onChange={(_event, value) => value && setPhotoLocation(value)}
               renderInput={(params) => (
                 <TextField {...params} label={photoLocationText} />
@@ -226,9 +229,13 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
               Add
             </Button>
           </Stack>
-          <Stack direction="row" spacing={2} alignItems="center">
+          <Stack
+            direction={{ xs: "column", md: "row" }}
+            spacing={2}
+            alignItems={{ xs: "flex-start", md: "center" }}
+          >
             <Typography>{dateOfPhotoText}</Typography>
-            <Box sx={{ minWidth: 120 }}>
+            <Box>
               <FormControl fullWidth>
                 <InputLabel id="photo-date-search-operator-select">
                   Operator
@@ -263,9 +270,13 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
               Add
             </Button>
           </Stack>
-          <Stack direction="row" spacing={2} alignItems="center">
+          <Stack
+            direction={{ xs: "column", md: "row" }}
+            spacing={2}
+            alignItems={{ xs: "flex-start", md: "center" }}
+          >
             <Typography>{authorNameText}</Typography>
-            <Box sx={{ minWidth: 120 }}>
+            <Box>
               <FormControl fullWidth>
                 <InputLabel id="name-search-operator-select">
                   Operator
@@ -286,7 +297,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
               disablePortal
               id="author-names"
               options={authorNameOptions}
-              sx={{ width: 480 }}
+              sx={{ width: { xs: 300, md: 480 } }}
               onChange={(_event, value) => {
                 setName(value ?? "");
               }}
