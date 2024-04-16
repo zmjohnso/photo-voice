@@ -41,8 +41,8 @@ export const EntryDisplay: React.FC = () => {
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
         height: "95%",
-        marginTop: "1rem",
-        marginBottom: "1rem",
+        margin: "1rem",
+        overflowY: "auto",
       }}
       variant="outlined"
     >
@@ -50,7 +50,10 @@ export const EntryDisplay: React.FC = () => {
         voiceEntry.fields.photo.length === 1 && (
           <CardMedia
             component="img"
-            sx={{ width: { xs: "100vw", md: "50vw" }, maxHeight: "75%" }}
+            sx={{
+              width: { xs: "100vw", md: "50vw" },
+              maxHeight: { xs: "50%", md: "75%" },
+            }}
             image={voiceEntry.fields.photo[0].fields.file.url}
             alt={voiceEntry.fields.photo[0].fields.title}
           />
