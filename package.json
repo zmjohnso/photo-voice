@@ -10,7 +10,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "lint": "prettier --check --no-error-on-unmatched-pattern 'src/**/*.{js,jsx,ts,tsx,json,css,md}'"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -36,6 +37,7 @@
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "@vitejs/plugin-react-swc": "^3.0.0",
+    "@vitest/coverage-c8": "^0.33.0",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-prettier": "^4.2.1",

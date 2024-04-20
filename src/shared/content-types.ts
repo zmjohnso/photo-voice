@@ -11,7 +11,6 @@ export interface VoiceEntry {
   entryId: number;
 }
 
-// TODO: can this type be cleaned up?
 export interface Photo {
   fields: {
     description: string;

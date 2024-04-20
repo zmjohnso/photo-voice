@@ -4,6 +4,7 @@ import {
   VoiceAuthor,
   Photo,
   VoiceEntry,
+  HomePage,
 } from "../src/shared/content-types";
 import {
   NameOrLocationData,
@@ -43,34 +44,36 @@ const mockPhoto: Photo = {
   },
 };
 
-export const mockVoiceEntry: Entry<VoiceEntry> = {
-  sys: {
-    id: "entryId123",
-    type: "",
-    createdAt: "",
-    updatedAt: "",
-    locale: "",
-    contentType: {
-      sys: undefined as any,
+export const mockVoiceEntries: Entry<VoiceEntry>[] = [
+  {
+    sys: {
+      id: "entryId123",
+      type: "",
+      createdAt: "",
+      updatedAt: "",
+      locale: "",
+      contentType: {
+        sys: undefined as any,
+      },
+    },
+    fields: {
+      title: "Title",
+      voice: "Voice Data",
+      photo: [mockPhoto],
+      photoDate: new Date(),
+      photoLocation: mockPhotoLocation as unknown as Entry<PhotoLocation>,
+      entryId: 1,
+      voiceAuthor: mockVoiceAuthor as unknown as Entry<VoiceAuthor>,
+    },
+    metadata: undefined as any,
+    toPlainObject: function (): object {
+      throw new Error("Function not implemented.");
+    },
+    update: function (): Promise<Entry<VoiceEntry>> {
+      throw new Error("Function not implemented.");
     },
   },
-  fields: {
-    title: "Title",
-    voice: "Voice Data",
-    photo: [mockPhoto],
-    photoDate: new Date(),
-    photoLocation: mockPhotoLocation as unknown as Entry<PhotoLocation>,
-    entryId: 1,
-    voiceAuthor: mockVoiceAuthor as unknown as Entry<VoiceAuthor>,
-  },
-  metadata: undefined as any,
-  toPlainObject: function (): object {
-    throw new Error("Function not implemented.");
-  },
-  update: function (): Promise<Entry<VoiceEntry>> {
-    throw new Error("Function not implemented.");
-  },
-};
+];
 
 export const mockPhotoLocations: NameOrLocationData[] = [
   { value: "Tokyo", operator: LogicalOperators.And },
@@ -90,4 +93,21 @@ export const mockPhotoStartDate: DateData = {
 export const mockPhotoEndDate: DateData = {
   value: new Date("2023-12-31"),
   operator: DateLogicalOperators.Before,
+};
+
+export const mockHomePage: Entry<HomePage> = {
+  fields: {
+    logo: mockPhoto,
+    logoDark: mockPhoto,
+    welcomeText: "Welcome text",
+    supportDescription: "Support description",
+  },
+  metadata: undefined as any,
+  sys: undefined as any,
+  toPlainObject: function (): object {
+    throw new Error("Function not implemented.");
+  },
+  update: function (): Promise<Entry<HomePage>> {
+    throw new Error("Function not implemented.");
+  },
 };
