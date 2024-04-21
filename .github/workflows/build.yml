@@ -32,7 +32,7 @@ jobs:
         run: npm run lint
       # Test
       - name: Test
-        run: npm test
+        run: npm run test
       # Build
       - name: Build
         run: npm run build
