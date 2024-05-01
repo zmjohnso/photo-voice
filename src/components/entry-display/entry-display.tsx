@@ -5,21 +5,49 @@ import {
   CardMedia,
   ImageList,
   ImageListItem,
+  Modal,
   Stack,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useStore } from "../../store/store";
 import { DATE_FORMAT_OPTIONS } from "../../shared/utilities";
 import { useLoaderData } from "react-router-dom";
 import { DisplayEntryLoaderValue } from "../../loaders/display-entry-loader";
 
+const photoModalStyles = {
+  position: "absolute" as const,
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  width: "80%",
+  height: "80%",
+};
+
 export const EntryDisplay: React.FC = () => {
   const [languageMode] = useStore((state) => [state.languageMode]);
   const voiceEntry = useLoaderData() as DisplayEntryLoaderValue;
   const theme = useTheme();
+  const isMediumScreen = useMediaQuery(
+    `(min-width:${theme.breakpoints.values.md}px)`
+  );
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(
+    null
+  );
+
+  const handlePhotoModalOpen = (index: number) => {
+    setSelectedPhotoIndex(index);
+  };
+
+  const handlePhotoModalClose = () => {
+    setSelectedPhotoIndex(null);
+  };
 
   if (!voiceEntry) {
     return (
@@ -52,7 +80,6 @@ export const EntryDisplay: React.FC = () => {
             component="img"
             sx={{
               width: { xs: "100vw", md: "50vw" },
-              maxHeight: { xs: "50%", md: "75%" },
             }}
             image={voiceEntry.fields.photo[0].fields.file.url}
             alt={voiceEntry.fields.photo[0].fields.title}
@@ -62,20 +89,39 @@ export const EntryDisplay: React.FC = () => {
         voiceEntry.fields.photo.length > 1 && (
           <ImageList
             sx={{
-              width: "70vw",
-              height: "95%",
+              width: { xs: "100vw", md: "50vw" },
+              minWidth: { xs: "100vw", md: "40vw" },
+              maxHeight: "100vh",
             }}
-            cols={1}
+            cols={isMediumScreen ? 1 : 2}
             rowHeight={"auto"}
           >
-            {voiceEntry.fields.photo.map((photo) => (
+            {voiceEntry.fields.photo.map((photo, index) => (
               <ImageListItem key={photo.fields.title}>
                 <img
                   src={photo.fields.file.url}
                   srcSet={photo.fields.file.url}
                   alt={photo.fields.title}
                   loading="lazy"
+                  onClick={() => handlePhotoModalOpen(index)}
                 />
+                <Modal
+                  open={selectedPhotoIndex === index}
+                  onClose={handlePhotoModalClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box sx={photoModalStyles}>
+                    <img
+                      src={photo.fields.file.url}
+                      srcSet={photo.fields.file.url}
+                      alt={photo.fields.title}
+                      width="100%"
+                      height="100%"
+                      loading="lazy"
+                    />
+                  </Box>
+                </Modal>
               </ImageListItem>
             ))}
           </ImageList>
@@ -86,7 +132,9 @@ export const EntryDisplay: React.FC = () => {
           flexDirection: "column",
         }}
       >
-        <CardContent sx={{ flex: "1 0 auto" }}>
+        <CardContent
+          sx={{ flex: "1 1 auto", maxHeight: "50vh", overflow: "auto" }}
+        >
           <Stack spacing={2}>
             <Typography gutterBottom component="div" variant="h5">
               {voiceEntry.fields.title}
