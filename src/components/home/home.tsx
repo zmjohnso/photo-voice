@@ -32,11 +32,7 @@ export const Home: React.FC = () => {
       <CardMedia
         component="img"
         sx={{ width: { xs: 350, md: 450 } }}
-        image={
-          theme.palette.mode === "light"
-            ? homePage.fields.logo.fields.file.url
-            : homePage.fields.logoDark.fields.file.url
-        }
+        image={homePage.fields.logo.fields.file.url}
         alt="Photo Voice Logo"
       />
       <Box display="flex" alignItems="center" textAlign="center">

@@ -44,7 +44,6 @@ export interface VoiceAuthor {
 
 export interface HomePage {
   logo: Photo;
-  logoDark: Photo;
   welcomeText: string;
   supportDescription: string;
 }
