@@ -5,10 +5,7 @@ export const theme = (mode: PaletteMode) =>
     palette: {
       mode,
       primary: {
-        main: "#68B36B",
-      },
-      secondary: {
-        main: "#B368B1",
+        main: "#68b83f",
       },
     },
   });

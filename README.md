@@ -1,6 +1,5 @@
 <div align="center">
-  <img src="src/assets/logo.jpg#gh-light-mode-only" alt="PhotoVoice Logo">
-  <img src="src/assets/logo-dark.jpg#gh-dark-mode-only" alt="PhotoVoice Logo">
+  <img src="src/assets/icon-512.png" alt="PhotoVoice Logo">
 </div>
 
 <p align="center">
