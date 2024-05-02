@@ -98,7 +98,6 @@ export const mockPhotoEndDate: DateData = {
 export const mockHomePage: Entry<HomePage> = {
   fields: {
     logo: mockPhoto,
-    logoDark: mockPhoto,
     welcomeText: "Welcome text",
     supportDescription: "Support description",
   },
