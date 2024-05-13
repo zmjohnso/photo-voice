@@ -28,7 +28,6 @@ export const Contact: React.FC = () => {
   } = useForm<IFormInput>();
   const theme = useTheme();
   const emailAddress = "photovoicejapan@gmail.com";
-
   const requiredErrorMessage = "Field is required.";
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
