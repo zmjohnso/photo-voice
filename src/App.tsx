@@ -17,6 +17,9 @@ import { useStore } from "./store/store";
 import { useMemo } from "react";
 import { Locale } from "./shared/utilities";
 import { DisplayEntryLoader } from "./loaders/display-entry-loader";
+import { Author } from "./components/author/author";
+import { AuthorLoader } from "./loaders/author-loader";
+import { AuthorEntryLoader } from "./loaders/author-entry-loader";
 
 const router = (languageMode: Locale) =>
   createBrowserRouter([
@@ -63,6 +66,24 @@ const router = (languageMode: Locale) =>
           loader: async ({ params }) => {
             const { entryId } = params;
             const loader = await DisplayEntryLoader(languageMode, entryId);
+            return loader;
+          },
+        },
+        {
+          path: "display/author/:entryId",
+          element: <IconDisplay />,
+          loader: async ({ params }) => {
+            const { entryId } = params;
+            const loader = await AuthorEntryLoader(languageMode, entryId);
+            return loader;
+          },
+        },
+        {
+          path: "author/:entryId",
+          element: <Author />,
+          loader: async ({ params }) => {
+            const { entryId } = params;
+            const loader = await AuthorLoader(languageMode, entryId);
             return loader;
           },
         },
