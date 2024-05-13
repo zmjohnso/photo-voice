@@ -6,6 +6,7 @@ import { AdvancedSearch } from "./advanced-search/advanced-search";
 import { SearchState } from "../../shared/utilities";
 import { useLoaderData } from "react-router-dom";
 import { SearchLoaderValue } from "../../loaders/search-loader";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 export const Search: React.FC = () => {
   const [tabValue, setTabValue] = useState(0);
@@ -46,9 +47,9 @@ export const Search: React.FC = () => {
       : setSearchState(SearchState.Advanced);
   };
 
-  const searchTabsEnglish = ["Simple", "Advanced"];
+  const searchTabsEnglish = ["Simple", "Advanced", "Map"];
   // get real translations
-  const searchTabsJapanese = ["シンプル", "高度"];
+  const searchTabsJapanese = ["シンプル", "高度", "地図"];
 
   const searchTabs =
     languageMode === "en-US" ? searchTabsEnglish : searchTabsJapanese;
@@ -78,6 +79,24 @@ export const Search: React.FC = () => {
           photoLocationOptions={photoLocationOptions}
           authorNameOptions={authorNameOptions}
         />
+      )}
+      {tabValue === 2 && (
+        <MapContainer
+          center={[35.6761919, 139.6503106]}
+          zoom={13}
+          scrollWheelZoom={true}
+          style={{ height: "80vh" }}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <Marker position={[51.505, -0.09]}>
+            <Popup>
+              A pretty CSS3 popup. <br /> Easily customizable.
+            </Popup>
+          </Marker>
+        </MapContainer>
       )}
     </Box>
   );
