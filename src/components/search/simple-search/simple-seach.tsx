@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { LoadingIndicator } from "../../loading-indicator/loading-indicator";
 import { useEffect } from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/ja";
@@ -39,10 +38,6 @@ export const SimpleSearch: React.FC<Props> = (props) => {
     state.languageMode,
   ]);
   const navigate = useNavigate();
-
-  if (!photoLocationOptions.length || !authorNameOptions.length) {
-    return <LoadingIndicator />;
-  }
 
   // this is not ideal as it doesn't update the date picker except on page reload
   // ideally the user would be able to switch between languages and see the date picker update

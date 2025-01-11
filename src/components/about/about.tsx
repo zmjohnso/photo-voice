@@ -1,18 +1,12 @@
-import { Box, CardMedia, Typography, useTheme } from "@mui/material";
+import { Box, Skeleton, Typography, useTheme } from "@mui/material";
 import React from "react";
-import { LoadingIndicator } from "../loading-indicator/loading-indicator";
-import { useLoaderData, useNavigation } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { AboutLoaderValue } from "../../loaders/about-loader";
 import ReactMarkdown from "react-markdown";
 
 export const About: React.FC = () => {
   const aboutPage = useLoaderData() as AboutLoaderValue;
-  const navigation = useNavigation();
   const theme = useTheme();
-
-  if (navigation.state === "loading") {
-    return <LoadingIndicator />;
-  }
 
   return (
     <Box
@@ -28,12 +22,16 @@ export const About: React.FC = () => {
       alignItems="center"
       color={theme.palette.text.primary}
     >
-      <CardMedia
-        component="img"
-        sx={{ width: { xs: 350, md: 450 } }}
-        image={aboutPage.fields.aboutPicture.fields.file.url}
-        alt="About Page Image"
-      />
+      {aboutPage.fields.aboutPicture.fields.file.url ? (
+        <Box
+          component="img"
+          sx={{ width: { xs: 350, md: 450 } }}
+          src={aboutPage.fields.aboutPicture.fields.file.url}
+          alt="About Page Image"
+        />
+      ) : (
+        <Skeleton variant="rectangular" width={450} height={450} />
+      )}
       <Typography variant="body1" component="div" padding="1rem">
         <ReactMarkdown>{aboutPage.fields.description}</ReactMarkdown>
       </Typography>
