@@ -27,7 +27,7 @@ import { Author } from "./components/author/author";
 import { AuthorLoader } from "./loaders/author-loader";
 import { AuthorEntryLoader } from "./loaders/author-entry-loader";
 
-declare module "@mui/styles/defaultTheme" {
+declare module "@mui/material/styles" {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface DefaultTheme extends Theme {}
 }
