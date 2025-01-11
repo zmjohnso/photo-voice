@@ -16,6 +16,7 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../../store/store";
+import { useShallow } from "zustand/shallow";
 import { useState } from "react";
 import {
   DateLogicalOperators,
@@ -40,13 +41,15 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [addPhotoLocations, addAuthorNames, addPhotoDate, reset, languageMode] =
-    useStore((state) => [
-      state.addPhotoLocations,
-      state.addAuthorNames,
-      state.addPhotoDate,
-      state.reset,
-      state.languageMode,
-    ]);
+    useStore(
+      useShallow((state) => [
+        state.addPhotoLocations,
+        state.addAuthorNames,
+        state.addPhotoDate,
+        state.reset,
+        state.languageMode,
+      ])
+    );
 
   const [photoLocation, setPhotoLocation] = useState("");
 

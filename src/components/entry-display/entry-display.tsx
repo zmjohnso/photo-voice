@@ -5,7 +5,6 @@ import {
   CardMedia,
   ImageList,
   ImageListItem,
-  Link as MuiLink,
   Modal,
   Stack,
   Typography,
@@ -15,12 +14,9 @@ import {
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useStore } from "../../store/store";
+import { useShallow } from "zustand/shallow";
 import { DATE_FORMAT_OPTIONS } from "../../shared/utilities";
-import {
-  Link as ReactRouterLink,
-  useLoaderData,
-  useNavigate,
-} from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import { DisplayEntryLoaderValue } from "../../loaders/display-entry-loader";
 
 const photoModalStyles = {
@@ -36,9 +32,8 @@ const photoModalStyles = {
 };
 
 export const EntryDisplay: React.FC = () => {
-  const [languageMode] = useStore((state) => [state.languageMode]);
+  const [languageMode] = useStore(useShallow((state) => [state.languageMode]));
   const voiceEntry = useLoaderData() as DisplayEntryLoaderValue;
-  const navigate = useNavigate();
   const theme = useTheme();
   const isMediumScreen = useMediaQuery(
     `(min-width:${theme.breakpoints.values.md}px)`
@@ -152,14 +147,14 @@ export const EntryDisplay: React.FC = () => {
             )}
           </Stack>
           <Stack alignItems="flex-end">
-            <ReactRouterLink
+            <Link
               to={`/author/${voiceEntry.fields.voiceAuthor.sys.id}`}
               style={{ textDecoration: "none" }}
             >
-              <MuiLink gutterBottom variant="body2">
+              <Typography variant="body2" component="div">
                 {voiceEntry.fields.voiceAuthor.fields.name}
-              </MuiLink>
-            </ReactRouterLink>
+              </Typography>
+            </Link>
             <Typography variant="body2" component="div">
               {voiceEntry.fields.photoLocation.fields.photoPrefecture}
             </Typography>

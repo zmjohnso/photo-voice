@@ -1,9 +1,10 @@
 import { Entry } from "contentful";
 import React, { useEffect, useState } from "react";
 import { VoiceEntry } from "../../shared/content-types";
-import { Box, Grid, Typography, useTheme } from "@mui/material";
+import { Box, Grid2 as Grid, Typography, useTheme } from "@mui/material";
 import { EntryPreview } from "../entry-preview/entry-preview";
 import { useStore } from "../../store/store";
+import { useShallow } from "zustand/shallow";
 import {
   DateLogicalOperators,
   LogicalOperators,
@@ -21,15 +22,17 @@ export const IconDisplay: React.FC = () => {
     photoEndDate,
     photoDate,
     languageMode,
-  ] = useStore((state) => [
-    state.searchState,
-    state.photoLocations,
-    state.authorNames,
-    state.photoStartDate,
-    state.photoEndDate,
-    state.photoDate,
-    state.languageMode,
-  ]);
+  ] = useStore(
+    useShallow((state) => [
+      state.searchState,
+      state.photoLocations,
+      state.authorNames,
+      state.photoStartDate,
+      state.photoEndDate,
+      state.photoDate,
+      state.languageMode,
+    ])
+  );
   const voiceEntries = useLoaderData() as IconDisplayLoaderValue;
   const theme = useTheme();
 
@@ -317,12 +320,7 @@ export const IconDisplay: React.FC = () => {
             {filteredVoiceEntries.map((entry) => (
               <Grid
                 key={entry.fields.entryId}
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={4}
-                xl={3}
+                size={{ xs: 12, sm: 6, md: 4, lg: 4, xl: 3 }}
               >
                 <EntryPreview entry={entry}></EntryPreview>
               </Grid>
