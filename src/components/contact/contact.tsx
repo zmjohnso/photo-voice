@@ -148,7 +148,6 @@ export const Contact: React.FC = () => {
                 {...register("message", { required: true })}
                 error={Boolean(errors.message)}
                 helperText={errors.message ? requiredErrorMessage : ""}
-                style={{ height: "5rem" }}
               />
             </CardContent>
             <CardActions>

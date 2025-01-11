@@ -4,7 +4,6 @@ import { VoiceEntry } from "../../shared/content-types";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import { EntryPreview } from "../entry-preview/entry-preview";
 import { useStore } from "../../store/store";
-import { LoadingIndicator } from "../loading-indicator/loading-indicator";
 import {
   DateLogicalOperators,
   LogicalOperators,
@@ -305,10 +304,6 @@ export const IconDisplay: React.FC = () => {
       setFilteredVoiceEntries(tempFilteredVoiceEntries);
     }
   }, [photoLocations, authorNames, voiceEntries, photoStartDate, photoEndDate]);
-
-  if (voiceEntries === undefined) {
-    return <LoadingIndicator />;
-  }
 
   return (
     <>

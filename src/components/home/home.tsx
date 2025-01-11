@@ -1,18 +1,12 @@
 import { Box, CardMedia, Typography, useTheme } from "@mui/material";
 
 import React from "react";
-import { LoadingIndicator } from "../loading-indicator/loading-indicator";
-import { useLoaderData, useNavigation } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { HomeLoaderValue } from "../../loaders/home-loader";
 
 export const Home: React.FC = () => {
-  const navigation = useNavigation();
   const homePage = useLoaderData() as HomeLoaderValue;
   const theme = useTheme();
-
-  if (navigation.state === "loading") {
-    return <LoadingIndicator />;
-  }
 
   return (
     <Box
