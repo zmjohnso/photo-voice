@@ -14,7 +14,7 @@ import {
 import Typography from "@mui/material/Typography";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useStore } from "../../../store/store";
 import { useShallow } from "zustand/shallow";
 import { useState } from "react";

@@ -12,7 +12,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import TranslateIcon from "@mui/icons-material/Translate";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { useState } from "react";
 import React from "react";

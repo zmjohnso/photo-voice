@@ -1,6 +1,6 @@
 import React from "react";
 import { AuthorLoaderValue } from "../../loaders/author-loader";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router";
 import {
   Box,
   Button,

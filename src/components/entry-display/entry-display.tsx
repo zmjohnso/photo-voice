@@ -16,7 +16,7 @@ import ReactMarkdown from "react-markdown";
 import { useStore } from "../../store/store";
 import { useShallow } from "zustand/shallow";
 import { DATE_FORMAT_OPTIONS } from "../../shared/utilities";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router";
 import { DisplayEntryLoaderValue } from "../../loaders/display-entry-loader";
 
 const photoModalStyles = {

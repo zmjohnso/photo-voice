@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { Entry } from "contentful";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { VoiceEntry } from "../../shared/content-types";
 
 interface Props {

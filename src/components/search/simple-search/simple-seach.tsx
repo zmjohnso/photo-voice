@@ -1,7 +1,7 @@
 import { Autocomplete, Box, Button, Stack, TextField } from "@mui/material";
 import { useStore } from "../../../store/store";
 import { useShallow } from "zustand/shallow";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";

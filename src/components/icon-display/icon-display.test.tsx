@@ -4,8 +4,8 @@ import { mockVoiceEntries } from "../../../__mocks__/mock-data";
 
 describe("FilterVoiceEntries", () => {
   test("should render successfully", async () => {
-    vi.mock("react-router-dom", () => ({
-      ...vi.importActual("react-router-dom"),
+    vi.mock("react-router", () => ({
+      ...vi.importActual("react-router"),
       useLoaderData: () => mockVoiceEntries,
       useNavigate: () => vi.fn(),
     }));

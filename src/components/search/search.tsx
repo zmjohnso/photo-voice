@@ -5,7 +5,7 @@ import { useStore } from "../../store/store";
 import { useShallow } from "zustand/shallow";
 import { AdvancedSearch } from "./advanced-search/advanced-search";
 import { SearchState } from "../../shared/utilities";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router";
 import { SearchLoaderValue } from "../../loaders/search-loader";
 
 export const Search: React.FC = () => {

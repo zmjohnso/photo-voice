@@ -10,7 +10,7 @@ import {
   LogicalOperators,
   SearchState,
 } from "../../shared/utilities";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router";
 import { IconDisplayLoaderValue } from "../../loaders/icon-display-loader";
 
 export const IconDisplay: React.FC = () => {
