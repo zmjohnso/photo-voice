@@ -4,7 +4,7 @@ import { Locale } from "../shared/utilities";
 
 export const DisplayEntryLoader = async (
   languageMode: Locale,
-  entryId: string | undefined
+  entryId: string | undefined,
 ) => {
   const client = getClient();
   // Add error handling

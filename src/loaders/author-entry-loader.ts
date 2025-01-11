@@ -4,7 +4,7 @@ import { Locale } from "../shared/utilities";
 
 export const AuthorEntryLoader = async (
   languageMode: Locale,
-  authorEntryId: string | undefined
+  authorEntryId: string | undefined,
 ) => {
   const client = getClient();
   // Add error handling
@@ -15,7 +15,7 @@ export const AuthorEntryLoader = async (
     })
     .then((res) => {
       return res.items.filter(
-        (item) => item.fields.voiceAuthor.sys.id === authorEntryId
+        (item) => item.fields.voiceAuthor.sys.id === authorEntryId,
       );
     });
   return res;

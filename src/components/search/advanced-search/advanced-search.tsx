@@ -48,7 +48,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
         state.addPhotoDate,
         state.reset,
         state.languageMode,
-      ])
+      ]),
     );
 
   const [photoLocation, setPhotoLocation] = useState("");
@@ -63,7 +63,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
   const [name, setName] = useState("");
 
   const [nameCriteriaVerbiage, setNameCriteriaVerbiage] = useState<string[]>(
-    []
+    [],
   );
 
   const [photoLocationSearchOperator, setPhotoLocationSearchOperator] =
@@ -76,7 +76,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
     useState<LogicalOperators>(LogicalOperators.And);
 
   const handlePhotoLocationSearchOperatorChange = (
-    event: SelectChangeEvent
+    event: SelectChangeEvent,
   ) => {
     setPhotoLocationSearchOperator(event.target.value as LogicalOperators);
   };
@@ -157,7 +157,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
           " " +
           photoDate?.toLocaleDateString(
             languageMode === "ja" ? "ja-JP" : "en-US",
-            DATE_FORMAT_OPTIONS
+            DATE_FORMAT_OPTIONS,
           );
 
         setPhotoDateCriteriaVerbiage([

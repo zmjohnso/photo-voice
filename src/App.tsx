@@ -113,7 +113,7 @@ function App() {
       state.setColorMode,
       state.languageMode,
       state.setLanguageMode,
-    ])
+    ]),
   );
 
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");

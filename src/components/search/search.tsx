@@ -15,7 +15,7 @@ export const Search: React.FC = () => {
       state.setSearchState,
       state.reset,
       state.languageMode,
-    ])
+    ]),
   );
   const { photoLocations, voiceAuthors } = useLoaderData() as SearchLoaderValue;
 
@@ -27,13 +27,13 @@ export const Search: React.FC = () => {
   const prefectures = [
     ...new Set(
       photoLocations?.map((x) => x.fields.photoPrefecture).filter((x) => x) ??
-        []
+        [],
     ),
   ];
   const cities = [
     ...new Set(
       photoLocations?.map((x) => x.fields.photoCity ?? "").filter((x) => x) ??
-        []
+        [],
     ),
   ];
   const photoLocationOptions = [...prefectures, ...cities];

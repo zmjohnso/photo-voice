@@ -30,7 +30,7 @@ export const Layout: React.FC = () => {
       state.setColorMode,
       state.languageMode,
       state.setLanguageMode,
-    ])
+    ]),
   );
 
   const menuOpen = Boolean(menuAnchorEl);
@@ -45,7 +45,7 @@ export const Layout: React.FC = () => {
     window.open(
       "https://github.com/zmjohnso/photo-voice",
       "_blank",
-      "noopener noreferrer"
+      "noopener noreferrer",
     );
   };
 
@@ -54,7 +54,7 @@ export const Layout: React.FC = () => {
     setTranslateMenuAnchorEl(null);
   };
   const handleTranslateMenuClick = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     setTranslateMenuAnchorEl(event.currentTarget);
   };
@@ -111,7 +111,7 @@ export const Layout: React.FC = () => {
   );
 
   return (
-    (<Box
+    <Box
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -165,14 +165,19 @@ export const Layout: React.FC = () => {
               ))}
             </Box>
             <Box>
-              <IconButton color="inherit" onClick={handleGithubClick} size="large">
+              <IconButton
+                color="inherit"
+                onClick={handleGithubClick}
+                size="large"
+              >
                 <GitHubIcon />
               </IconButton>
               <IconButton
                 aria-label="translate button"
                 color="inherit"
                 onClick={handleTranslateMenuClick}
-                size="large">
+                size="large"
+              >
                 <TranslateIcon />
               </IconButton>
               <Menu
@@ -193,7 +198,11 @@ export const Layout: React.FC = () => {
                   </MenuItem>
                 ))}
               </Menu>
-              <IconButton onClick={handleColorMode} color="inherit" size="large">
+              <IconButton
+                onClick={handleColorMode}
+                color="inherit"
+                size="large"
+              >
                 {colorMode === "light" ? (
                   <Brightness4Icon />
                 ) : (
@@ -213,6 +222,6 @@ export const Layout: React.FC = () => {
       >
         <Outlet />
       </Box>
-    </Box>)
+    </Box>
   );
 };

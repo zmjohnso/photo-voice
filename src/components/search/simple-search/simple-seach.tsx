@@ -38,7 +38,7 @@ export const SimpleSearch: React.FC<Props> = (props) => {
       state.addPhotoEndDate,
       state.photoEndDate,
       state.languageMode,
-    ])
+    ]),
   );
   const navigate = useNavigate();
 

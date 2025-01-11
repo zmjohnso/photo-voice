@@ -36,10 +36,10 @@ export const EntryDisplay: React.FC = () => {
   const voiceEntry = useLoaderData() as DisplayEntryLoaderValue;
   const theme = useTheme();
   const isMediumScreen = useMediaQuery(
-    `(min-width:${theme.breakpoints.values.md}px)`
+    `(min-width:${theme.breakpoints.values.md}px)`,
   );
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(
-    null
+    null,
   );
 
   const handlePhotoModalOpen = (index: number) => {
@@ -171,7 +171,7 @@ export const EntryDisplay: React.FC = () => {
             <Typography variant="body2" component="div">
               {new Date(voiceEntry.fields.photoDate).toLocaleDateString(
                 languageMode === "ja" ? "ja-JP" : "en-US",
-                DATE_FORMAT_OPTIONS
+                DATE_FORMAT_OPTIONS,
               )}
             </Typography>
           </Stack>
