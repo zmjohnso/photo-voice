@@ -1,6 +1,6 @@
 import { Box, Skeleton, Typography, useTheme } from "@mui/material";
 import React from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router";
 import { AboutLoaderValue } from "../../loaders/about-loader";
 import ReactMarkdown from "react-markdown";
 

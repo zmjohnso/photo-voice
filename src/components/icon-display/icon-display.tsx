@@ -1,15 +1,16 @@
 import { Entry } from "contentful";
 import React, { useEffect, useState } from "react";
 import { VoiceEntry } from "../../shared/content-types";
-import { Box, Grid, Typography, useTheme } from "@mui/material";
+import { Box, Grid2 as Grid, Typography, useTheme } from "@mui/material";
 import { EntryPreview } from "../entry-preview/entry-preview";
 import { useStore } from "../../store/store";
+import { useShallow } from "zustand/shallow";
 import {
   DateLogicalOperators,
   LogicalOperators,
   SearchState,
 } from "../../shared/utilities";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router";
 import { IconDisplayLoaderValue } from "../../loaders/icon-display-loader";
 
 export const IconDisplay: React.FC = () => {
@@ -21,15 +22,17 @@ export const IconDisplay: React.FC = () => {
     photoEndDate,
     photoDate,
     languageMode,
-  ] = useStore((state) => [
-    state.searchState,
-    state.photoLocations,
-    state.authorNames,
-    state.photoStartDate,
-    state.photoEndDate,
-    state.photoDate,
-    state.languageMode,
-  ]);
+  ] = useStore(
+    useShallow((state) => [
+      state.searchState,
+      state.photoLocations,
+      state.authorNames,
+      state.photoStartDate,
+      state.photoEndDate,
+      state.photoDate,
+      state.languageMode,
+    ]),
+  );
   const voiceEntries = useLoaderData() as IconDisplayLoaderValue;
   const theme = useTheme();
 
@@ -167,10 +170,10 @@ export const IconDisplay: React.FC = () => {
 
           const notLocationCheck = !notLocations.includes(
             entry.fields.photoLocation.fields.photoPrefecture ||
-              (entry.fields.photoLocation.fields.photoCity ?? "")
+              (entry.fields.photoLocation.fields.photoCity ?? ""),
           );
           const notAuthorCheck = !notAuthors.includes(
-            entry.fields.voiceAuthor.fields.name
+            entry.fields.voiceAuthor.fields.name,
           );
 
           const dateCheck = () => {
@@ -185,10 +188,10 @@ export const IconDisplay: React.FC = () => {
             const entryDate = new Date(entry.fields.photoDate);
 
             const isBefore = beforeDates.some(
-              (date) => entryDate < new Date(date)
+              (date) => entryDate < new Date(date),
             );
             const isAfter = afterDates.some(
-              (date) => entryDate > new Date(date)
+              (date) => entryDate > new Date(date),
             );
 
             if (
@@ -210,13 +213,13 @@ export const IconDisplay: React.FC = () => {
 
           const countOperators = (
             array: { operator: LogicalOperators }[],
-            targetOperator: LogicalOperators
+            targetOperator: LogicalOperators,
           ) => array.filter((item) => item.operator === targetOperator).length;
 
           const checkAndOperators = (
             count: number,
             items: string[],
-            fieldType: "location" | "author"
+            fieldType: "location" | "author",
           ) => {
             if (count === 0) {
               return true;
@@ -224,7 +227,7 @@ export const IconDisplay: React.FC = () => {
               if (fieldType === "location") {
                 return items.includes(
                   entry.fields.photoLocation.fields.photoPrefecture ||
-                    (entry.fields.photoLocation.fields.photoCity ?? "")
+                    (entry.fields.photoLocation.fields.photoCity ?? ""),
                 );
               } else if (fieldType === "author") {
                 return items.includes(entry.fields.voiceAuthor.fields.name);
@@ -236,39 +239,39 @@ export const IconDisplay: React.FC = () => {
 
           const andLocationCount = countOperators(
             photoLocations,
-            LogicalOperators.And
+            LogicalOperators.And,
           );
           const andLocationCheck = checkAndOperators(
             andLocationCount,
             andLocations,
-            "location"
+            "location",
           );
 
           const orLocationCount = countOperators(
             photoLocations,
-            LogicalOperators.Or
+            LogicalOperators.Or,
           );
           const orLocationCheck =
             orLocationCount === 0
               ? true
               : orLocations.includes(
                   entry.fields.photoLocation.fields.photoPrefecture ||
-                    (entry.fields.photoLocation.fields.photoCity ?? "")
+                    (entry.fields.photoLocation.fields.photoCity ?? ""),
                 );
 
           const andAuthorCount = countOperators(
             authorNames,
-            LogicalOperators.And
+            LogicalOperators.And,
           );
           const andAuthorCheck = checkAndOperators(
             andAuthorCount,
             andAuthors,
-            "author"
+            "author",
           );
 
           const orAuthorCount = countOperators(
             authorNames,
-            LogicalOperators.Or
+            LogicalOperators.Or,
           );
           const orAuthorCheck =
             orAuthorCount === 0
@@ -317,12 +320,7 @@ export const IconDisplay: React.FC = () => {
             {filteredVoiceEntries.map((entry) => (
               <Grid
                 key={entry.fields.entryId}
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                lg={4}
-                xl={3}
+                size={{ xs: 12, sm: 6, md: 4, lg: 4, xl: 3 }}
               >
                 <EntryPreview entry={entry}></EntryPreview>
               </Grid>

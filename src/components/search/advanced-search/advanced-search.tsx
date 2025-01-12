@@ -14,8 +14,9 @@ import {
 import Typography from "@mui/material/Typography";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useStore } from "../../../store/store";
+import { useShallow } from "zustand/shallow";
 import { useState } from "react";
 import {
   DateLogicalOperators,
@@ -40,13 +41,15 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [addPhotoLocations, addAuthorNames, addPhotoDate, reset, languageMode] =
-    useStore((state) => [
-      state.addPhotoLocations,
-      state.addAuthorNames,
-      state.addPhotoDate,
-      state.reset,
-      state.languageMode,
-    ]);
+    useStore(
+      useShallow((state) => [
+        state.addPhotoLocations,
+        state.addAuthorNames,
+        state.addPhotoDate,
+        state.reset,
+        state.languageMode,
+      ]),
+    );
 
   const [photoLocation, setPhotoLocation] = useState("");
 
@@ -60,7 +63,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
   const [name, setName] = useState("");
 
   const [nameCriteriaVerbiage, setNameCriteriaVerbiage] = useState<string[]>(
-    []
+    [],
   );
 
   const [photoLocationSearchOperator, setPhotoLocationSearchOperator] =
@@ -73,7 +76,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
     useState<LogicalOperators>(LogicalOperators.And);
 
   const handlePhotoLocationSearchOperatorChange = (
-    event: SelectChangeEvent
+    event: SelectChangeEvent,
   ) => {
     setPhotoLocationSearchOperator(event.target.value as LogicalOperators);
   };
@@ -154,7 +157,7 @@ export const AdvancedSearch: React.FC<Props> = (props) => {
           " " +
           photoDate?.toLocaleDateString(
             languageMode === "ja" ? "ja-JP" : "en-US",
-            DATE_FORMAT_OPTIONS
+            DATE_FORMAT_OPTIONS,
           );
 
         setPhotoDateCriteriaVerbiage([

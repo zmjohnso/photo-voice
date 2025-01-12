@@ -8,7 +8,7 @@ interface SearchTextConstants {
 }
 
 export const getSearchTextConstants = (
-  languageMode: string
+  languageMode: string,
 ): SearchTextConstants => {
   return {
     searchText: languageMode === "en-US" ? "Search" : "検索",

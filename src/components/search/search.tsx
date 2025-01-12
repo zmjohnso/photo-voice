@@ -2,18 +2,21 @@ import { useEffect, useState } from "react";
 import { Box, Tabs, Tab } from "@mui/material";
 import { SimpleSearch } from "./simple-search/simple-seach";
 import { useStore } from "../../store/store";
+import { useShallow } from "zustand/shallow";
 import { AdvancedSearch } from "./advanced-search/advanced-search";
 import { SearchState } from "../../shared/utilities";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router";
 import { SearchLoaderValue } from "../../loaders/search-loader";
 
 export const Search: React.FC = () => {
   const [tabValue, setTabValue] = useState(0);
-  const [setSearchState, reset, languageMode] = useStore((state) => [
-    state.setSearchState,
-    state.reset,
-    state.languageMode,
-  ]);
+  const [setSearchState, reset, languageMode] = useStore(
+    useShallow((state) => [
+      state.setSearchState,
+      state.reset,
+      state.languageMode,
+    ]),
+  );
   const { photoLocations, voiceAuthors } = useLoaderData() as SearchLoaderValue;
 
   useEffect(() => {
@@ -24,13 +27,13 @@ export const Search: React.FC = () => {
   const prefectures = [
     ...new Set(
       photoLocations?.map((x) => x.fields.photoPrefecture).filter((x) => x) ??
-        []
+        [],
     ),
   ];
   const cities = [
     ...new Set(
       photoLocations?.map((x) => x.fields.photoCity ?? "").filter((x) => x) ??
-        []
+        [],
     ),
   ];
   const photoLocationOptions = [...prefectures, ...cities];

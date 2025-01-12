@@ -1,7 +1,7 @@
 import { Box, CardMedia, Typography, useTheme } from "@mui/material";
 
 import React from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router";
 import { HomeLoaderValue } from "../../loaders/home-loader";
 
 export const Home: React.FC = () => {

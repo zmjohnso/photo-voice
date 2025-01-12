@@ -12,11 +12,12 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import TranslateIcon from "@mui/icons-material/Translate";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { useState } from "react";
 import React from "react";
 import { useStore } from "../../store/store";
+import { useShallow } from "zustand/shallow";
 
 export const Layout: React.FC = () => {
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
@@ -24,12 +25,12 @@ export const Layout: React.FC = () => {
     useState<null | HTMLElement>(null);
   const theme = useTheme();
   const [colorMode, setColorMode, languageMode, setLanguageMode] = useStore(
-    (state) => [
+    useShallow((state) => [
       state.colorMode,
       state.setColorMode,
       state.languageMode,
       state.setLanguageMode,
-    ]
+    ]),
   );
 
   const menuOpen = Boolean(menuAnchorEl);
@@ -44,7 +45,7 @@ export const Layout: React.FC = () => {
     window.open(
       "https://github.com/zmjohnso/photo-voice",
       "_blank",
-      "noopener noreferrer"
+      "noopener noreferrer",
     );
   };
 
@@ -53,7 +54,7 @@ export const Layout: React.FC = () => {
     setTranslateMenuAnchorEl(null);
   };
   const handleTranslateMenuClick = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     setTranslateMenuAnchorEl(event.currentTarget);
   };
@@ -164,13 +165,18 @@ export const Layout: React.FC = () => {
               ))}
             </Box>
             <Box>
-              <IconButton color="inherit" onClick={handleGithubClick}>
+              <IconButton
+                color="inherit"
+                onClick={handleGithubClick}
+                size="large"
+              >
                 <GitHubIcon />
               </IconButton>
               <IconButton
                 aria-label="translate button"
                 color="inherit"
                 onClick={handleTranslateMenuClick}
+                size="large"
               >
                 <TranslateIcon />
               </IconButton>
@@ -192,7 +198,11 @@ export const Layout: React.FC = () => {
                   </MenuItem>
                 ))}
               </Menu>
-              <IconButton onClick={handleColorMode} color="inherit">
+              <IconButton
+                onClick={handleColorMode}
+                color="inherit"
+                size="large"
+              >
                 {colorMode === "light" ? (
                   <Brightness4Icon />
                 ) : (

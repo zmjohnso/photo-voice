@@ -1,6 +1,6 @@
 import React from "react";
 import { AuthorLoaderValue } from "../../loaders/author-loader";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router";
 import {
   Box,
   Button,
@@ -9,10 +9,11 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
+import { useShallow } from "zustand/shallow";
 import { useStore } from "../../store/store";
 
 export const Author: React.FC = () => {
-  const [languageMode] = useStore((state) => [state.languageMode]);
+  const [languageMode] = useStore(useShallow((state) => [state.languageMode]));
   const author = useLoaderData() as AuthorLoaderValue;
   const navigate = useNavigate();
 

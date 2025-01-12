@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router";
 import { About } from "./components/about/about";
 import { Layout } from "./components/layout/layout";
 import { Contact } from "./components/contact/contact";
@@ -11,15 +11,26 @@ import ErrorPage from "./routes/error-page";
 import { Search } from "./components/search/search";
 import { Home } from "./components/home/home";
 import { IconDisplayLoader } from "./loaders/icon-display-loader";
-import { ThemeProvider, useMediaQuery } from "@mui/material";
+import {
+  ThemeProvider,
+  Theme,
+  StyledEngineProvider,
+  useMediaQuery,
+} from "@mui/material";
 import { theme } from "./shared/theme";
 import { useStore } from "./store/store";
+import { useShallow } from "zustand/shallow";
 import { useMemo } from "react";
 import { Locale } from "./shared/utilities";
 import { DisplayEntryLoader } from "./loaders/display-entry-loader";
 import { Author } from "./components/author/author";
 import { AuthorLoader } from "./loaders/author-loader";
 import { AuthorEntryLoader } from "./loaders/author-entry-loader";
+
+declare module "@mui/material/styles" {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
 
 const router = (languageMode: Locale) =>
   createBrowserRouter([
@@ -97,12 +108,12 @@ const router = (languageMode: Locale) =>
 
 function App() {
   const [colorMode, setColorMode, languageMode, setLanguageMode] = useStore(
-    (state) => [
+    useShallow((state) => [
       state.colorMode,
       state.setColorMode,
       state.languageMode,
       state.setLanguageMode,
-    ]
+    ]),
   );
 
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -118,9 +129,11 @@ function App() {
   }, [currentLanguage, setLanguageMode]);
 
   return (
-    <ThemeProvider theme={theme(colorMode)}>
-      <RouterProvider router={router(languageMode)} />
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme(colorMode)}>
+        <RouterProvider router={router(languageMode)} />
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 }
 

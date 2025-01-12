@@ -1,6 +1,7 @@
 import { Autocomplete, Box, Button, Stack, TextField } from "@mui/material";
 import { useStore } from "../../../store/store";
-import { useNavigate } from "react-router-dom";
+import { useShallow } from "zustand/shallow";
+import { useNavigate } from "react-router";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -28,15 +29,17 @@ export const SimpleSearch: React.FC<Props> = (props) => {
     addPhotoEndDate,
     photoEndDate,
     languageMode,
-  ] = useStore((state) => [
-    state.addPhotoLocations,
-    state.addAuthorNames,
-    state.addPhotoStartDate,
-    state.photoStartDate,
-    state.addPhotoEndDate,
-    state.photoEndDate,
-    state.languageMode,
-  ]);
+  ] = useStore(
+    useShallow((state) => [
+      state.addPhotoLocations,
+      state.addAuthorNames,
+      state.addPhotoStartDate,
+      state.photoStartDate,
+      state.addPhotoEndDate,
+      state.photoEndDate,
+      state.languageMode,
+    ]),
+  );
   const navigate = useNavigate();
 
   // this is not ideal as it doesn't update the date picker except on page reload
