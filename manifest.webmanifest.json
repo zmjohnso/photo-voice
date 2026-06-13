@@ -1,7 +1,0 @@
-{
-    "name": "Photo Voice Japan",
-    "icons": [
-      { "src": "src/assets/icon-192.png", "type": "image/png", "sizes": "192x192" },
-      { "src": "src/assets/icon-512.png", "type": "image/png", "sizes": "512x512" }
-    ]
-  }
